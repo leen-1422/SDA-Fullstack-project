@@ -11,6 +11,7 @@ export type Product = {
 }
 
 export type ProductState = {
+
   items: Product[]
   error: null | string
   isLoading: boolean
@@ -41,6 +42,7 @@ export const userSlice = createSlice({
       const filteredItems = state.items.filter((product) => product.id !== action.payload.productId)
       state.items = filteredItems
     }
+    
   }
 })
 export const { removeProduct, addProduct, productsRequest, productsSuccess } = userSlice.actions

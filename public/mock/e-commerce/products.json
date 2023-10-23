@@ -1,8 +1,8 @@
 [
   {
     "id": 1,
-    "name": "Laptop",
-    "image": "https://m.media-amazon.com/images/I/81KoSSAwH2L._SL1500_.jpg",
+    "name": "flower",
+    "image": "https://m.media-amazon.com/images/I/81SigpJN1KL._SL1500_.jpg",
     "description": "High-performance laptop for all your needs.",
     "categories": [1, 2],
     "variants": ["8GB RAM", "16GB RAM"],
