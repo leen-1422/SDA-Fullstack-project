@@ -12,7 +12,11 @@
     "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
     "@heroicons/react": "^2.0.18",
+    "@mui/material": "^5.14.15",
+    "@mui/styled-engine-sc": "^6.0.0-alpha.3",
     "@reduxjs/toolkit": "^1.9.3",
     "@types/react-anchor-link-smooth-scroll": "1.0.2",
     "axios": "^1.4.0",
@@ -23,7 +27,8 @@
     "react-icons": "^4.11.0",
     "react-redux": "^8.0.5",
     "react-router": "^6.17.0",
-    "react-router-dom": "^6.17.0"
+    "react-router-dom": "^6.17.0",
+    "styled-components": "^6.1.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.28",

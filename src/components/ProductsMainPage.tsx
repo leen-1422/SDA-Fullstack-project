@@ -9,14 +9,14 @@ import {
 import { AppDispatch, RootState } from '../redux/store'
 import api from '../api'
 import { Link } from 'react-router-dom'
+import Categories from './Categories'
 
 
 export default function ProductsMainPage() {
     const dispatch = useDispatch<AppDispatch>()
   const state = useSelector((state: RootState) => state)
   const products = state.products
-  // const[selectedFilter, setselectedFilter] = useState([])
-  // const[filteredItems, setFilteredItems] = useState()
+  
 
 
   useEffect(() => {
@@ -33,8 +33,11 @@ export default function ProductsMainPage() {
 
 
 
+
+
   return (
 <div className="bg-white">
+  <Categories/>
 
   <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
     <h2 className="sr-only">Products</h2>

@@ -20,6 +20,7 @@ export default function Navbar() {
     <div className="text-sm lg:flex-grow">
       <Link to={'/'} className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4" >Home</Link>
       <Link to={'/cart'} className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white" >Cart</Link>
+      <Link to={'/admin'} className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white" >Admin</Link>
     </div>
     <div>
     <Link to={'/login'} className="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0" >Login</Link>

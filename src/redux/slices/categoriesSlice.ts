@@ -33,6 +33,6 @@ export const categoriesSlice = createSlice({
     
   }
 })
-export const {  categoriesRequest, categoriesSuccess } = categoriesSlice.actions
-
-export default categoriesSlice.reducer
+const categoriesReducer = categoriesSlice.reducer;
+export default categoriesReducer
+export const categoriesActions = categoriesSlice.actions;
