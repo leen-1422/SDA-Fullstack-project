@@ -44,10 +44,12 @@ export const productSlice = createSlice({
     },
     editProducts: (state, action: { payload: { productId: number; updatedProduct: Product } }) => {
       const { productId, updatedProduct } = action.payload;
-      state.items = state.items.map((product) =>
+      state.items = state.items.map((product) =>              
         product.id === productId ? { ...product, ...updatedProduct } : product
       );
     },
+
+    
     
   }
 })

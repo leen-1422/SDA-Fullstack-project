@@ -9,10 +9,6 @@ export default function OrdersList() {
     const dispatch = useDispatch<AppDispatch>()
     const state = useSelector((state: RootState) => state)
     const ordersList = state.orders
-    
-  
-  
-  
     useEffect(() => {
       handleGetUsers()
     }, [])

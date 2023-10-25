@@ -10,6 +10,7 @@ import ProductDetails from './components/ProductDetails'
 import UsersList from './components/UsersList'
 import OrdersList from './components/OrdersList'
 import Categories from './components/Categories'
+import Products from './pages/Products'
 
 
 function App() {

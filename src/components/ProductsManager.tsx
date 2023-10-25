@@ -13,6 +13,7 @@ import api from '../api'
 import { useParams } from 'react-router'
 import { Button } from '@mui/material'
 import { Link } from 'react-router-dom'
+import UsersList from './UsersList'
 
 export function ProductsManager() {
   const dispatch = useDispatch<AppDispatch>()
@@ -42,6 +43,7 @@ export function ProductsManager() {
 
   return (
     <div>
+
       <Link to={'/users'}>
       <Button variant="contained">Users</Button>
 
