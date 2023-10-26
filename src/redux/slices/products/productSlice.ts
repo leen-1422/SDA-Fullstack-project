@@ -17,6 +17,7 @@ export type ProductState = {
   error: null | string
   isLoading: boolean
   selectedProduct: Product| null,
+  search:string 
 }
 
 const initialState: ProductState = {
@@ -24,6 +25,7 @@ const initialState: ProductState = {
   error: null,
   isLoading: false,
   selectedProduct: null,
+  search:''
 }
 
 export const productSlice = createSlice({
@@ -51,11 +53,14 @@ export const productSlice = createSlice({
         product.id === productId ? { ...product, ...updatedProduct } : product
       );
     },
+    getSearch: (state,action)=>{
+      state.search= action.payload
+  },
 
     
     
   }
 })
-export const { removeProduct, addProduct, productsRequest, productsSuccess, editProducts } = productSlice.actions
+export const { removeProduct, addProduct, productsRequest, productsSuccess, editProducts, getSearch} = productSlice.actions
 
 export default productSlice.reducer
