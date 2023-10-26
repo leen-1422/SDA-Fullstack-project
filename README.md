@@ -22,8 +22,8 @@ Tech Stack: React, TypeScript, and Redux/Redux Toolkit. Styling: CSS/SASS or MUI
 - Get list of products  DONE
 - Filter products by categories or price 
 - Search products by name 
-- Add products to a cart
-- Remove products from a cart
+- Add products to a cart Done
+- Remove products from a cart Done
 
 **Functionalities for an Admin:**
 

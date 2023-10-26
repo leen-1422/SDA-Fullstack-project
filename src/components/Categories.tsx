@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../redux/store';
 import api from '../api';
-import { categoriesActions } from '../redux/slices/categoriesSlice';
+import { categoriesRequest, categoriesSuccess,setSelectedCategory } from '../redux/slices/categoriesSlice';
 
 export default function Categories() {
     
@@ -12,10 +12,10 @@ export default function Categories() {
 
 
     const handleGetCategories = async () => {
-        dispatch(categoriesActions.categoriesRequest())
+        dispatch(categoriesRequest())
     
         const res = await api.get('/mock/e-commerce/categories.json')
-        dispatch(categoriesActions.categoriesSuccess(res.data))
+        dispatch(categoriesSuccess(res.data))
       }
       useEffect(() => {
         handleGetCategories()

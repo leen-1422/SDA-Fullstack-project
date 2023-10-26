@@ -8,19 +8,22 @@ export type Product = {
   categories: number[]
   variants: string[]
   sizes: string[]
+  categoryId: null | number 
 }
 
 export type ProductState = {
-
+  
   items: Product[]
   error: null | string
   isLoading: boolean
+  selectedProduct: Product| null,
 }
 
 const initialState: ProductState = {
   items: [],
   error: null,
-  isLoading: false
+  isLoading: false,
+  selectedProduct: null,
 }
 
 export const productSlice = createSlice({

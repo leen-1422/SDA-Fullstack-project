@@ -1,7 +1,7 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { json } from 'react-router'
 
-export type Product = {
+export type CartProduct = {
     id: number
     name: string
     image: string 
@@ -13,7 +13,7 @@ export type Product = {
   }
   
   export type ProductState = {
-    cartItems: Product[], 
+    cartItems: CartProduct[], 
     cartTotal: number,
     cartAmount: number
   }

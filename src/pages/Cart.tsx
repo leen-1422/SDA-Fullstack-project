@@ -9,6 +9,8 @@ export default function Cart() {
   const state = useSelector((state: RootState) => state);
   const cartItems = state.cart.cartItems;
   console.log(cartItems)
+
+  
   
   return (
 
