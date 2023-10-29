@@ -11,7 +11,7 @@ import UsersList from './components/UsersList'
 import OrdersList from './components/OrdersList'
 import Categories from './components/Categories'
 import Products from './pages/Products'
-import EditProduct from './components/EditProduct'
+// import EditProduct from './components/EditProduct'
 // import EditCategory from './components/EditCategory'
 
 
@@ -31,7 +31,7 @@ function App() {
         <Route path='/users' element={<UsersList />} /> 
         <Route path='/orders' element={< OrdersList />} /> 
         <Route path='/categories' element={<Categories />} /> 
-        <Route path="/admin/edit/:id" element={<EditProduct />} />
+        {/* <Route path="/admin/edit/:id" element={<EditProduct />} /> */}
         {/* <Route path="/categories/edit/:id" element={<EditCategory />} /> */}
         
         

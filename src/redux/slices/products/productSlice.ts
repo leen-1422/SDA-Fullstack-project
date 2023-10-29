@@ -39,7 +39,7 @@ export const productSlice = createSlice({
       state.isLoading = false
       state.items = action.payload
     },
-    addProduct: (state, action: { payload: { product: Product } }) => {
+    addProduct: (state, action) => {
       // let's append the new product to the beginning of the array
       state.items = [action.payload.product, ...state.items]
     },
@@ -48,18 +48,27 @@ export const productSlice = createSlice({
       state.items = filteredItems
     },
 
-    editProducts: (state, action) => {
-      const { id, name, image, description, categories, variants, sizes } = action.payload;
-      const product = state.items.find((item) => item.id === id);
-      if (product) {
-        product.name = name;
-        product.image = image;
-        product.description = description;
-        product.categories = categories;
-        product.variants = variants;
-        product.sizes = sizes;
-      }
+    // editProducts: (state, action) => {
+    //   const { id, name, image, description, categories, variants, sizes } = action.payload;
+    //   const product = state.items.find((item) => item.id === id);
+    //   if (product) {
+    //     product.name = name;
+    //     product.image = image;
+    //     product.description = description;
+    //     product.categories = categories;
+    //     product.variants = variants;
+    //     product.sizes = sizes;
+    //   }
+    // },
+
+    editProduct: (state, action: { payload: { editedProduct: Product } }) => {
+      const editedProduct = action.payload.editedProduct;
+    
+      state.items = state.items.map((product) =>
+        product.id === editedProduct.id ? editedProduct : product
+      );
     },
+       
     getSearch: (state,action)=>{
       state.search= action.payload
   },
@@ -68,6 +77,6 @@ export const productSlice = createSlice({
     
   }
 })
-export const { removeProduct, addProduct, productsRequest, productsSuccess, editProducts, getSearch} = productSlice.actions
+export const { removeProduct, addProduct, productsRequest, productsSuccess, editProduct, getSearch} = productSlice.actions
 
 export default productSlice.reducer

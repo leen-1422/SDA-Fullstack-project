@@ -9,9 +9,10 @@ export default function CategoryTable() {
   // const {categories, isLoading, error} = useCategoryState()
   const catiegores = useSelector((state: RootState) => state.categories.categories);
 
-  const [selectedCategory, setSelectedCategory] = useState<Product | null>(null)
+  
   // const [category, setCategory] = useState({ name: selectedCategory ? selectedCategory.name : '' })
   const [category, setCategory] = useState({ name: '' });
+  const [selectedCategory, setSelectedCategory] = useState<Product | null>(null)
 
 
   useEffect(() => {

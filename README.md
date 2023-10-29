@@ -6,7 +6,7 @@ Tech Stack: React, TypeScript, and Redux/Redux Toolkit. Styling: CSS/SASS or MUI
 
 **Data Sources:**
 
-- Products: id, name, description, categories, variants, sizes
+- Products: id, name, description, categories, variants, sizes 
 - Categories: id, name
 - Orders: id, productId, userId, purchasedAt
 - Users: id, firstName, lastName, email, password, role (visitor or admin)
@@ -27,24 +27,24 @@ Tech Stack: React, TypeScript, and Redux/Redux Toolkit. Styling: CSS/SASS or MUI
 
 **Functionalities for an Admin:**
 
-- Add a new product, update info of a product, remove a product 🚀
+- Add a new product, update info of a product, remove a product ✅
 
 ### Level 2: Additional Requirements
 
 **Authentication:**
 
-- Implement register and login functionality via email and password Done
-- Protect the routes based on login and admin status
+- Implement register and login functionality via email and password  🚀
+- Protect the routes based on login and admin status  🚀
 
 **Functionalities for an Admin:**
 
-- list all users, delete or block a user. 🚀
+- list all users, delete or block a user. ✅
 - list all orders. ✅
-- Add a new category, update info of a category, remove a category 🚀
+- Add a new category, update info of a category, remove a category ✅
 
 **Form Validation:**
 
-- Implement form validation.
+- Implement form validation. 
 
 ### Level 3: Bonus Requirement (Optional)
 
