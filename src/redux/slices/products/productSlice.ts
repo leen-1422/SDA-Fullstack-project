@@ -47,11 +47,18 @@ export const productSlice = createSlice({
       const filteredItems = state.items.filter((product) => product.id !== action.payload.productId)
       state.items = filteredItems
     },
-    editProducts: (state, action: { payload: { productId: number; updatedProduct: Product } }) => {
-      const { productId, updatedProduct } = action.payload;
-      state.items = state.items.map((product) =>              
-        product.id === productId ? { ...product, ...updatedProduct } : product
-      );
+
+    editProducts: (state, action) => {
+      const { id, name, image, description, categories, variants, sizes } = action.payload;
+      const product = state.items.find((item) => item.id === id);
+      if (product) {
+        product.name = name;
+        product.image = image;
+        product.description = description;
+        product.categories = categories;
+        product.variants = variants;
+        product.sizes = sizes;
+      }
     },
     getSearch: (state,action)=>{
       state.search= action.payload

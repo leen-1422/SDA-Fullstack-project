@@ -5,21 +5,24 @@ import {
   productsRequest,
   productsSuccess,
   removeProduct,
-  editProducts
+  editProducts,
+  
 } from '../redux/slices/products/productSlice'
 import { AppDispatch, RootState } from '../redux/store'
 import { NewProductWrapper } from './NewProductWrapper'
 import api from '../api'
-import { useParams } from 'react-router'
+import { useNavigate, useParams } from 'react-router'
 import { Button } from '@mui/material'
 import { Link } from 'react-router-dom'
 import UsersList from './UsersList'
+
 
 export function ProductsManager() {
   const dispatch = useDispatch<AppDispatch>()
   const state = useSelector((state: RootState) => state)
   const products = state.products
-  const { id } = useParams();
+  const navigate = useNavigate()
+  
 
   useEffect(() => {
     handleGetProducts()
@@ -79,11 +82,19 @@ export function ProductsManager() {
                 onClick={() => dispatch(removeProduct({ productId: product.id }))}>
                 X
               </button>
+
+              {/* <Link to={`edit/${product.id}`} > */}
+                {/* //onClick={() => dispatch(editProducts({ productId: product.id , updatedProduct: product}))} */}
               <button
+              onClick={() => navigate(`edit/${product.id}`)}
                 className=" text-red-400 text-xs"
-                onClick={() => dispatch(editProducts({ productId: product.id , updatedProduct: product}))}>
+                >
                 Edit
               </button>
+              
+              
+              
+
             </li>
           ))}
         </ul>

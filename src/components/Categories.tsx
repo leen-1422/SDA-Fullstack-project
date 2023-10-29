@@ -3,42 +3,21 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../redux/store';
 import api from '../api';
 import { categoriesRequest, categoriesSuccess,setSelectedCategory } from '../redux/slices/categoriesSlice';
+import CategoriesForm from './CategoriesForm';
+import { Link } from 'react-router-dom';
 
 export default function Categories() {
-    
-    const dispatch = useDispatch<AppDispatch>()
-    const catiegores = useSelector((state: RootState) => state.categories.categories);
-    console.log(catiegores)
-
-
-    const handleGetCategories = async () => {
-        dispatch(categoriesRequest())
-    
-        const res = await api.get('/mock/e-commerce/categories.json')
-        dispatch(categoriesSuccess(res.data))
-      }
-      useEffect(() => {
-        handleGetCategories()
-      }, [])
-
+  
   return (
 
     <div>
+      <CategoriesForm/>
 
-
-        
-        <div className='container'>
-            {catiegores.map((section) => (
-            <div  key={section.id}>     
-            <h3>{section.name}</h3>
+    
         </div>
         
-        
 
-      ))}
 
-      </div>
-
-    </div>
+    
   )
 }

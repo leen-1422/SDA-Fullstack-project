@@ -41,7 +41,6 @@ export const userSlice = createSlice({
       const filteredItems = state.users.filter((user) => user.id !== action.payload.userId)
       state.users = filteredItems
     }
-    
   }
 })
 export const { removeUser, usersRequest, usersSuccess } = userSlice.actions

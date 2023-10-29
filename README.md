@@ -13,34 +13,34 @@ Tech Stack: React, TypeScript, and Redux/Redux Toolkit. Styling: CSS/SASS or MUI
 
 **Pages to Create:**
 
-1. Home page (list all the products) 
-2. Product page (contain the details of a product)
+1. Home page (list all the products) ✅
+2. Product page (contain the details of a product) ✅
 3. Admin page 
 
 **Functionalities for a Visitor:**
 
-- Get list of products  DONE
-- Filter products by categories or price 
-- Search products by name 
-- Add products to a cart Done
-- Remove products from a cart Done
+- Get list of products  ✅
+- Filter products by categories or price ✅
+- Search products by name ✅
+- Add products to a cart ✅
+- Remove products from a cart ✅
 
 **Functionalities for an Admin:**
 
-- Add a new product, update info of a product, remove a product 
+- Add a new product, update info of a product, remove a product 🚀
 
 ### Level 2: Additional Requirements
 
 **Authentication:**
 
-- Implement register and login functionality via email and password
+- Implement register and login functionality via email and password Done
 - Protect the routes based on login and admin status
 
 **Functionalities for an Admin:**
 
-- list all users, delete or block a user. Done
-- list all orders. Done
-- Add a new category, update info of a category, remove a category 
+- list all users, delete or block a user. 🚀
+- list all orders. ✅
+- Add a new category, update info of a category, remove a category 🚀
 
 **Form Validation:**
 
@@ -49,9 +49,8 @@ Tech Stack: React, TypeScript, and Redux/Redux Toolkit. Styling: CSS/SASS or MUI
 ### Level 3: Bonus Requirement (Optional)
 
 If you have a higher skill level and finish the previous requirements before the deadline, you can tackle the following bonus tasks:
-
-- Messages, show loading, success, and error messages (e.g., when loading products list or adding new product)
-- Implement pagination feature
+- Messages, show loading, success, and error messages (e.g., when loading products list or adding new product) 
+- Implement pagination feature 
 - Create a Profile Page (only available if user logs in), implement editing user profile feature (user can change first name, last name)
 
 - Peer Review:

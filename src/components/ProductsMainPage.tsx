@@ -90,7 +90,7 @@ export default function ProductsMainPage() {
             id="category"
             onChange={(e) => handleCategoryChange(Number(e.target.value))}
             value={state.categories.selectedCategoryId || ''}>
-            <option value=""   >All Categories</option>
+            <option value={0}   >All Categories</option>
             {categories.categories.map((category) => (
               <option key={category.id} value={category.id}>
                 {category.name}

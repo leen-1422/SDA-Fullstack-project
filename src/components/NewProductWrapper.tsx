@@ -4,15 +4,20 @@ import { useDispatch } from 'react-redux'
 import { ProductForm } from './ProductForm'
 import { addProduct, Product } from '../redux/slices/products/productSlice'
 import { AppDispatch } from '../redux/store'
+import EditProduct from './EditProduct'
 
 const initialProductState: Product = {
   id: 0,
-  name: '',
+  name:  '',
   image: '',
   description: '',
   categories: [],
   variants: [],
-  sizes: []
+  sizes: [],
+  categoryId: null,
+  
+  
+  
 }
 
 export function NewProductWrapper() {
@@ -54,6 +59,7 @@ export function NewProductWrapper() {
     <div>
       <h3 className="text-2xl font-bold">Add a new product</h3>
       <ProductForm handleSubmit={handleSubmit} handleChange={handleChange} product={product} />
+      
     </div>
   )
 }
