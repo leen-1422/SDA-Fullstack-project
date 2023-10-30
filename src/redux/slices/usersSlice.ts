@@ -1,34 +1,48 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { PayloadAction, createSlice } from '@reduxjs/toolkit'
+import { Navigate } from 'react-router'
 
-
-
-export type Users = {
+export type User = {
   id: number
   firstName: string
   lastName: string
   email: string
-  password: string,
+  password: string
   role: string
-
 }
 
-export type InitialState = {
-
-  users: Users[]
+export type UserState = {
+  users: User[]
   error: null | string
   isLoading: boolean
+  isLoggedIn: boolean
+  isAdmin: boolean
+  userData: User | null
 }
 
-const initialState: InitialState = {
+const initialState: UserState = {
   users: [],
   error: null,
-  isLoading: false
+  isLoading: false,
+  isLoggedIn: false,
+  isAdmin: false,
+  userData: null
 }
 
-export const userSlice = createSlice({
-  name: 'user',
+export const usersSlice = createSlice({
+  name: 'users',
   initialState,
   reducers: {
+    login: (state, action) => {
+      state.isLoggedIn = true
+      state.userData = action.payload
+    },
+    Adminlogin: (state, action: PayloadAction<User>) => {
+      if (state.userData?.role === 'admin') {
+        state.isAdmin = true
+        state.userData = action.payload
+      }
+    },
+
     usersRequest: (state) => {
       state.isLoading = true
     },
@@ -36,13 +50,20 @@ export const userSlice = createSlice({
       state.isLoading = false
       state.users = action.payload
     },
-
+    addUser: (state, action: { payload: { user: User } }) => {
+      // let's append the new product to the beginning of the array
+      state.users = [action.payload.user, ...state.users]
+    },
     removeUser: (state, action: { payload: { userId: number } }) => {
-      const filteredItems = state.users.filter((user) => user.id !== action.payload.userId)
+      const filteredItems = state.users.filter((product) => product.id !== action.payload.userId)
       state.users = filteredItems
+    },
+    getError: (state, action: PayloadAction<string>) => {
+      state.error = action.payload
     }
   }
 })
-export const { removeUser, usersRequest, usersSuccess } = userSlice.actions
+export const { Adminlogin, login, removeUser, addUser, usersRequest, usersSuccess } =
+  usersSlice.actions
 
-export default userSlice.reducer
+export default usersSlice.reducer 

@@ -4,7 +4,7 @@
     "firstName": "John",
     "lastName": "Doe",
     "email": "john.doe@example.com",
-    "password": "hashed_password",
+    "password": "123",
     "role": "admin"
   },
 
@@ -13,7 +13,7 @@
     "firstName": "Jane",
     "lastName": "Smith",
     "email": "jane.smith@example.com",
-    "password": "hashed_password",
+    "password": "123",
     "role": "visitor"
   },
   {
@@ -21,7 +21,7 @@
     "firstName": "David",
     "lastName": "Johnson",
     "email": "david.johnson@example.com",
-    "password": "hashed_password",
+    "password": "123",
     "role": "visitor"
   }
 ]

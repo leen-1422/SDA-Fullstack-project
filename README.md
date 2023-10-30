@@ -33,8 +33,8 @@ Tech Stack: React, TypeScript, and Redux/Redux Toolkit. Styling: CSS/SASS or MUI
 
 **Authentication:**
 
-- Implement register and login functionality via email and password  🚀
-- Protect the routes based on login and admin status  🚀
+- Implement register and login functionality via email and password  ✅
+- Protect the routes based on login and admin status  ✅
 
 **Functionalities for an Admin:**
 

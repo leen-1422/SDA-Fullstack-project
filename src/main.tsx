@@ -6,21 +6,19 @@ import App from './App'
 import './index.css'
 import { BrowserRouter } from 'react-router-dom'
 import AuthProvider from 'react-auth-kit/AuthProvider'
+import React from 'react'
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
+  <React.StrictMode>
+
   <Provider store={store}>
-    <AuthProvider
-    authType={'cookie'}
-    authName={'_auth'}
-    cookieDomain={window.location.hostname}
-    cookieSecure={false}>
-    <BrowserRouter>
-    <App />
+    
+      <BrowserRouter>
+      <App />
+      </BrowserRouter>
 
-    </BrowserRouter>
-
-    </AuthProvider>
-  
     
   </Provider>
+      
+  </React.StrictMode>
 )

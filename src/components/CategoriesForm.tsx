@@ -6,11 +6,10 @@ import { Product, addCategory, categoriesRequest, categoriesSuccess, removeCateg
 
 export default function CategoryTable() {
   const dispatch = useDispatch<AppDispatch>()
-  // const {categories, isLoading, error} = useCategoryState()
   const catiegores = useSelector((state: RootState) => state.categories.categories);
 
   
-  // const [category, setCategory] = useState({ name: selectedCategory ? selectedCategory.name : '' })
+
   const [category, setCategory] = useState({ name: '' });
   const [selectedCategory, setSelectedCategory] = useState<Product | null>(null)
 
@@ -45,7 +44,7 @@ export default function CategoryTable() {
       dispatch(addCategory({ category: newCategory }))
     }
 
-    // Reset the form
+
     setCategory({ name: '' })
     setSelectedCategory(null)
   }
@@ -56,11 +55,6 @@ export default function CategoryTable() {
     const res = await api.get('/mock/e-commerce/categories.json')
     dispatch(categoriesSuccess(res.data))
   }
-
-  // const handleEditBtnClick = (item: Product) => {
-  //   setSelectedCategory(item)
-  //   console.log(selectedCategory)
-  // }
 
   const handleEditBtnClick = (item: Product) => {
     setSelectedCategory(item);

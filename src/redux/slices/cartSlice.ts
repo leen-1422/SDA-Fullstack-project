@@ -27,12 +27,7 @@ const initialState: ProductState = {
   cartAmount: 0,
 };
   
-  // const initialState: ProductState = {
-  //   cartItems: localStorage.getItem("cartItems") ? JSON.parse(localStorage.getItem("cartItems")) : [],
-  //   cartTotal: 0,
-  //   cartAmount: 0
 
-  // }
 
   export const cartSlice = createSlice({
     name: 'cart',

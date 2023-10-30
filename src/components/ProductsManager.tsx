@@ -13,19 +13,11 @@ import {
 import { AppDispatch, RootState } from '../redux/store'
 
 import api from '../api'
+import { Link } from 'react-router-dom'
+import { Button } from '@mui/material'
 
 
-// const initialProductState: Product = {
-//   id: 0,
-//   name: '',
-//   image: '',
-//   description: '',
-//   categories: [],
-//   variants: [],
-//   sizes: [],
-//   categoryId: 0
 
-// }
 export function ProductsManager() {
 
 
@@ -111,6 +103,20 @@ const handleEditBtnClick = (item: Product) => {
   return (
 
     <div className="flex">
+
+       <Link to="/users">
+        <Button variant="contained">Users</Button>
+        </Link>
+
+        <Link to="/orders">
+        <Button variant="contained">Orders</Button>
+        </Link>
+
+        <Link to="/categories">
+        <Button variant="contained">Catigores</Button>
+        </Link>
+
+      
       
       <div className="w-3/4 bg-white p-4">
         <div className=" rounded-lg overflow-hidden mx-4 md:mx-10">
@@ -252,8 +258,6 @@ const handleEditBtnClick = (item: Product) => {
         </div>
       </div>
     </div>
-
-
 
   )
 }

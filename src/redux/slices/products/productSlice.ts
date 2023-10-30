@@ -48,18 +48,7 @@ export const productSlice = createSlice({
       state.items = filteredItems
     },
 
-    // editProducts: (state, action) => {
-    //   const { id, name, image, description, categories, variants, sizes } = action.payload;
-    //   const product = state.items.find((item) => item.id === id);
-    //   if (product) {
-    //     product.name = name;
-    //     product.image = image;
-    //     product.description = description;
-    //     product.categories = categories;
-    //     product.variants = variants;
-    //     product.sizes = sizes;
-    //   }
-    // },
+
 
     editProduct: (state, action: { payload: { editedProduct: Product } }) => {
       const editedProduct = action.payload.editedProduct;

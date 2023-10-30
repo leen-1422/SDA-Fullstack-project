@@ -13,8 +13,7 @@ export default function Categories() {
     <div>
       <CategoriesForm/>
 
-    
-        </div>
+    </div>
         
 
 
