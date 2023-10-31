@@ -7,6 +7,7 @@ import axios from 'axios'
 import { Adminlogin, login, usersRequest, usersSlice, usersSuccess } from '../redux/slices/usersSlice'
 import { useNavigate } from 'react-router'
 import api from '../api'
+import { Link } from 'react-router-dom'
 
 export default function Login() {
   const users = useSelector((state: RootState) => state.users.users)
@@ -142,11 +143,11 @@ export default function Login() {
 
               <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                 Don’t have an account yet?{' '}
-                <a
-                  href="#"
+                <Link to="/regesteration"
+                  
                   className="font-medium text-primary-600 hover:underline dark:text-primary-500">
                   Sign up
-                </a>
+                </Link>
               </p>
             </form>
           </div>

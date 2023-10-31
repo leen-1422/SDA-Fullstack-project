@@ -19,6 +19,7 @@ import UserProfile from './components/UserProfile'
 import AdminPage from './pages/AdminPage'
 import AdminRoute from './components/AdminRoute'
 import ProductsMainPage from './components/ProductsMainPage'
+import Regeregister from './components/Regeregister'
 
 
 
@@ -35,10 +36,13 @@ function App() {
         <Route path="/products/:id" element={<ProductDetails />} />
         <Route path='/login' element={<Login />} /> 
         <Route path='/products' element={<ProductsMainPage />} /> 
+        <Route path='/regesteration' element={<Regeregister/>} />
 
 
 
       <Route  element={<AdminRoute />} > 
+      
+        <Route path='/admin' element={<AdminPage />} />
         <Route path='/admin' element={<ProductsManager />} />
         <Route path='/users' element={<UsersList />} /> 
         <Route path='/orders' element={< OrdersList />} /> 

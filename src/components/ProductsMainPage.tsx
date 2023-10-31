@@ -123,14 +123,20 @@ export default function ProductsMainPage() {
     </div>
 </div>
         </div>
-        {products.isLoading && <h3>Loading products...</h3>}
-        <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 xl:gap-x-8">
-          {filteredAndSearchedProducts.map((product) => (
-            <div className="group" key={product.id}>
-              <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7">
-                <img src={product.image} alt="Tall slender porcelain bottle with natural clay textured body and cork stopper." className="h-full w-full object-cover object-center group-hover:opacity-75" />
-              </div>
-              <h1 className="mt-4 font-semibold text-gray-700">{product.name}</h1>
+        <div className="grid grid-cols-1 gap-x-3 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 xl:gap-x-8">
+          {products.isLoading ? (
+            <h3 style={{ textAlign: 'center', color: 'red' }}>Loading products...</h3>
+          ) : (
+            filteredAndSearchedProducts.map((product) => (
+              <div key={product.id}>
+                <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7">
+                  <img
+                    src={product.image}
+                    alt="Tall slender porcelain bottle with natural clay textured body and cork stopper ."
+                    className="h-full w-full object-cover object-center group-hover:opacity-75"
+                  />
+                </div>
+        
               <h1>{product.price} SAR</h1>
               <Link to={`products/${product.id}`}>
               <button className="bg-transparent hover:bg-green-900 text-black-700 font-semibold hover:text-white py-2 px-4 border border-green-900 hover:border-transparent rounded">
@@ -146,7 +152,8 @@ export default function ProductsMainPage() {
 </svg>
 </button>
             </div>
-          ))}
+            ))
+          )}
         </div>
       </div>
     </div>

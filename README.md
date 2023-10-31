@@ -44,14 +44,14 @@ Tech Stack: React, TypeScript, and Redux/Redux Toolkit. Styling: CSS/SASS or MUI
 
 **Form Validation:**
 
-- Implement form validation. 
+- Implement form validation. ✅
 
 ### Level 3: Bonus Requirement (Optional)
 
 If you have a higher skill level and finish the previous requirements before the deadline, you can tackle the following bonus tasks:
-- Messages, show loading, success, and error messages (e.g., when loading products list or adding new product) 
+- Messages, show loading, success, and error messages (e.g., when loading products list or adding new product) ✅
 - Implement pagination feature 
-- Create a Profile Page (only available if user logs in), implement editing user profile feature (user can change first name, last name)
+- Create a Profile Page (only available if user logs in), implement editing user profile feature (user can change first name, last name) 
 
 - Peer Review:
 - Review the code and implementation of 2 assignments from other participants.
