@@ -5,33 +5,49 @@ import {Link} from 'react-router-dom'
 export default function Navbar() {
   return (
     <div className='header'>
-
-<nav className="flex items-center justify-between flex-wrap bg-teal-500 p-6">
-  <div className="flex items-center flex-shrink-0 text-white mr-6">
-    <svg className="fill-current h-8 w-8 mr-2" width="54" height="54" viewBox="0 0 54 54" xmlns="http://www.w3.org/2000/svg"><path d="M13.5 22.1c1.8-7.2 6.3-10.8 13.5-10.8 10.8 0 12.15 8.1 17.55 9.45 3.6.9 6.75-.45 9.45-4.05-1.8 7.2-6.3 10.8-13.5 10.8-10.8 0-12.15-8.1-17.55-9.45-3.6-.9-6.75.45-9.45 4.05zM0 38.3c1.8-7.2 6.3-10.8 13.5-10.8 10.8 0 12.15 8.1 17.55 9.45 3.6.9 6.75-.45 9.45-4.05-1.8 7.2-6.3 10.8-13.5 10.8-10.8 0-12.15-8.1-17.55-9.45-3.6-.9-6.75.45-9.45 4.05z"/>
-    </svg>
-    <span className="font-semibold text-xl tracking-tight">LOGO</span>
-  </div>
-  <div className="block lg:hidden">
-    <button className="flex items-center px-3 py-2 border rounded text-teal-200 border-teal-400 hover:text-white hover:border-white">
-      <svg className="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Menu</title><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/></svg>
-    </button>
-  </div>
-  <div className="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
-    <div className="text-sm lg:flex-grow">
-      <Link to={'/'} className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4" >Home</Link>
-      <Link to={'/cart'} className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white" >Cart</Link>
-      {/* <Link to={'/admin'} className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white" >Admin</Link> */}
-    </div>
-    <div>
-    <Link to={'/login'} className="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0" >Login</Link>
-    </div>
+      <nav className="w-full py-6 bg-white w-screen">
+  <div className="flex items-center justify-between mx-auto xl:max-w-7xl lg:max-w-5xl md:max-w-3xl md:px-2 px-4">
+    <section className="flex items-center text-gray-900 space-x-2">
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" viewBox="0 0 20 20" fill="currentColor">
+        
+      </svg>
+      <img src="src/images/Screenshot 2023-10-31 214440.png" alt="" className="h-11 w-14"/>
+      <a  className="font-bold text-xl focus:ring focus:ring-purple-500 focus:ring-opacity-25 outline-none rounded-lg">Geranium</a>
+    </section>
+    <section>
+      <ul className="md:space-x-8 space-x-6 text-gray-900 font-semibold hidden md:flex">
+        <li className="relative group">
+          <Link to="/" className="group focus:ring focus:ring-purple-500 focus:ring-opacity-25 outline-none rounded-lg" > Home </Link>
+          <div className="w-full h-0.5 bg-transparent group-hover:bg-purple-500 transition-al absolute bottom-0" />
+        </li>
+        <li className="relative group">
+          <Link to="/about"  className="focus:ring focus:ring-purple-500 focus:ring-opacity-25 outline-none rounded-lg">About</Link>
+          <div className="w-full h-0.5 bg-transparent group-hover:bg-purple-500 transition-al absolute bottom-0" />
+        </li>
+        <li className="relative group">
+          <Link to="/cart" className="focus:ring focus:ring-purple-500 focus:ring-opacity-25 outline-none rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
+</svg>
+</Link>
+          <div className="w-full h-0.5 bg-transparent group-hover:bg-purple-500 transition-al absolute bottom-0" />
+        </li>
+        <li><Link to="/login" className="bg-purple-500 px-4 py-1 rounded-xl text-white hover:bg-purple-400 active:bg-purple-600 focus:ring focus:ring-purple-500 focus:ring-opacity-25 outline-none">Login</Link></li>
+      </ul>
+      <button className="flex md:hidden hover:bg-gray-100 p-2 rounded-full transition-all focus:ring focus:ring-purple-500 focus:ring-opacity-25 active:bg-gray-200 outline-none">
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM9 15a1 1 0 011-1h6a1 1 0 110 2h-6a1 1 0 01-1-1z" clip-rule="evenodd" />
+        </svg>
+      </button>
+    </section>
   </div>
 </nav>
+
+
+</div>
       
 
 
 
-    </div>
+    
   )
 }

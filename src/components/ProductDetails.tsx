@@ -19,15 +19,26 @@ export default function ProductDetails() {
   }
 
   return (
-    <div>
-      <div>
-      <a href="#" className="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 ">
-  <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{selectedProduct?.description}</h5>
-  <img src={selectedProduct?.image} alt="Product" className="font-normal text-gray-700 dark:text-gray-400" />
-</a>
 
-
-      </div>
+<div className=" flex justify-center items-center h-screen">
+      <a
+        href="#"
+        className="block max-w-md p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 ">
+        <h5 className="mb-2 text-lg font-bold tracking-tight text-green-900 dark:text-white">
+          {selectedProduct?.description}
+        </h5>
+        <h5 className="mb-2 text-xl tracking-tight text-green-900 dark:text-white">
+          {selectedProduct?.sizes}
+        </h5>
+        <h5 className="mb-2 text-xl font-bold tracking-tight text-green-900 dark:text-white">
+          {selectedProduct?.variants}
+        </h5>
+        <img
+          src={ selectedProduct?.image}
+          alt="Product"
+          className="font-normal text-gray-700 dark:text-gray-400"
+        />
+      </a>
     </div>
   );
 }

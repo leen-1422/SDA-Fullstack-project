@@ -18,6 +18,7 @@ import UserProfile from './components/UserProfile'
 // import ProtectedRoute from './components/AdminRoute'
 import AdminPage from './pages/AdminPage'
 import AdminRoute from './components/AdminRoute'
+import ProductsMainPage from './components/ProductsMainPage'
 
 
 
@@ -27,13 +28,15 @@ function App() {
 
 <Navbar/>
       <Routes>
+      
         <Route path='/' element={<Home />} /> 
         <Route path='/cart' element={<Cart />} /> 
         <Route path='/about' element={<About />} /> 
-       
         <Route path="/products/:id" element={<ProductDetails />} />
-
         <Route path='/login' element={<Login />} /> 
+        <Route path='/products' element={<ProductsMainPage />} /> 
+
+
 
       <Route  element={<AdminRoute />} > 
         <Route path='/admin' element={<ProductsManager />} />
@@ -42,6 +45,7 @@ function App() {
         <Route path='/categories' element={<Categories />} /> 
        
         </Route>  
+
       </Routes>
 
 

@@ -6,10 +6,10 @@ Tech Stack: React, TypeScript, and Redux/Redux Toolkit. Styling: CSS/SASS or MUI
 
 **Data Sources:**
 
-- Products: id, name, description, categories, variants, sizes 
-- Categories: id, name
-- Orders: id, productId, userId, purchasedAt
-- Users: id, firstName, lastName, email, password, role (visitor or admin)
+- Products: id, name, description, categories, variants, sizes ✅
+- Categories: id, name✅
+- Orders: id, productId, userId, purchasedAt✅
+- Users: id, firstName, lastName, email, password, role (visitor or admin) ✅
 
 **Pages to Create:**
 

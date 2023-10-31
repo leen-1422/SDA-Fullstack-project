@@ -17,11 +17,22 @@ export default function ProductsMainPage() {
   const categories = state.categories
   const search = state.products.search
   const [searchValue, setSearchValue] = useState('');
+  
+  // const [currentPage,setCurrentPage]= useState(1)
+  // const itemsPerPage= 3;
+  // const totalPages = state.products.items.length / itemsPerPage
+  // const indexOfLAstItem= currentPage * itemsPerPage
+  // const indexOfFirstItem= indexOfLAstItem -itemsPerPage
+  // const currentItems = products.items.slice(indexOfFirstItem,indexOfLAstItem )
 
   useEffect(() => {
     handleGetProducts();
     handleGetCategories()
   }, []);
+
+  // const handelPagechange = (page:number) =>{
+  //   setCurrentPage(page)
+  // }
 
   const handleGetCategories = () => {
     dispatch(categoriesRequest())
@@ -106,7 +117,6 @@ export default function ProductsMainPage() {
             <input type="search"
             value={search}
             onChange={handelSearch}
-            
              id="search-dropdown" className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-r-lg border-l-gray-50 border-l-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-l-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500" placeholder="Search Mobile, Laptop, Watches..." required/>
 
         </div>
@@ -120,12 +130,21 @@ export default function ProductsMainPage() {
               <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7">
                 <img src={product.image} alt="Tall slender porcelain bottle with natural clay textured body and cork stopper." className="h-full w-full object-cover object-center group-hover:opacity-75" />
               </div>
-              <h3 className="mt-4 text-sm text-gray-700">{product.name}</h3>
+              <h1 className="mt-4 font-semibold text-gray-700">{product.name}</h1>
+              <h1>{product.price} SAR</h1>
               <Link to={`products/${product.id}`}>
-                <button className="mt-1 text-lg font-medium text-gray-900">More details</button>
+              <button className="bg-transparent hover:bg-green-900 text-black-700 font-semibold hover:text-white py-2 px-4 border border-green-900 hover:border-transparent rounded">
+  Mode details
+</button>
+                {/* <button className="mt-1 text-lg font-medium text-gray-900">More details</button> */}
               </Link>
               
-              <button onClick={() => dispatch(addToCart(product))   }  className="mt-1 text-lg font-medium text-gray-900">Add</button>
+
+              
+              <button onClick={() => dispatch(addToCart(product))   }  className="mt-1 ml-99 text-lg font-medium text-gray-900 mx-9 "><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+</svg>
+</button>
             </div>
           ))}
         </div>
