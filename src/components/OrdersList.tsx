@@ -20,8 +20,8 @@ export default function OrdersList() {
     }
   
   return (
-    <div>
-        <div className="grid grid-cols-1 md:grid-cols-2 w-full">
+    <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700 ">
+        <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
             {ordersList.isLoading && <h3> Loading products...</h3>}
             <div className="card grid gap-4">
               <ul>
@@ -35,6 +35,10 @@ export default function OrdersList() {
               </ul>
             </div>
           </div>
+          
+
+  
+
       </div>
   )
 }

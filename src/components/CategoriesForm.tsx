@@ -108,12 +108,12 @@ export default function CategoryTable() {
                     <td className="py-4 px-6 border-b border-gray-200">{name}</td>
                     <td className="py-4 px-6 border-b border-gray-200 whitespace">
                       <button
-                        className="mr-1 text-white bg-blue-600 rounded-md hover:bg-blue-500 focus:outline-none focus:shadow-outline-blue active:bg-blue-600 py-2 px-4 font-small"
+                        className="mr-1 text-white bg-gray-600 rounded-md hover:bg-gray-500 focus:outline-none focus:shadow-outline-blue active:bg-blue-600 py-2 px-4 font-small"
                         onClick={()=> handleEditBtnClick(item)}>
                         Edit
                       </button>
                        <button
-                        className="text-white bg-red-600 rounded-md hover:bg-red-500 focus:outline-none focus:shadow-outline-blue active:bg-red-600 py-2 px-4 font-small"
+                        className="text-white bg-purple-600 rounded-md hover:bg-purple-500 focus:outline-none focus:shadow-outline-blue active:bg-red-600 py-2 px-4 font-small"
                         onClick={() =>
                           dispatch(removeCategory({ categoryId: id }))
                         }>

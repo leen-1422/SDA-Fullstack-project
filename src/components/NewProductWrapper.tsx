@@ -15,7 +15,7 @@ const initialProductState: Product = {
   variants: [],
   sizes: [],
   categoryId: null,
-  
+  price:0
   
   
 }

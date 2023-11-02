@@ -20,6 +20,8 @@ import AdminPage from './pages/AdminPage'
 import AdminRoute from './components/AdminRoute'
 import ProductsMainPage from './components/ProductsMainPage'
 import Regeregister from './components/Regeregister'
+import Logout from './components/Logout'
+import AdminProfile from './components/AdminProfile'
 
 
 
@@ -28,25 +30,34 @@ function App() {
     <div >
 
 <Navbar/>
+
       <Routes>
       
         <Route path='/' element={<Home />} /> 
         <Route path='/cart' element={<Cart />} /> 
         <Route path='/about' element={<About />} /> 
         <Route path="/products/:id" element={<ProductDetails />} />
+        <Route path="/products/products/:id" element={<ProductDetails />} />
         <Route path='/login' element={<Login />} /> 
         <Route path='/products' element={<ProductsMainPage />} /> 
+        
         <Route path='/regesteration' element={<Regeregister/>} />
+        <Route path='/visitor' element={<UserProfile/>} />
+        
+        
 
 
 
       <Route  element={<AdminRoute />} > 
       
-        <Route path='/admin' element={<AdminPage />} />
+        {/* <Route path='/admin' element={<AdminPage />} /> */}
         <Route path='/admin' element={<ProductsManager />} />
         <Route path='/users' element={<UsersList />} /> 
         <Route path='/orders' element={< OrdersList />} /> 
         <Route path='/categories' element={<Categories />} /> 
+       
+        <Route path='/logout' element={<Logout/>} /> 
+
        
         </Route>  
 

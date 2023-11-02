@@ -6,7 +6,7 @@ export type Product = {
   image: string 
   description: string
   categories: number[]
-  variants: string[]
+ 
   sizes: string[]
   categoryId: null | number 
   price: number
@@ -62,6 +62,7 @@ export const productSlice = createSlice({
     getSearch: (state,action)=>{
       state.search= action.payload
   },
+  
 
     
     

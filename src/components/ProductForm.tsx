@@ -67,17 +67,8 @@ export function ProductForm({ product, handleSubmit, handleChange,  }: ProductFo
         />
       </div>
       <div className="mb-4">
-        <label htmlFor="variants" className={labelStyle}>
-          Variants: (use comma , to create multiple)
-        </label>
-        <input
-          type="text"
-          name="variants"
-          id="variants"
-          value={product.variants.join(',')}
-          onChange={handleChange}
-          className={inputStyle}
-        />
+
+
       </div>
       <div className="mb-4">
         <label htmlFor="sizes" className={labelStyle}>

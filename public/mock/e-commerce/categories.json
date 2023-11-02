@@ -1,42 +1,42 @@
 [
   {
     "id": 1,
-    "name": "Electronics"
+    "name": "Gymnosperms"
   },
   {
     "id": 2,
-    "name": "Computers"
+    "name": "Angiosperms"
   },
   {
     "id": 3,
-    "name": "Mobile Phones"
+    "name": "Perennials"
   },
   {
     "id": 4,
-    "name": "Gaming"
+    "name": "Shrubs"
   },
   {
     "id": 5,
-    "name": "Photography"
+    "name": "Ferns"
   },
   {
     "id": 6,
-    "name": "Health & Fitness"
+    "name": "Pteridophytes"
   },
   {
     "id": 7,
-    "name": "Home Entertainment"
+    "name": "Annuals"
   },
   {
     "id": 8,
-    "name": "Home Appliances"
+    "name": "Aquatic plants"
   },
   {
     "id": 9,
-    "name": "Audio"
+    "name": "Biennials"
   },
   {
     "id": 10,
-    "name": "Storage"
+    "name": "seed bearing"
   }
 ]

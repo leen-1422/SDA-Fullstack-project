@@ -5,10 +5,12 @@ import Login from './Login'
 
 
 const useAuth = () => {
-  const userloggedIn = useSelector((state: RootState) => state.users.isLoggedIn)
-  const isAdmin = useSelector((state: RootState) => state.users.isAdmin)
+  // const userloggedIn = useSelector((state: RootState) => state.users.isLoggedIn)
+  // const isAdmin = useSelector((state: RootState) => state.users.isAdmin)
 
-  return userloggedIn && isAdmin
+  const {isLoggedIn,isAdmin} = useSelector((state: RootState) => state.users)
+
+  return isLoggedIn && isAdmin
 }
 const AdminRoute = () => {
   const isAuth = useAuth()

@@ -98,7 +98,7 @@ export default function ProductsMainPage() {
         <h2 className="sr-only">Products</h2>
         <div>
         <div>
-    <div className="flex">
+    <div className="flex mb-12">
         <label htmlFor="search-dropdown" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Your Email</label>
             <select
             className="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-l-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600" 
@@ -136,8 +136,12 @@ export default function ProductsMainPage() {
                     className="h-full w-full object-cover object-center group-hover:opacity-75"
                   />
                 </div>
+                <h1 className='font-semibold'>{product.name}</h1>
+
         
-              <h1>{product.price} SAR</h1>
+              <h1><span>{product.price} SAR</span></h1>
+
+              <div className='flex justify-between mt-4'>
               <Link to={`products/${product.id}`}>
               <button className="bg-transparent hover:bg-green-900 text-black-700 font-semibold hover:text-white py-2 px-4 border border-green-900 hover:border-transparent rounded">
   Mode details
@@ -151,6 +155,9 @@ export default function ProductsMainPage() {
   <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
 </svg>
 </button>
+
+              </div>
+              
             </div>
             ))
           )}

@@ -53,7 +53,9 @@ export default function Login() {
         if (foundUser && foundUser.role === 'admin') {
           dispatch(Adminlogin(foundUser))
           navigate('/admin')
+          console.log(foundUser.role)
         } else {
+          console.log(foundUser.role)
           navigate('/')
         }
       } else {
@@ -137,7 +139,7 @@ export default function Login() {
 
               <button
                 type="submit"
-                className="w-full text-black bg-primary-800 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+                className="w-full text-white bg-purple-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
                 Sign in
               </button>
 
@@ -145,7 +147,7 @@ export default function Login() {
                 Don’t have an account yet?{' '}
                 <Link to="/regesteration"
                   
-                  className="font-medium text-primary-600 hover:underline dark:text-primary-500">
+                  className="font-medium text-primary-600 hover:underline dark:text-primary-500 ">
                   Sign up
                 </Link>
               </p>

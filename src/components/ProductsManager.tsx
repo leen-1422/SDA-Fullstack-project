@@ -104,20 +104,6 @@ const handleEditBtnClick = (item: Product) => {
 
     <div className="flex">
 
-       <Link to="/users">
-        <Button variant="contained">Users</Button>
-        </Link>
-
-        <Link to="/orders">
-        <Button variant="contained">Orders</Button>
-        </Link>
-
-        <Link to="/categories">
-        <Button variant="contained">Catigores</Button>
-        </Link>
-
-      
-      
       <div className="w-3/4 bg-white p-4">
         <div className=" rounded-lg overflow-hidden mx-4 md:mx-10">
           <div className="flex flex-1 items-center justify-center p-6">
@@ -177,21 +163,7 @@ const handleEditBtnClick = (item: Product) => {
               </div>
 
               <div className="flex mt-2">
-                <div className="mr-2">
-                  <input
-                    type="text"
-                    name="variants"
-                    id="variants"
-                    value={
-                      selectedProduct
-                        ? selectedProduct.variants.join(',')
-                        : product.variants.join(',')
-                    }
-                    onChange={handleChange}
-                    className="w-full rounded-md border border-gray-300 bg-white py-2 pl-3 pr-3 leading-5 placeholder-gray-500 focus:border-gray-500 focus:placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-500 sm:text-sm"
-                    placeholder="Varients"
-                  />
-                </div>
+
                 <div className="mr-2">
                   <input
                     type="text"
@@ -221,7 +193,7 @@ const handleEditBtnClick = (item: Product) => {
                 <th className="w-1/7 py-4 px-6 text-left text-gray-600 font-bold">Count</th>
                 <th className="w-1/5 py-4 px-6 text-left text-gray-600 font-bold">Image</th>
                 <th className="w-1/5 py-4 px-6 text-left text-gray-600 font-bold">Name</th>
-                <th className="w-1/4 py-4 px-6 text-left text-gray-600 font-bold">Description</th>
+               
                 <th className="w-1/4 py-4 px-6 text-left text-gray-600 font-bold">categories</th>
                 <th className="w-1/4 py-4 px-6 text-left text-gray-600 font-bold">varients</th>
                 <th className="w-1/4 py-4 px-6 text-left text-gray-600 font-bold">sizes</th>
@@ -236,18 +208,18 @@ const handleEditBtnClick = (item: Product) => {
                     <img src={item.image} width={100} />
                   </td>
                   <td className="py-4 px-6 border-b border-gray-200">{item.name}</td>
-                  <td className="py-4 px-6 border-b border-gray-200">{item.description}</td>
+                  
                   <td className="py-4 px-6 border-b border-gray-200">{item.categories}</td>
-                  <td className="py-4 px-6 border-b border-gray-200">{item.variants}</td>
+                  
                   <td className="py-4 px-6 border-b border-gray-200">{item.sizes}</td>
 
-                  <td className="py-4 px-6 border-b border-gray-200 whitespace">
-                    <button onClick={()=> handleEditBtnClick(item)} className="mr-1 text-white bg-blue-600 rounded-md hover:bg-blue-500 focus:outline-none focus:shadow-outline-blue active:bg-blue-600 py-2 px-4 font-small">
+                  <td className="py-4 px-6  border-gray-200 whitespace flex mt-9 ">
+                    <button onClick={()=> handleEditBtnClick(item)} className="mr-1 text-white bg-gray-600 rounded-md hover:bg-gray-500 focus:outline-none focus:shadow-outline-gray active:bg-gray-600 py-2 px-4 font-small">
                       Edit
                     </button>
                     <button
                       onClick={() => dispatch(removeProduct({ productId: item.id }))}
-                      className="text-white bg-red-600 rounded-md hover:bg-red-500 focus:outline-none focus:shadow-outline-blue active:bg-red-600 py-2 px-4 font-small">
+                      className="text-white bg-purple-600 rounded-md hover:bg-purple-500 focus:outline-none focus:shadow-outline-gray active:bg-purple-600 py-2 px-4 font-small">
                       Delete
                     </button>
                   </td>

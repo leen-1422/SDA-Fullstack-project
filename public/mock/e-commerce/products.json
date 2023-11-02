@@ -1,122 +1,120 @@
 [
   {
     "id": 1,
-    "name": "flower",
-    "image": "https://m.media-amazon.com/images/I/81SigpJN1KL._SL1500_.jpg",
-    "description": "High-performance laptop for all your needs.",
+    "name": "Cactus",
+    "image": "src/images/products/galina-n-miziNqvJx5M-unsplashll.jpg",
+    "description": "Cacti are widely cultivated as ornamentals. In addition, various species, notably prickly pears and chollas (Opuntia and Cylindopuntia, respectively), are cultivated as food. In Central and South America, species of Opuntia, Cereus, and others are used as living fences, and wood from columnar cacti is used as fuel in some desert regions. ",
     "categories": [1, 2],
-    "variants": ["8GB RAM", "16GB RAM"],
     "sizes": ["13-inch", "15-inch"],
-    "price": 200
+    "price": 150
   },
   {
     "id": 2,
-    "name": "Smartphone",
-    "image": "https://m.media-amazon.com/images/I/81SigpJN1KL._SL1500_.jpg",
-    "description": "Latest smartphone with advanced features.",
+    "name": "Pereskia",
+    "image": "src/images/products/gabriel-alenius-EXvZCn-oCTY-unsplash2.jpg",
+    "description": "Members of the genus typically have thin stems and non-succulent leaves. The flowers are commonly showy and roselike in appearance, with numerous stamens and the floral cup that is characteristic of the cactus family. The roots are often fleshy and tuberous. Most species are armed with spines that emerge in clusters from areoles along the stems; some species also feature wool or hairs.",
     "categories": [1, 3],
-    "variants": ["64GB", "128GB"],
-    "sizes": [],
-    "price": 200
+    "sizes": ["13-inch", "14-inch"],
+    "price": 50
   },
   {
     "id": 3,
-    "name": "Tablet",
-    "image": "https://m.media-amazon.com/images/I/81gC7frRJyL._SL1500_.jpg",
-    "description": "Compact and powerful tablet for work and entertainment.",
+    "name": "Phytolaccaceae",
+    "image": "src/images/products/linh-le-Ebwp2-6BG8E-unsplash (2).jpg",
+    "description": "A family of the order Caryophyllales, Phytolaccaceae includes poke or pokeweed (Phytolacca americana), a North American weed. The rouge plant (Rivina humilis), a shrub common to the southeastern United States, and Agdestis clematidea, a tuberous-rooted vine, are sometimes cultivated in warm regions.",
     "categories": [1, 2],
-    "variants": ["32GB", "64GB"],
+   
     "sizes": ["10-inch", "12-inch"],
-    "price": 200
+    "price": 100
   },
   {
     "id": 4,
-    "name": "Gaming Console",
-    "image": "https://m.media-amazon.com/images/I/51wPWj--fAL._SL1000_.jpg",
-    "description": "Next-gen gaming console for immersive gameplay.",
+    "name": "Amaranthaceae",
+    "image": "src/images/products/gaelle-marcel-AzodV2D0GLc-unsplash (2).jpg",
+    "description": "Members of the family can be annuals or perennials and commonly grow in saline soils. The simple leaves are sometimes succulent or hairy and are usually arranged alternately along the stems. The stems, roots, leaves, or flowers of many species are red in colour because of the presence of characteristic betalain pigments.",
     "categories": [4],
-    "variants": ["500GB", "1TB"],
-    "sizes": [],
-    "price": 200
+    
+    "sizes": ["13-inch", "15-inch"],
+    "price": 190
   },
   {
     "id": 5,
-    "name": "Camera",
-    "image": "https://m.media-amazon.com/images/I/41zG3lqcEvL._SL1000_.jpg",
-    "description": "High-resolution camera for capturing memories.",
+    "name": "orchid",
+    "image": "src/images/products/stephanie-harvey-slSRjvoiIpY-unsplash.jpg",
+    "description": "The primary characteristics that distinguish the orchids as a group are found in the flower. At the bottom of an unspecialized non-orchid flower is the stem that supports it, called the pedicel.",
     "categories": [5],
-    "variants": ["24MP", "36MP"],
-    "sizes": [],
-    "price": 200
+  
+    "sizes": ["9-inch", "15-inch"],
+    "price": 289
   },
   {
     "id": 6,
-    "name": "Fitness Tracker",
-    "image": "https://m.media-amazon.com/images/I/61JL0ccPltL._SL1500_.jpg",
-    "description": "Track your health and fitness goals with this smart tracker.",
+    "name": "shooting star",
+    "image": "src/images/products/stephanie-harvey-f7PfM2NklZ4-unsplash.jpg",
+    "description": "The low-growing shooting stars are perennial herbs with wavy-margined leaves growing in a rosette. The flowers, which are commonly reddish, purple, lilac, pink, or white, grow in a small cluster at the end of a leafless stalk (scape).",
     "categories": [6],
-    "variants": ["Small", "Large"],
-    "sizes": [],
-    "price": 200
+    
+    "sizes": ["13-inch", "15-inch"],
+    "price": 182
   },
   {
     "id": 7,
-    "name": "Home Theater System",
-    "image": "https://m.media-amazon.com/images/I/615+VvllX6L._SL1500_.jpg",
-    "description": "Create a cinematic experience at home with this system.",
+    "name": "globe amaranth",
+    "image": "src/images/products/sarah-dorweiler-x2Tmfd1-SgA-unsplash.jpg",
+    "description": "Globe amaranth is an annual plant that reaches 30–90 cm (1–3 feet) in height. The leaves are simple with entire margins and are arranged oppositely along the reddish stems. A prolific bloomer, the plant continually produces dense round flower clusters on long stalks throughout the summer and fall. ",
     "categories": [7],
-    "variants": ["5.1 Surround Sound", "7.1 Surround Sound"],
-    "sizes": [],
-    "price": 200
+    
+    "sizes": ["3-inch", "5-inch"],
+    "price": 234
   },
   {
     "id": 8,
-    "name": "Coffee Maker",
-    "image": "https://m.media-amazon.com/images/I/51JKNxKS1dL._SL1200_.jpg",
-    "description": "Brew your favorite coffee at home with ease.",
+    "name": "Masdevallia",
+    "image": "src/images/products/polina-silivanova-ywRYbp-6p8c-unsplash.jpg",
+    "description": "Most species are epiphytes, though some grow in soil or attached to rocks. They have short stems and erect or slightly spreading leaves that arise from a creeping rhizome. The brightly coloured flowers often have unusual shapes; the sepals are characteristically united at their bases and have one or more long tail-like extensions.",
     "categories": [8],
-    "variants": ["Single Serve", "Drip Coffee Maker"],
-    "sizes": [],
-    "price": 200
+    
+    "sizes": ["2-inch", "8-inch"],
+    "price": 188
   },
   {
     "id": 9,
-    "name": "Bluetooth Speaker",
-    "image": "https://m.media-amazon.com/images/I/61N2a48p9xL._SL1200_.jpg",
-    "description": "Portable speaker for music on the go.",
+    "name": "chin cactus",
+    "image": "src/images/products/annie-spratt-8lHrlXmuDV0-unsplash.jpg",
+    "description": "The small plants are globose to cylindrical and are so named for the chinlike protuberance below each spine-bearing areole (special bud) on the ribs. The showy diurnal flowers are most often white or cream, with shades of pink, yellow, or red in some species and varieties. The receptacle (the flower stalk upon which the flower organs attach) characteristically lacks spines or hairs.",
     "categories": [9],
-    "variants": ["Black", "White"],
-    "sizes": [],
-    "price": 200
+   
+    "sizes": ["13-inch", "15-inch"],
+    "price": 50
   },
   {
     "id": 10,
-    "name": "External Hard Drive",
-    "image": "https://m.media-amazon.com/images/I/81pAOJFcsFS._SL1500_.jpg",
-    "description": "Store and backup your data with high-capacity storage.",
+    "name": "moonlight cactus",
+    "image": "src/images/products/doug-kelley-rPDuuBEtFI8-unsplash.jpg",
+    "description": "The genus is known for its large, usually fragrant, night-blooming white flowers, which are among the largest in the cactus family. The flowers often last only a single night and are usually pollinated by moths. The large fleshy fruits are spiny and red at maturity. Some species clamber along the ground; others cling with aerial roots to trees and other objects as epiphytes. ",
     "categories": [10],
-    "variants": ["1TB", "2TB"],
-    "sizes": [],
-    "price": 200
+  
+    "sizes": ["13-inch", "15-inch"],
+    "price": 111
   },
   {
     "id": 11,
-    "name": "Headphones",
-    "image": "https://m.media-amazon.com/images/I/51j7l0QISqL._SL1000_.jpg",
-    "description": "Noise-cancelling headphones for immersive audio experience.",
+    "name": "organ-pipe cactus",
+    "image": "src/images/products/natalie-kinnear-_L9BFKp3EF8-unsplash.jpg",
+    "description": "Organ-pipe cactus typically grows 5–8 metres (about 16–26 feet) tall and features several to many tall columnar arms arising candelabra-like from the base or not far above it. The stems range from green to gray in colour and are densely covered with brown spines. The white flowers have numerous petals and stamens and are often tinged with pink or purple. Opening at night, the flowers are typically pollinated by bats. The red fruits are sweet and fleshy.",
     "categories": [9],
-    "variants": ["Over-Ear", "In-Ear"],
-    "sizes": [],
-    "price": 200
+    
+    "sizes": ["13-inch", "15-inch"],
+    "price": 190
   },
   {
     "id": 12,
-    "name": "Smartwatch",
-    "image": "https://m.media-amazon.com/images/I/811GOkDSOaL._SL1500_.jpg",
-    "description": "Stay connected and track your activities with this smartwatch.",
+    "name": "ball cactus",
+    "image": "src/images/products/alex-lvrs-mwINQsW2KJs-unsplash (2).jpg",
+    "description": "Ball cacti are generally small and globose to cylindroid in shape. Many species are deeply ribbed and usually bear clusters of spines surrounded by white or yellow glochids (hairlike spines). The flowers are typically yellow to red and borne along the crown. Some species have small flowers of only about 1 cm (0.5 inch) in diameter, while others grow up to about 6 cm (2.4 inches). Plants can be singular or may produce offsets at the base.",
     "categories": [6],
-    "variants": ["Titanium"],
-    "sizes": [],
-    "price": 200
+    
+    "sizes": ["13-inch", "15-inch"],
+    "price": 189
   }
 ]
