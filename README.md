@@ -1,15 +1,15 @@
 ## Option 2: E-commerce Website
 
-### Level 1: Basic Requirements
+### Level 1: Basic Requirements  ✅
 
 Tech Stack: React, TypeScript, and Redux/Redux Toolkit. Styling: CSS/SASS or MUI.
 
-**Data Sources:**
+**Data Sources:**  ✅
 
-- Products: id, name, description, categories, variants, sizes ✅
-- Categories: id, name✅
-- Orders: id, productId, userId, purchasedAt✅
-- Users: id, firstName, lastName, email, password, role (visitor or admin) ✅
+- Products: id, name, description, categories, variants, sizes 
+- Categories: id, name
+- Orders: id, productId, userId, purchasedAt
+- Users: id, firstName, lastName, email, password, role (visitor or admin) 
 
 **Pages to Create:**
 
@@ -50,8 +50,8 @@ Tech Stack: React, TypeScript, and Redux/Redux Toolkit. Styling: CSS/SASS or MUI
 
 If you have a higher skill level and finish the previous requirements before the deadline, you can tackle the following bonus tasks:
 - Messages, show loading, success, and error messages (e.g., when loading products list or adding new product) ✅
-- Implement pagination feature ✅
-- Create a Profile Page (only available if user logs in), implement editing user profile feature (user can change first name, last name) ✅
+- Implement pagination feature 
+- Create a Profile Page (only available if user logs in), implement editing user profile feature (user can change first name, last name) 🛠️
 
 - Peer Review:
 - Review the code and implementation of 2 assignments from other participants.
