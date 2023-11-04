@@ -2,6 +2,7 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { json } from 'react-router'
 import { toast } from 'react-toastify'
 
+
 export type CartProduct = {
     id: number
     name: string
@@ -41,13 +42,13 @@ const initialState: ProductState = {
 
         if(itemIndex >= 0 ){
           state.cartItems[itemIndex].cartQuantity +=1
-          toast.info (`${action.payload.name} cart Quantity`, {
+          toast.success (`${action.payload.name} is added to your cart`, {
             position: "bottom-left"});
         }else{
           const tempProduct = {...action.payload, cartQuantity: 1} // increase the product by one if it already exist 
           state.cartItems.push(tempProduct);
 
-          toast.success (" added to cart", {
+          toast.success (`${action.payload.name} is added to your cart`, {
             position: "bottom-left"})
           
           
@@ -59,6 +60,11 @@ const initialState: ProductState = {
       removeProduct: (state, action: { payload: { productId: number } }) => {
         const filteredItems = state.cartItems.filter((product) => product.id !== action.payload.productId)
         state.cartItems = filteredItems
+        toast.error ('item is removed from cart', {
+          position: "bottom-left"
+        });
+
+
         
       },
       decreaseCart:(state,action : { payload: { productId: number } }  )=>{
@@ -67,14 +73,14 @@ const initialState: ProductState = {
         )
         if (state.cartItems[itemIndex].cartQuantity > 1){
           state.cartItems[itemIndex].cartQuantity -=1
-          toast.info (`${action.payload.productId} idk`, {
+          toast.info ('you removed one item from cart', {
             position: "bottom-left"
           });
 
         }else if (state.cartItems[itemIndex].cartQuantity === 1){
           const filteredItems = state.cartItems.filter((product) => product.id !== action.payload.productId)
         state.cartItems = filteredItems
-        toast.error (`${action.payload.productId} remove from cart`, {
+        toast.error ('item is removed from cart', {
           position: "bottom-left"
         });
 

@@ -1,8 +1,8 @@
 import { useDispatch, useSelector } from "react-redux"
-import { AppDispatch, RootState } from "../redux/store"
+import { AppDispatch, RootState } from "../../redux/store"
 import { ChangeEvent, FormEvent, useEffect, useState } from "react"
-import api from "../api"
-import { Product, addCategory, categoriesRequest, categoriesSuccess, removeCategory, updateCategory } from "../redux/slices/categoriesSlice"
+import api from "../../api"
+import { Product, addCategory, categoriesRequest, categoriesSuccess, removeCategory, updateCategory } from "../../redux/slices/categories/categoriesSlice"
 
 export default function CategoryTable() {
   const dispatch = useDispatch<AppDispatch>()

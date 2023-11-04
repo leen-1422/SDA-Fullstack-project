@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../redux/store';
-import { CartProduct, addToCart, decreaseCart, removeProduct } from '../redux/slices/cartSlice';
+import { CartProduct, addToCart, decreaseCart, removeProduct } from '../redux/slices/cart/cartSlice';
 import { Link } from 'react-router-dom';
 
 export default function Cart() {

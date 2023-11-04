@@ -1,12 +1,12 @@
 import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { RootState } from '../redux/store'
+import { RootState } from '../../redux/store'
 import axios from 'axios'
 
-import { Adminlogin, login, usersRequest, usersSlice, usersSuccess } from '../redux/slices/usersSlice'
+import { Adminlogin, login, usersRequest, usersSlice, usersSuccess } from '../../redux/slices/users/usersSlice'
 import { useNavigate } from 'react-router'
-import api from '../api'
+import api from '../../api'
 import { Link } from 'react-router-dom'
 
 export default function Login() {

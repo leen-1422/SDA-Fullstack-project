@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { AppDispatch, RootState } from '../redux/store'
-import api from '../api'
-import {ordersRequest, ordersSuccess} from '../redux/slices/ordersSlice'
+import { AppDispatch, RootState } from '../../redux/store'
+import api from '../../api'
+import {ordersRequest, ordersSuccess} from '../../redux/slices/orders/ordersSlice'
 
 export default function OrdersList() {
     

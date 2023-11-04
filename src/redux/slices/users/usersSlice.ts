@@ -1,5 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { Navigate } from 'react-router'
+import { toast } from 'react-toastify'
 
 export type User = {
   id: number
@@ -60,10 +61,13 @@ export const usersSlice = createSlice({
     addUser: (state, action: { payload: { user: User } }) => {
       // let's append the new product to the beginning of the array
       state.users = [action.payload.user, ...state.users]
+      
     },
     removeUser: (state, action: { payload: { userId: number } }) => {
       const filteredItems = state.users.filter((product) => product.id !== action.payload.userId)
       state.users = filteredItems
+      toast.error ('user is removed', {
+        position: "bottom-left"})
     },
     getError: (state, action: PayloadAction<string>) => {
       state.error = action.payload
@@ -75,6 +79,8 @@ export const usersSlice = createSlice({
         foundUser.firstName = firstName
         foundUser.lastName = lastName
         state.userData = foundUser
+        toast.success ('your information is successfully updated', {
+          position: "bottom-left"})
         localStorage.setItem(
           'loginData',
           JSON.stringify({

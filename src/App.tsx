@@ -1,27 +1,29 @@
-import { ProductsManager } from './components/ProductsManager'
+import { ProductsManager } from './pages/ProductsManager'
 import './App.css'
 import Home from './pages/Home'
 import { Outlet, Route, Router, Routes } from 'react-router'
-import Navbar from './components/Navbar'
+import Navbar from './components/homeComponents/Navbar'
 import Cart from './pages/Cart'
 import About from './pages/About'
-import Login from './components/Login'
-import ProductDetails from './components/ProductDetails'
-import UsersList from './components/UsersList'
-import OrdersList from './components/OrdersList'
-import Categories from './components/Categories'
-import Products from './pages/Products'
-// import AdminPage from './pages/AdminPage'
+import Login from './components/homeComponents/Login'
+import ProductDetails from './components/homeComponents/ProductDetails'
+import UsersList from './components/usersComponents/UsersList'
+import OrdersList from './components/ordersComponent/OrdersList'
+import Categories from './components/categoriesComponents/Categories'
+
+
 import { Link } from 'react-router-dom'
 
-import UserProfile from './components/UserProfile'
-// import ProtectedRoute from './components/AdminRoute'
-import AdminPage from './pages/AdminPage'
-import AdminRoute from './components/AdminRoute'
-import ProductsMainPage from './components/ProductsMainPage'
-import Regeregister from './components/Regeregister'
-import Logout from './components/Logout'
-import AdminProfile from './components/AdminProfile'
+import UserProfile from './components/usersComponents/UserProfile'
+
+
+import AdminRoute from './components/adminComponents/AdminRoute'
+import ProductsMainPage from './components/homeComponents/ProductsMainPage'
+import Regeregister from './components/homeComponents/Regeregister'
+
+
+
+
 
 
 
@@ -40,23 +42,16 @@ function App() {
         <Route path="/products/products/:id" element={<ProductDetails />} />
         <Route path='/login' element={<Login />} /> 
         <Route path='/products' element={<ProductsMainPage />} /> 
-        
         <Route path='/regesteration' element={<Regeregister/>} />
         <Route path='/visitor' element={<UserProfile/>} />
         
         
-
-
-
       <Route  element={<AdminRoute />} > 
-      
-        {/* <Route path='/admin' element={<AdminPage />} /> */}
         <Route path='/admin' element={<ProductsManager />} />
         <Route path='/users' element={<UsersList />} /> 
         <Route path='/orders' element={< OrdersList />} /> 
         <Route path='/categories' element={<Categories />} /> 
-       
-        <Route path='/logout' element={<Logout/>} /> 
+
 
        
         </Route>  

@@ -1,10 +1,10 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Product, productsRequest, productsSuccess, getSearch} from '../redux/slices/products/productSlice';
-import { categoriesRequest, categoriesSuccess, setSelectedCategory } from '../redux/slices/categoriesSlice';
-import { addToCart } from '../redux/slices/cartSlice';
-import { AppDispatch, RootState } from '../redux/store';
-import api from '../api';
+import { Product, productsRequest, productsSuccess, getSearch} from '../../redux/slices/products/productSlice';
+import { categoriesRequest, categoriesSuccess, setSelectedCategory } from '../../redux/slices/categories/categoriesSlice';
+import { addToCart } from '../../redux/slices/cart/cartSlice';
+import { AppDispatch, RootState } from '../../redux/store';
+import api from '../../api';
 import { Link } from 'react-router-dom';
 import { Button } from '@mui/material';
 
@@ -16,23 +16,20 @@ export default function ProductsMainPage() {
   const cartItems = state.cart.cartItems;
   const categories = state.categories
   const search = state.products.search
-  const [searchValue, setSearchValue] = useState('');
+
   
-  // const [currentPage,setCurrentPage]= useState(1)
-  // const itemsPerPage= 3;
-  // const totalPages = state.products.items.length / itemsPerPage
-  // const indexOfLAstItem= currentPage * itemsPerPage
-  // const indexOfFirstItem= indexOfLAstItem -itemsPerPage
-  // const currentItems = products.items.slice(indexOfFirstItem,indexOfLAstItem )
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 4
 
   useEffect(() => {
     handleGetProducts();
     handleGetCategories()
   }, []);
-
-  // const handelPagechange = (page:number) =>{
-  //   setCurrentPage(page)
-  // }
+  
+  const handlePageChange = (pageNumber: number) => {
+    setCurrentPage(pageNumber)
+  
+  }
 
   const handleGetCategories = () => {
     dispatch(categoriesRequest())
@@ -86,14 +83,17 @@ export default function ProductsMainPage() {
   }
 
   const filteredAndSearchedProducts = filterProductbySearch(filteredProducts, search)
-  
+
+  const indexOfLastProduct = currentPage * itemsPerPage
+  const indexOfFirstProduct = indexOfLastProduct - itemsPerPage
+  const currentProducts = filteredAndSearchedProducts.slice(indexOfFirstProduct, indexOfLastProduct)
+
+  const totalPages = Math.ceil(filteredAndSearchedProducts.length / itemsPerPage)
+
 
 
   return (
     <div className="bg-white">
-
-
-
       <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
         <h2 className="sr-only">Products</h2>
         <div>
@@ -125,9 +125,16 @@ export default function ProductsMainPage() {
         </div>
         <div className="grid grid-cols-1 gap-x-3 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 xl:gap-x-8">
           {products.isLoading ? (
-            <h3 style={{ textAlign: 'center', color: 'red' }}>Loading products...</h3>
+            <div className='' aria-label="Loading..." role="status">
+            <svg className="animate-spin w-10 h-10 fill-slate-800" viewBox="3 3 18 18">
+              <path className="opacity-20" d="M12 5C8.13401 5 5 8.13401 5 12C5 15.866 8.13401 19 12 19C15.866 19 19 15.866 19 12C19 8.13401 15.866 5 12 5ZM3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12Z">
+              </path>
+              <path d="M16.9497 7.05015C14.2161 4.31648 9.78392 4.31648 7.05025 7.05015C6.65973 7.44067 6.02656 7.44067 5.63604 7.05015C5.24551 6.65962 5.24551 6.02646 5.63604 5.63593C9.15076 2.12121 14.8492 2.12121 18.364 5.63593C18.7545 6.02646 18.7545 6.65962 18.364 7.05015C17.9734 7.44067 17.3403 7.44067 16.9497 7.05015Z">
+              </path>
+            </svg>
+          </div>
           ) : (
-            filteredAndSearchedProducts.map((product) => (
+            currentProducts.map((product) => (
               <div key={product.id}>
                 <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7">
                   <img
@@ -162,7 +169,34 @@ export default function ProductsMainPage() {
             ))
           )}
         </div>
+        <div className='mt-10 flex'>
+        {Array.from({ length: totalPages }, (_, index) => index + 1).map((pageNumber) => (
+          <button
+          className={`mx-1 flex h-9 w-9 items-center justify-center rounded-full border ${
+            currentPage === pageNumber ? 'bg-gray-500' : 'bg-purple-600'
+          }    transition duration-150 ease-in-out hover:bg-light-300`}
+            key={pageNumber}
+            onClick={() => handlePageChange(pageNumber)}
+            style={{
+              justifyContent:'center',
+
+
+              
+              alignItems: 'center',
+              padding: '5px',
+              margin: '6px',
+              color: 'white',
+              cursor: 'pointer'
+            }}>
+            {pageNumber}
+          </button>
+        ))}
+
+        </div>
+
+        
       </div>
+     
     </div>
   );
 }

@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router";
-import HeroSection from "../components/HeroSection";
-import ProductsMainPage from "../components/ProductsMainPage";
-import ProductsAds from "../components/ProductsAds";
-import Footer from "../components/Footer";
+import HeroSection from "../components/homeComponents/HeroSection";
+import ProductsMainPage from "../components/homeComponents/ProductsMainPage";
+import ProductsAds from "../components/homeComponents/ProductsAds";
+import Footer from "../components/homeComponents/Footer";
 import About from "./About";
 
 

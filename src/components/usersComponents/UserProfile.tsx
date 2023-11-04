@@ -1,9 +1,9 @@
 import { pink } from '@mui/material/colors';
 import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../redux/store';
-import { updateUser, usersRequest, usersSuccess } from '../redux/slices/usersSlice';
-import api from '../api';
+import { RootState } from '../../redux/store';
+import { updateUser, usersRequest, usersSuccess } from '../../redux/slices/users/usersSlice';
+import api from '../../api';
 
 export default function UserProfile() {
   const { isLoggedIn, isAdmin, userData, users } = useSelector((state: RootState) => state.users);

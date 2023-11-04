@@ -1,10 +1,10 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { AppDispatch, RootState } from '../redux/store'
+import { AppDispatch, RootState } from '../../redux/store'
 import { useParams } from 'react-router';
-import { Product } from '../redux/slices/products/productSlice';
-import api from '../api'
-import { addToCart } from '../redux/slices/cartSlice';
+import { Product } from '../../redux/slices/products/productSlice';
+import api from '../../api'
+import { addToCart } from '../../redux/slices/cart/cartSlice';
 
 export default function ProductDetails() {
   const dispatch = useDispatch();
@@ -80,7 +80,7 @@ export default function ProductDetails() {
         </div>
         <div className="flex">
           <span className="title-font font-medium text-2xl text-gray-900"> SAR {selectedProduct.price}</span>
-          <button  onClick={() => dispatch(addToCart(selectedProduct))   }className="flex ml-auto text-white bg-green-900 border-0 py-2 px-6 focus:outline-none hover:bg-red-600 rounded"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
+          <button  onClick={() => dispatch(addToCart(selectedProduct))   }className="flex ml-auto text-white bg-green-900 border-0 py-2 px-6 focus:outline-none hover:bg-green-600 rounded"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
   <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
 </svg></button>
           <button className="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-900 ml-4">

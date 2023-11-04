@@ -1,9 +1,9 @@
 import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router'
-import { RootState } from '../redux/store'
-import { Adminlogin, login, usersRequest, usersSuccess } from '../redux/slices/usersSlice'
-import api from '../api'
+import { RootState } from '../../redux/store'
+import { Adminlogin, login, usersRequest, usersSuccess } from '../../redux/slices/users/usersSlice'
+import api from '../../api'
 import { Link } from 'react-router-dom'
 import { Alert, AlertTitle } from '@mui/material'
 

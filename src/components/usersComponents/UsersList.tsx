@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { AppDispatch, RootState } from '../redux/store'
+import { AppDispatch, RootState } from '../../redux/store'
 
-import api from '../api'
-import {removeUser, usersRequest, usersSuccess} from '../redux/slices/usersSlice'
+import api from '../../api'
+import {removeUser, usersRequest, usersSuccess} from '../../redux/slices/users/usersSlice'
 
 export default function UsersList() {
     const dispatch = useDispatch<AppDispatch>()

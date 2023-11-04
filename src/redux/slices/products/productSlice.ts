@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { toast } from 'react-toastify'
 
 export type Product = {
   id: number
@@ -43,10 +44,14 @@ export const productSlice = createSlice({
     addProduct: (state, action) => {
       // let's append the new product to the beginning of the array
       state.items = [action.payload.product, ...state.items]
+      toast.success ('new product is added', {
+        position: "bottom-left"})
     },
     removeProduct: (state, action: { payload: { productId: number } }) => {
       const filteredItems = state.items.filter((product) => product.id !== action.payload.productId)
       state.items = filteredItems
+      toast.error ('product is removed', {
+        position: "bottom-left"})
     },
 
 
@@ -57,6 +62,8 @@ export const productSlice = createSlice({
       state.items = state.items.map((product) =>
         product.id === editedProduct.id ? editedProduct : product
       );
+      toast.success (`${action.payload.editedProduct.name} is updated`, {
+        position: "bottom-left"})
     },
        
     getSearch: (state,action)=>{

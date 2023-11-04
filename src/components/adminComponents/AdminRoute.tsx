@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux"
-import { RootState } from "../redux/store"
+import { RootState } from "../../redux/store"
 import { Outlet } from "react-router"
-import Login from './Login'
+import Login from '../homeComponents/Login'
 
 
 const useAuth = () => {
