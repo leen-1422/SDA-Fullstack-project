@@ -2,108 +2,91 @@ import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import {
-  removeProduct, 
-  addProduct, 
-  productsRequest, 
-  productsSuccess, 
+  Product,
+  addProduct,
   editProduct,
-  Product
-  
+  productsRequest,
+  productsSuccess,
+  removeProduct
 } from '../redux/slices/products/productSlice'
-import { AppDispatch, RootState } from '../redux/store'
+import { RootState } from '../redux/store'
 
 import api from '../api'
-import { Link } from 'react-router-dom'
-import { Button } from '@mui/material'
-
-
 
 export function ProductsManager() {
+  const dispatch = useDispatch()
+  const state = useSelector((state: RootState) => state)
+  const products = state.products
 
-
-
-const dispatch = useDispatch()
-const state = useSelector((state: RootState) => state);
-const products = state.products;
-
-
-const [product, setProduct] = useState({ 
-  id: 0,
-  name: '',
-  image: '',
-  description: '',
-  categories: [],
-  variants: [],
-  sizes: [],
-  })
-const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
-
-useEffect(() => {
-  handleGetProducts()
-}, [])
-
-const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-  const { name, value } = e.target;
-  const isList = name === "categories" || name === "variants" || name === "sizes";
-
-  if (selectedProduct) {
-    setSelectedProduct((prevProduct) => ({
-      ...prevProduct!,
-      [name]: isList ? value.split(",") : value,
-    }));
-  } else {
-    setProduct((prevProduct) => ({
-      ...prevProduct,
-      [name]: isList ? value.split(",") : value,
-    }));
-  }
-};
-
-const handleSubmit = (e: FormEvent) => {
-  e.preventDefault();
-
-  if (selectedProduct && selectedProduct.id) {
-    const updatedProduct = { ...selectedProduct }; 
-    dispatch(editProduct({ editedProduct: updatedProduct }));
-  } else {
-    const newProduct = { ...product, id: new Date().getTime() };
-    dispatch(addProduct({ product: newProduct }));
-  }
-
-
-  setProduct({ 
+  const [product, setProduct] = useState({
     id: 0,
     name: '',
     image: '',
     description: '',
     categories: [],
     variants: [],
-    sizes: [],
-   });
-  setSelectedProduct(null);
-};
+    sizes: []
+  })
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
 
-//fetching data of products
-const handleGetProducts = async () => {
-  dispatch(productsRequest())
+  useEffect(() => {
+    handleGetProducts()
+  }, [])
 
-  const res = await api.get('/mock/e-commerce/products.json')
-  dispatch(productsSuccess(res.data))
-  console.log(res.data)
-}
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target
+    const isList = name === 'categories' || name === 'variants' || name === 'sizes'
 
-const handleEditBtnClick = (item: Product) => {
-  setSelectedProduct(item);
-};
+    if (selectedProduct) {
+      setSelectedProduct((prevProduct) => ({
+        ...prevProduct!,
+        [name]: isList ? value.split(',') : value
+      }))
+    } else {
+      setProduct((prevProduct) => ({
+        ...prevProduct,
+        [name]: isList ? value.split(',') : value
+      }))
+    }
+  }
 
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault()
 
-  
+    if (selectedProduct && selectedProduct.id) {
+      const updatedProduct = { ...selectedProduct }
+      dispatch(editProduct({ editedProduct: updatedProduct }))
+    } else {
+      const newProduct = { ...product, id: new Date().getTime() }
+      dispatch(addProduct({ product: newProduct }))
+    }
 
+    setProduct({
+      id: 0,
+      name: '',
+      image: '',
+      description: '',
+      categories: [],
+      variants: [],
+      sizes: []
+    })
+    setSelectedProduct(null)
+  }
+
+  //fetching data of products
+  const handleGetProducts = async () => {
+    dispatch(productsRequest())
+
+    const res = await api.get('/mock/e-commerce/products.json')
+    dispatch(productsSuccess(res.data))
+  }
+
+  const handleEditBtnClick = (item: Product) => {
+    setSelectedProduct(item)
+  }
 
   return (
-
     <div className="flex">
-
       <div className="w-3/4 bg-white p-4">
         <div className=" rounded-lg overflow-hidden mx-4 md:mx-10">
           <div className="flex flex-1 items-center justify-center p-6">
@@ -163,7 +146,6 @@ const handleEditBtnClick = (item: Product) => {
               </div>
 
               <div className="flex mt-2">
-
                 <div className="mr-2">
                   <input
                     type="text"
@@ -193,7 +175,7 @@ const handleEditBtnClick = (item: Product) => {
                 <th className="w-1/7 py-4 px-6 text-left text-gray-600 font-bold">Count</th>
                 <th className="w-1/5 py-4 px-6 text-left text-gray-600 font-bold">Image</th>
                 <th className="w-1/5 py-4 px-6 text-left text-gray-600 font-bold">Name</th>
-               
+
                 <th className="w-1/4 py-4 px-6 text-left text-gray-600 font-bold">categories</th>
                 <th className="w-1/4 py-4 px-6 text-left text-gray-600 font-bold">varients</th>
                 <th className="w-1/4 py-4 px-6 text-left text-gray-600 font-bold">sizes</th>
@@ -208,13 +190,15 @@ const handleEditBtnClick = (item: Product) => {
                     <img src={item.image} width={100} />
                   </td>
                   <td className="py-4 px-6 border-b border-gray-200">{item.name}</td>
-                  
+
                   <td className="py-4 px-6 border-b border-gray-200">{item.categories}</td>
-                  
+
                   <td className="py-4 px-6 border-b border-gray-200">{item.sizes}</td>
 
                   <td className="py-4 px-6  border-gray-200 whitespace flex mt-9 ">
-                    <button onClick={()=> handleEditBtnClick(item)} className="mr-1 text-white bg-gray-600 rounded-md hover:bg-gray-500 focus:outline-none focus:shadow-outline-gray active:bg-gray-600 py-2 px-4 font-small">
+                    <button
+                      onClick={() => handleEditBtnClick(item)}
+                      className="mr-1 text-white bg-gray-600 rounded-md hover:bg-gray-500 focus:outline-none focus:shadow-outline-gray active:bg-gray-600 py-2 px-4 font-small">
                       Edit
                     </button>
                     <button
@@ -230,6 +214,5 @@ const handleEditBtnClick = (item: Product) => {
         </div>
       </div>
     </div>
-
   )
 }

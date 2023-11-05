@@ -1,18 +1,22 @@
-import { useDispatch, useSelector } from "react-redux"
-import { AppDispatch, RootState } from "../../redux/store"
-import { ChangeEvent, FormEvent, useEffect, useState } from "react"
-import api from "../../api"
-import { Product, addCategory, categoriesRequest, categoriesSuccess, removeCategory, updateCategory } from "../../redux/slices/categories/categoriesSlice"
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import api from '../../api'
+import {
+  Product,
+  addCategory,
+  categoriesRequest,
+  categoriesSuccess,
+  removeCategory,
+  updateCategory
+} from '../../redux/slices/categories/categoriesSlice'
+import { AppDispatch, RootState } from '../../redux/store'
 
 export default function CategoryTable() {
   const dispatch = useDispatch<AppDispatch>()
-  const catiegores = useSelector((state: RootState) => state.categories.categories);
+  const catiegores = useSelector((state: RootState) => state.categories.categories)
 
-  
-
-  const [category, setCategory] = useState({ name: '' });
+  const [category, setCategory] = useState({ name: '' })
   const [selectedCategory, setSelectedCategory] = useState<Product | null>(null)
-
 
   useEffect(() => {
     handleGetCategories()
@@ -20,14 +24,13 @@ export default function CategoryTable() {
 
   useEffect(() => {
     if (selectedCategory) {
-      setCategory({ name: selectedCategory.name });
+      setCategory({ name: selectedCategory.name })
     } else {
-      setCategory({ name: '' });
+      setCategory({ name: '' })
     }
-  }, [selectedCategory]);
+  }, [selectedCategory])
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value)
     setCategory((prevCategory) => {
       return { ...prevCategory, [e.target.name]: e.target.value }
     })
@@ -44,7 +47,6 @@ export default function CategoryTable() {
       dispatch(addCategory({ category: newCategory }))
     }
 
-
     setCategory({ name: '' })
     setSelectedCategory(null)
   }
@@ -57,16 +59,13 @@ export default function CategoryTable() {
   }
 
   const handleEditBtnClick = (item: Product) => {
-    setSelectedCategory(item);
-  };
+    setSelectedCategory(item)
+  }
 
   return (
     <div className="flex">
-      
       <div className="w-3/4 bg-white p-4">
         <div className=" rounded-lg overflow-hidden mx-4 md:mx-10">
-          {/* {isLoading && <h3> Loading categories...</h3>} */}
-
           <div className="flex flex-1 items-center justify-center p-6">
             <div className="w-full max-w-lg">
               <form className="mt-5 sm:flex sm:items-center" onSubmit={handleAddSubmit}>
@@ -109,14 +108,12 @@ export default function CategoryTable() {
                     <td className="py-4 px-6 border-b border-gray-200 whitespace">
                       <button
                         className="mr-1 text-white bg-gray-600 rounded-md hover:bg-gray-500 focus:outline-none focus:shadow-outline-blue active:bg-blue-600 py-2 px-4 font-small"
-                        onClick={()=> handleEditBtnClick(item)}>
+                        onClick={() => handleEditBtnClick(item)}>
                         Edit
                       </button>
-                       <button
+                      <button
                         className="text-white bg-purple-600 rounded-md hover:bg-purple-500 focus:outline-none focus:shadow-outline-blue active:bg-red-600 py-2 px-4 font-small"
-                        onClick={() =>
-                          dispatch(removeCategory({ categoryId: id }))
-                        }>
+                        onClick={() => dispatch(removeCategory({ categoryId: id }))}>
                         Delete
                       </button>
                     </td>

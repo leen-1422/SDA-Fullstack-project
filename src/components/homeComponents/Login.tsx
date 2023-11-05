@@ -1,13 +1,10 @@
-import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react'
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-
 import { RootState } from '../../redux/store'
-import axios from 'axios'
-
-import { Adminlogin, login, usersRequest, usersSlice, usersSuccess } from '../../redux/slices/users/usersSlice'
 import { useNavigate } from 'react-router'
-import api from '../../api'
 import { Link } from 'react-router-dom'
+import api from '../../api'
+import { Adminlogin, login, usersRequest, usersSuccess } from '../../redux/slices/users/usersSlice'
 
 export default function Login() {
   const users = useSelector((state: RootState) => state.users.users)
@@ -15,8 +12,6 @@ export default function Login() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const [errorMessage, setErrorMessage] = useState('')
-  const url = '/mock/e-commerce/users.json'
-
 
   useEffect(() => {
     handleGetUsers()
@@ -27,7 +22,6 @@ export default function Login() {
     const res = await api.get('/mock/e-commerce/users.json')
     dispatch(usersSuccess(res.data))
   }
-
 
   const [user, setUser] = useState({
     email: '',
@@ -53,9 +47,7 @@ export default function Login() {
         if (foundUser && foundUser.role === 'admin') {
           dispatch(Adminlogin(foundUser))
           navigate('/admin')
-          console.log(foundUser.role)
         } else {
-          console.log(foundUser.role)
           navigate('/')
         }
       } else {
@@ -68,7 +60,6 @@ export default function Login() {
 
   return (
     <section className="bg-gray-50 dark:bg-gray-900  ">
-      
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <a
           href="#"
@@ -145,8 +136,8 @@ export default function Login() {
 
               <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                 Don’t have an account yet?{' '}
-                <Link to="/regesteration"
-                  
+                <Link
+                  to="/regesteration"
                   className="font-medium text-primary-600 hover:underline dark:text-primary-500 ">
                   Sign up
                 </Link>

@@ -5,10 +5,9 @@ type ProductFormProps = {
   product: Product
   handleSubmit: (e: FormEvent) => void
   handleChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
-
 }
 
-export function ProductForm({ product, handleSubmit, handleChange,  }: ProductFormProps) {
+export function ProductForm({ product, handleSubmit, handleChange }: ProductFormProps) {
   const inputStyle =
     'w-full px-3 py-2 text-white border rounded-lg focus:outline-none focus:border-blue-400'
   const labelStyle = 'block text-sm font-medium text-gray-600'
@@ -66,10 +65,7 @@ export function ProductForm({ product, handleSubmit, handleChange,  }: ProductFo
           className={inputStyle}
         />
       </div>
-      <div className="mb-4">
-
-
-      </div>
+      <div className="mb-4"></div>
       <div className="mb-4">
         <label htmlFor="sizes" className={labelStyle}>
           Sizes: (use comma , to create multiple)
