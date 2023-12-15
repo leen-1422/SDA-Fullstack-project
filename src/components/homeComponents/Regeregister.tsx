@@ -1,57 +1,48 @@
-import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router'
+import { ChangeEvent, FormEvent, useState } from 'react'
 import { Link } from 'react-router-dom'
 import api from '../../api'
-import { usersRequest, usersSuccess } from '../../redux/slices/users/usersSlice'
-import { RootState } from '../../redux/store'
+
+import { AxiosError } from 'axios'
 
 export default function Regeregister() {
-  const users = useSelector((state: RootState) => state.users.users)
-
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
-  const [errorMessage, setErrorMessage] = useState('')
-
-  useEffect(() => {
-    handleGetUsers()
-  }, [])
-  const handleGetUsers = async () => {
-    dispatch(usersRequest())
-
-    const res = await api.get('/mock/e-commerce/users.json')
-    dispatch(usersSuccess(res.data))
-  }
+  const [errorMessage, setErrorMessage] = useState<null | string>(null)
+  const [successMessage, setSuccsessMessage] = useState<null | string>(null)
+  const [loading, setLoading] = useState(false)
 
   const [user, setUser] = useState({
     email: '',
-    password: ''
+    password: '',
+    firstName: '',
+    lastName: ''
   })
 
-  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setUser((prevState) => {
-      return { ...prevState, [event.target.name]: event.target.value }
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    setUser({
+      ...user,
+      [name]: value
     })
   }
+
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault()
-    if (!user.email || !user.password) {
-      setErrorMessage('Please fill in all fields')
-
-      return
-    }
     try {
-      const foundUser = users.find((userData) => userData.email === user.email)
-
-      if (foundUser && foundUser.email === user.email) {
-      } else {
-        alert('your sucssfully register')
-        navigate('/')
-      }
+      setLoading(true)
+      const res = await api.post('/api/users/register', user)
+      console.log(res)
+      setSuccsessMessage(res.data.msg)
+      setErrorMessage(null)
     } catch (error) {
-      setErrorMessage('An error occurred')
+      if (error instanceof AxiosError) {
+        setErrorMessage(error.response?.data.msg)
+        setSuccsessMessage(null)
+      }
+    } finally {
+      setLoading(false)
     }
   }
+
+
   return (
     <div>
       <section className="bg-gray-50 dark:bg-gray-900">
@@ -67,6 +58,7 @@ export default function Regeregister() {
                 Create and account
               </h1>{' '}
               {errorMessage && <div className="error-message">{errorMessage}</div>}
+              {successMessage && <div className="text-green-600">{successMessage}</div>}
               <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
                 <div>
                   <label
@@ -77,6 +69,7 @@ export default function Regeregister() {
                   <input
                     onChange={handleInputChange}
                     type="email"
+                    title="email"
                     name="email"
                     id="email"
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -92,6 +85,7 @@ export default function Regeregister() {
                   <input
                     onChange={handleInputChange}
                     type="password"
+                    title="password"
                     name="password"
                     id="password"
                     placeholder="••••••••"
@@ -100,16 +94,33 @@ export default function Regeregister() {
                 </div>
                 <div>
                   <label
-                    htmlFor="confirm-password"
+                    htmlFor="firstname"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                    Confirm password
+                    First Name
                   </label>
                   <input
                     onChange={handleInputChange}
-                    type="confirm-password"
-                    name="confirm-password"
-                    id="confirm-password"
-                    placeholder="••••••••"
+                    title="firstname"
+                    type="text"
+                    name="firstName"
+                    id="firstname"
+                    placeholder="First Name"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="lastname"
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                    lastname
+                  </label>
+                  <input
+                    onChange={handleInputChange}
+                    title="lastname"
+                    type="text"
+                    name="lastName"
+                    id="lastname"
+                    placeholder="lastname"
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   />
                 </div>
@@ -134,9 +145,10 @@ export default function Regeregister() {
                   </div>
                 </div>
                 <button
-                  type="submit"
+                 
                   className="w-full text-black bg-success-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-                  Create an account
+                    {loading ? 'loading...' : "Create an account"}
+                  
                 </button>
                 <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                   Already have an account?{' '}

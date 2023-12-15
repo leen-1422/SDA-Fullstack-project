@@ -1,17 +1,34 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit'
+import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { toast } from 'react-toastify'
+import api from '../../../api'
+
+export const ROLES = {
+  USER: 'USER',
+  ADMIN: 'ADMIN'
+} as const
+type Role = keyof typeof ROLES
+export type UserUser ={
+  _id:string
+  email: string
+  isActive: boolean
+  role: 'USER'
+}
+
+
 
 export type User = {
-  id: number
+  _id: string
   firstName: string
   lastName: string
   email: string
   password: string
   role: string
+  
 }
 
 export type UserState = {
-  users: User[]
+  users: User[],
+  user: null | User,
   error: null | string
   isLoading: boolean
   isLoggedIn: boolean
@@ -21,12 +38,28 @@ export type UserState = {
 
 const initialState: UserState = {
   users: [],
+  user: null,
   error: null,
   isLoading: false,
   isLoggedIn: false,
   isAdmin: false,
   userData: null
 }
+
+
+//users thunk
+
+export const getUsersThunk = createAsyncThunk('users/get', async () => {
+  try {
+    const res = await api.get('/api/users')
+    console.log("res", res)
+    return res.data
+  } catch (error) {
+    console.log(error)
+  }
+})
+
+
 
 export const usersSlice = createSlice({
   name: 'users',
@@ -42,6 +75,10 @@ export const usersSlice = createSlice({
           userData: state.userData
         })
       )
+    },
+    loginSucccess:(state,action) =>{
+      state.user= action.payload
+
     },
     Adminlogin: (state, action: PayloadAction<User>) => {
       if (state.userData?.role === 'admin') {
@@ -60,8 +97,8 @@ export const usersSlice = createSlice({
     addUser: (state, action: { payload: { user: User } }) => {
       state.users = [action.payload.user, ...state.users]
     },
-    removeUser: (state, action: { payload: { userId: number } }) => {
-      const filteredItems = state.users.filter((product) => product.id !== action.payload.userId)
+    removeUser: (state, action: { payload: { userId: string } }) => {
+      const filteredItems = state.users.filter((product) => product._id !== action.payload.userId)
       state.users = filteredItems
       toast.error('user is removed', {
         position: 'bottom-left'
@@ -72,7 +109,7 @@ export const usersSlice = createSlice({
     },
     updateUser: (state, action) => {
       const { id, firstName, lastName } = action.payload
-      const foundUser = state.users.find((user) => user.id === id)
+      const foundUser = state.users.find((user) => user._id === id)
       if (foundUser) {
         foundUser.firstName = firstName
         foundUser.lastName = lastName
@@ -89,9 +126,16 @@ export const usersSlice = createSlice({
         )
       }
     }
+  },
+  extraReducers: (builder) => {
+    builder.addCase(getUsersThunk.fulfilled, (state, action) => {
+      state.users = action.payload
+      return state
+    })
   }
+  
 })
-export const { Adminlogin, login, removeUser, addUser, usersRequest, usersSuccess, updateUser } =
+export const { Adminlogin, login, removeUser, addUser, usersRequest, usersSuccess, updateUser, loginSucccess } =
   usersSlice.actions
 
 export default usersSlice.reducer

@@ -1,21 +1,21 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { toast } from 'react-toastify'
 
-export type Product = {
-  id: number
+export type Category = {
+  _id: string
   name: string
 }
 
 export type InitialState = {
-  categories: Product[]
-  selectedCategoryId: number
+  items: Category[]
+  selectedCategoryId: string
   error: null | string
   isLoading: boolean
 }
 
 const initialState: InitialState = {
-  categories: [],
-  selectedCategoryId: 0,
+  items: [],
+  selectedCategoryId: '',
   error: null,
   isLoading: false
 }
@@ -29,32 +29,32 @@ export const categoriesSlice = createSlice({
     },
     categoriesSuccess: (state, action) => {
       state.isLoading = false
-      state.categories = action.payload
+      state.items = action.payload
     },
     setSelectedCategory: (state, action) => {
       state.selectedCategoryId = action.payload
     },
     addCategory: (state, action) => {
-      state.categories = [action.payload.category, ...state.categories]
+      state.items = [action.payload.category, ...state.items]
       toast.success('new category is added', {
         position: 'bottom-left'
       })
     },
-    removeCategory: (state, action: { payload: { categoryId: number } }) => {
-      const filteredItems = state.categories.filter(
-        (category) => category.id !== action.payload.categoryId
+    removeCategory: (state, action: { payload: { categoryId: string } }) => {
+      const filteredItems = state.items.filter(
+        (category) => category._id !== action.payload.categoryId
       )
-      state.categories = filteredItems
+      state.items = filteredItems
       toast.error('category is removed', {
         position: 'bottom-left'
       })
     },
-    updateCategory: (state, action: { payload: { editCategory: Product } }) => {
-      const filteredItems = state.categories.filter(
-        (product) => product.id !== action.payload.editCategory.id
+    updateCategory: (state, action: { payload: { editCategory: Category } }) => {
+      const filteredItems = state.items.filter(
+        (product) => product._id !== action.payload.editCategory._id
       )
-      state.categories = filteredItems
-      state.categories = [action.payload.editCategory, ...state.categories]
+      state.items = filteredItems
+      state.items = [action.payload.editCategory, ...state.items]
       toast.success('category is updated', {
         position: 'bottom-left'
       })

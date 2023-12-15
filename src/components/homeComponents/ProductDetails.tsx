@@ -1,15 +1,35 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router'
 import { addToCart } from '../../redux/slices/cart/cartSlice'
-import { Product } from '../../redux/slices/products/productSlice'
+import {
+  Product,
+  productsRequest,
+  productsSuccess,
+  singleProductsSuccess
+} from '../../redux/slices/products/productSlice'
 import { RootState } from '../../redux/store'
+import api from '../../api'
+import { useEffect } from 'react'
 
 export default function ProductDetails() {
   const dispatch = useDispatch()
   const { id } = useParams()
-  const products = useSelector((state: RootState) => state.products.items)
+  const selectedProduct = useSelector((state: RootState) => state.products.selectedProduct)
 
-  const selectedProduct = products.find((product: Product) => product.id === Number(id))
+  useEffect(() => {
+    handleGetProduct()
+  }, [])
+
+  const handleGetProduct = async () => {
+    dispatch(productsRequest())
+    try {
+      const res = await api.get(`/api/products/${id}`)
+      dispatch(singleProductsSuccess(res.data))
+      console.log('single product data:', res.data)
+    } catch (error) {
+      // Handle error
+    }
+  }
 
   if (!selectedProduct) {
     return <div>No product found.</div>
@@ -22,7 +42,7 @@ export default function ProductDetails() {
           <img
             alt="ecommerce"
             className="lg:w-1/2 w-full object-cover object-center rounded border border-gray-200"
-            src={'/' + selectedProduct.image}
+            src={selectedProduct.image}
           />
           <div className="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
             <h2 className="text-sm title-font text-gray-900 tracking-widest">

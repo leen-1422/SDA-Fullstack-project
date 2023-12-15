@@ -2,7 +2,7 @@ import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import api from '../../api'
 import {
-  Product,
+  Category,
   addCategory,
   categoriesRequest,
   categoriesSuccess,
@@ -13,10 +13,10 @@ import { AppDispatch, RootState } from '../../redux/store'
 
 export default function CategoryTable() {
   const dispatch = useDispatch<AppDispatch>()
-  const catiegores = useSelector((state: RootState) => state.categories.categories)
+  const catiegores = useSelector((state: RootState) => state.categories.items)
 
   const [category, setCategory] = useState({ name: '' })
-  const [selectedCategory, setSelectedCategory] = useState<Product | null>(null)
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(null)
 
   useEffect(() => {
     handleGetCategories()
@@ -58,7 +58,7 @@ export default function CategoryTable() {
     dispatch(categoriesSuccess(res.data))
   }
 
-  const handleEditBtnClick = (item: Product) => {
+  const handleEditBtnClick = (item: Category) => {
     setSelectedCategory(item)
   }
 
@@ -98,11 +98,11 @@ export default function CategoryTable() {
             </thead>
             <tbody className="bg-white">
               {catiegores.map((item, index) => {
-                const { id, name } = item
-                const isEditing = selectedCategory && selectedCategory.id === id
+                const { _id, name } = item
+                const isEditing = selectedCategory && selectedCategory._id === _id
 
                 return (
-                  <tr key={id}>
+                  <tr key={_id}>
                     <td className="py-4 px-6 border-b border-gray-200">{index + 1}</td>
                     <td className="py-4 px-6 border-b border-gray-200">{name}</td>
                     <td className="py-4 px-6 border-b border-gray-200 whitespace">
@@ -113,7 +113,7 @@ export default function CategoryTable() {
                       </button>
                       <button
                         className="text-white bg-purple-600 rounded-md hover:bg-purple-500 focus:outline-none focus:shadow-outline-blue active:bg-red-600 py-2 px-4 font-small"
-                        onClick={() => dispatch(removeCategory({ categoryId: id }))}>
+                        onClick={() => dispatch(removeCategory({ categoryId: _id }))}>
                         Delete
                       </button>
                     </td>

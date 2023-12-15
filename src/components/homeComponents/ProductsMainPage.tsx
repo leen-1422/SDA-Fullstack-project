@@ -10,6 +10,7 @@ import {
 } from '../../redux/slices/categories/categoriesSlice'
 import {
   Product,
+  getProductsThunk,
   getSearch,
   productsRequest,
   productsSuccess
@@ -20,74 +21,59 @@ export default function ProductsMainPage() {
   const dispatch = useDispatch<AppDispatch>()
   const state = useSelector((state: RootState) => state)
   const products = state.products
-  const categories = state.categories
-  const search = state.products.search
-
+  const categories = state.categories.items
+  const searchTerm = useSelector((state: RootState) => state.products.search)
+  // Pagination state
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 4
-
   useEffect(() => {
-    handleGetProducts()
+    dispatch(getProductsThunk())
     handleGetCategories()
   }, [])
-
-  const handlePageChange = (pageNumber: number) => {
-    setCurrentPage(pageNumber)
-  }
-
   const handleGetCategories = () => {
     dispatch(categoriesRequest())
     api
-      .get('/mock/e-commerce/categories.json')
+      .get('/api/categories')
       .then((res) => dispatch(categoriesSuccess(res.data)))
       .catch((error) => console.error('Error fetching categories:', error))
   }
-
-  const handleGetProducts = async () => {
-    dispatch(productsRequest())
-    const res = await api.get('/mock/e-commerce/products.json')
-    dispatch(productsSuccess(res.data))
+  // const handleGetProducts = async () => {
+  //   dispatch(productsRequest())
+  //   const res = await api.get('/api/products')
+  //   console.log('res', res.data.result)
+  //   dispatch(productsSuccess(res.data.result))
+  // }
+  const productsList: Product[] = state.products.items
+  const selectedCategoryId: string = state.categories.selectedCategoryId
+  const filterProductsbyCategory = (selectedCategoryId: string) => {
+    return selectedCategoryId !== ''
+      ? productsList.filter((product) =>
+          product.category.find((cat) => cat._id === selectedCategoryId)
+        )
+      : productsList
   }
-
-  const Products: Product[] = state.products.items
-  const selectedCategoryId: number | null = state.categories.selectedCategoryId
-
-  const filterProductsbyCategory = (categoryId: number, productsList: Product[]) => {
-    if (categoryId == 0) {
-      return productsList
-    }
-
-    return productsList.filter((product) => product.categories.includes(categoryId as number))
-    if (filteredProducts.length === 0) {
-      return productsList
-    }
-  }
-
-  const handleCategoryChange = (categoryId: number) => {
+  const filtereddProducts = filterProductsbyCategory(selectedCategoryId)
+  const handleCategoryChange = (categoryId: string) => {
     dispatch(setSelectedCategory(categoryId))
   }
-
-  const filteredProducts = filterProductsbyCategory(selectedCategoryId, Products)
-
-  const handelSearch = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
     dispatch(getSearch(event.target.value))
   }
   const filterProductbySearch = (products: Product[], searchKeyWord: string) => {
     return searchKeyWord
       ? products.filter((product) =>
-          product.name.toLocaleLowerCase().includes(searchKeyWord.toLocaleLowerCase())
+          product.name.toLowerCase().includes(searchKeyWord.toLowerCase())
         )
       : products
   }
-
-  const filteredAndSearchedProducts = filterProductbySearch(filteredProducts, search)
-
+  const filteredAndSearchedProducts = filterProductbySearch(filtereddProducts, searchTerm)
   const indexOfLastProduct = currentPage * itemsPerPage
   const indexOfFirstProduct = indexOfLastProduct - itemsPerPage
   const currentProducts = filteredAndSearchedProducts.slice(indexOfFirstProduct, indexOfLastProduct)
-
   const totalPages = Math.ceil(filteredAndSearchedProducts.length / itemsPerPage)
-
+  const handlePageChange = (pageNumber: number) => {
+    setCurrentPage(pageNumber)
+  }
   return (
     <div className="bg-white">
       <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
@@ -103,11 +89,11 @@ export default function ProductsMainPage() {
               <select
                 className="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-l-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600"
                 id="category"
-                onChange={(e) => handleCategoryChange(Number(e.target.value))}
+                onChange={(e) => handleCategoryChange((e.target.value))}
                 value={state.categories.selectedCategoryId || ''}>
-                <option value={0}>All Categories</option>
-                {categories.categories.map((category) => (
-                  <option key={category.id} value={category.id}>
+                <option value={''}>All Categories</option>
+                {categories.map((category) => (
+                  <option key={category._id} value={category._id}>
                     {category.name}
                   </option>
                 ))}
@@ -116,8 +102,8 @@ export default function ProductsMainPage() {
               <div className="relative w-full">
                 <input
                   type="search"
-                  value={search}
-                  onChange={handelSearch}
+                  value={searchTerm}
+                  onChange={handleSearch}
                   id="search-dropdown"
                   className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-r-lg border-l-gray-50 border-l-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-l-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
                   placeholder="Search Mobile, Laptop, Watches..."
@@ -139,7 +125,7 @@ export default function ProductsMainPage() {
             </div>
           ) : (
             currentProducts.map((product) => (
-              <div key={product.id}>
+              <div key={product._id}>
                 <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7">
                   <img
                     src={product.image}
@@ -154,7 +140,7 @@ export default function ProductsMainPage() {
                 </h1>
 
                 <div className="flex justify-between mt-4">
-                  <Link to={`products/${product.id}`}>
+                  <Link to={`products/${product._id}`}>
                     <button className="bg-transparent hover:bg-green-900 text-black-700 font-semibold hover:text-white py-2 px-4 border border-green-900 hover:border-transparent rounded">
                       Mode details
                     </button>

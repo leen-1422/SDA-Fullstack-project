@@ -39,7 +39,7 @@ export default function Navbar() {
           </section>
           <section>
             <ul className="md:space-x-8 space-x-6 text-gray-900 font-semibold hidden md:flex">
-              {isLoggedIn && (
+              {/* {isLoggedIn && ( */}
                 <>
                   <div className="flex">
                     <svg
@@ -62,8 +62,8 @@ export default function Navbar() {
                     </Link>
                   </div>
                 </>
-              )}
-              {!isAdmin && (
+              {/* )} */}
+              {/* {!isAdmin && ( */}
                 <>
                   <li className="relative group">
                     <Link
@@ -104,9 +104,9 @@ export default function Navbar() {
                     <div className="w-full h-0.5 bg-transparent group-hover:bg-purple-500 transition-al absolute bottom-0" />
                   </li>
                 </>
-              )}
+              {/* )} */}
 
-              {!isLoggedIn && (
+              {/* {!isLoggedIn && ( */}
                 <>
                   <li>
                     <Link
@@ -116,9 +116,9 @@ export default function Navbar() {
                     </Link>
                   </li>
                 </>
-              )}
+              {/* )} */}
 
-              {isLoggedIn && isAdmin && (
+              {/* {isLoggedIn && isAdmin && ( */}
                 <>
                   <li className="relative group">
                     <Link
@@ -155,7 +155,7 @@ export default function Navbar() {
                     <div className="w-full h-0.5 bg-transparent group-hover:bg-purple-500 transition-al absolute bottom-0" />
                   </li>
                 </>
-              )}
+              {/* )} */}
             </ul>
             <button className="flex md:hidden hover:bg-gray-100 p-2 rounded-full transition-all focus:ring focus:ring-purple-500 focus:ring-opacity-25 active:bg-gray-200 outline-none">
               <svg

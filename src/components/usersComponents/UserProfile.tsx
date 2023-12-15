@@ -37,7 +37,7 @@ export default function UserProfile() {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
-    const updateUserData = { id: userData?.id, ...user }
+    const updateUserData = { id: userData?._id, ...user }
     dispatch(updateUser(updateUserData))
   }
 
