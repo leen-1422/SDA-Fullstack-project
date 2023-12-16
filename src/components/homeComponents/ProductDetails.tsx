@@ -1,18 +1,13 @@
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router'
-import { addToCart } from '../../redux/slices/cart/cartSlice'
-import {
-  Product,
-  productsRequest,
-  productsSuccess,
-  singleProductsSuccess
-} from '../../redux/slices/products/productSlice'
-import { RootState } from '../../redux/store'
 import api from '../../api'
-import { useEffect } from 'react'
+import { addToCart } from '../../redux/slices/cart/cartSlice'
+import { productsRequest, singleProductsSuccess } from '../../redux/slices/products/productSlice'
+import { AppDispatch, RootState } from '../../redux/store'
 
 export default function ProductDetails() {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch<AppDispatch>()
   const { id } = useParams()
   const selectedProduct = useSelector((state: RootState) => state.products.selectedProduct)
 

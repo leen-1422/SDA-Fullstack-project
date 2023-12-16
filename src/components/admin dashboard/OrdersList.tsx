@@ -1,15 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import api from '../../api'
 import {
   deleteOrderThunk,
   getOrdersThunk,
-  ordersRequest,
-  ordersSuccess,
   updateOrderThunk
 } from '../../redux/slices/orders/ordersSlice'
 import { AppDispatch, RootState } from '../../redux/store'
-import axios from 'axios'
 
 export default function OrdersList() {
   const dispatch = useDispatch<AppDispatch>()
@@ -23,13 +19,9 @@ export default function OrdersList() {
     dispatch(deleteOrderThunk(id))
   }
 
-  const handelUpdate = (id:string) =>{
-    dispatch(updateOrderThunk({ status, id }));
-
+  const handelUpdate = (id: string) => {
+    dispatch(updateOrderThunk({ status, id }))
   }
-
-
-
 
   return (
     <section className="container mx-auto p-6 font-mono">

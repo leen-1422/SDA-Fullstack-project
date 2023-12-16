@@ -1,11 +1,10 @@
-import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { AppDispatch, RootState } from '../../redux/store'
-import { Product, editProduct, addProduct } from '../../redux/slices/products/productSlice'
-import api from '../../api'
+import { ChangeEvent, FormEvent, useState } from 'react'
+import { useSelector } from 'react-redux'
+import api from '../../../api'
+import { Product } from '../../../redux/slices/products/productSlice'
+import { RootState } from '../../../redux/store'
 
 export default function ProductModal() {
-  const dispatch = useDispatch<AppDispatch>
   const products = useSelector((state: RootState) => state.products.items)
   console.log(products)
 
@@ -39,14 +38,10 @@ export default function ProductModal() {
     }
   }
 
-
-
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
     try {
       await api.post('/api/products', product)
-
-
     } catch (error) {
       console.log(error)
     }

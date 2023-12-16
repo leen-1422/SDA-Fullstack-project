@@ -7,14 +7,12 @@ export const ROLES = {
   ADMIN: 'ADMIN'
 } as const
 type Role = keyof typeof ROLES
-export type UserUser ={
-  _id:string
+export type UserUser = {
+  _id: string
   email: string
   isActive: boolean
   role: 'USER'
 }
-
-
 
 export type User = {
   _id: string
@@ -23,12 +21,13 @@ export type User = {
   email: string
   password: string
   role: string
-  
+  isActive: boolean
+  blocked: boolean
 }
 
 export type UserState = {
-  users: User[],
-  user: null | User,
+  users: User[]
+  user: null | User
   error: null | string
   isLoading: boolean
   isLoggedIn: boolean
@@ -46,20 +45,35 @@ const initialState: UserState = {
   userData: null
 }
 
-
 //users thunk
 
 export const getUsersThunk = createAsyncThunk('users/get', async () => {
   try {
     const res = await api.get('/api/users')
-    console.log("res", res)
-    return res.data
+    console.log('res', res)
+    return res.data.users
   } catch (error) {
     console.log(error)
   }
 })
 
+export const deleteUserThunk = createAsyncThunk('user/delete', async (userId: string) => {
+  try {
+    await api.delete(`/api/users/${userId}`)
+    return userId
+  } catch (error) {
+    console.log(error)
+  }
+})
 
+export const blockUserThunk = createAsyncThunk('user/block', async (userId: string) => {
+  try {
+    await api.put(`/api/users//block/${userId}`)
+    return userId
+  } catch (error) {
+    console.log(error)
+  }
+})
 
 export const usersSlice = createSlice({
   name: 'users',
@@ -76,9 +90,8 @@ export const usersSlice = createSlice({
         })
       )
     },
-    loginSucccess:(state,action) =>{
-      state.user= action.payload
-
+    loginSucccess: (state, action) => {
+      state.user = action.payload
     },
     Adminlogin: (state, action: PayloadAction<User>) => {
       if (state.userData?.role === 'admin') {
@@ -94,16 +107,7 @@ export const usersSlice = createSlice({
       state.isLoading = false
       state.users = action.payload
     },
-    addUser: (state, action: { payload: { user: User } }) => {
-      state.users = [action.payload.user, ...state.users]
-    },
-    removeUser: (state, action: { payload: { userId: string } }) => {
-      const filteredItems = state.users.filter((product) => product._id !== action.payload.userId)
-      state.users = filteredItems
-      toast.error('user is removed', {
-        position: 'bottom-left'
-      })
-    },
+
     getError: (state, action: PayloadAction<string>) => {
       state.error = action.payload
     },
@@ -132,10 +136,22 @@ export const usersSlice = createSlice({
       state.users = action.payload
       return state
     })
+    builder.addCase(deleteUserThunk.fulfilled, (state, action) => {
+      const userId = action.payload
+      const deleteUser = state.users.filter((user) => user._id !== userId)
+      state.users = deleteUser
+      return state
+    })
+    builder.addCase(blockUserThunk.fulfilled, (state, action) => {
+      const userId = action.payload
+
+      state.users = state.users.map((user) =>
+        user._id === userId ? { ...user, blocked: !user.blocked } : user
+      )
+    })
   }
-  
 })
-export const { Adminlogin, login, removeUser, addUser, usersRequest, usersSuccess, updateUser, loginSucccess } =
+export const { Adminlogin, login, usersRequest, usersSuccess, updateUser, loginSucccess } =
   usersSlice.actions
 
 export default usersSlice.reducer

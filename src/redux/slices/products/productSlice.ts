@@ -1,9 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { toast } from 'react-toastify'
 
-import { Category } from '../categories/categoriesSlice'
 import api from '../../../api'
-import { useState } from 'react'
+import { Category } from '../categories/categoriesSlice'
 
 export type Product = {
   _id: string
@@ -56,29 +55,45 @@ export const deleteProductsThunk = createAsyncThunk(
   }
 )
 
-export const updateProductsThunk = createAsyncThunk('products/put', async (productId: string) => {
-  try {
-    await api.put(`/api/products/${productId}`)
-    return productId
-  } catch (error) {
-    console.log(error)
-  }
-})
-
-export const addProductsThunk = createAsyncThunk(
-  'products/add',
-  async (product: {
-    name: string
-    image: string
-    description: string
-    category: Category[]
-    sizes: string[]
-    price: number
-  }) => {
+export const editProductThunk = createAsyncThunk(
+  'products/edit',
+  async ({ productId, updatedProduct }: { productId: string; updatedProduct: any }) => {
     try {
-      const res = await api.post('/api/products', product)
-      console.log('res', res.data)
-      return res.data
+      await api.put(`/api/products/${productId}`, updatedProduct)
+      console.log('from inside thunk', productId)
+      return updatedProduct
+    } catch (error) {
+      console.log('👀 ', error)
+    }
+  }
+)
+
+// export const addProductsThunk = createAsyncThunk(
+//   'products/add',
+//   async (product: {
+//     name: string
+//     image: string
+//     description: string
+//     category: Category[]
+//     sizes: string[]
+//     price: number
+//   }) => {
+//     try {
+//       const res = await api.post('/api/products', product)
+//       console.log('res', res.data)
+//       return res.data
+//     } catch (error) {
+//       console.log(error)
+//     }
+//   }
+// )
+
+export const createProductThunk = createAsyncThunk(
+  'products/create',
+  async (newProduct: Product) => {
+    try {
+      const response = await api.post('/api/products', newProduct)
+      return response.data
     } catch (error) {
       console.log(error)
     }
@@ -99,32 +114,6 @@ export const productSlice = createSlice({
       state.isLoading = false
       state.selectedProduct = action.payload
     },
-    addProduct: (state, action) => {
-      state.items = [action.payload.product, ...state.items]
-      toast.success('new product is added', {
-        position: 'bottom-left'
-      })
-    },
-    removeProduct: (state, action: { payload: { productId: string } }) => {
-      const filteredItems = state.items.filter(
-        (product) => product._id !== action.payload.productId
-      )
-      state.items = filteredItems
-      toast.error('product is removed', {
-        position: 'bottom-left'
-      })
-    },
-
-    editProduct: (state, action: { payload: { editedProduct: Product } }) => {
-      const editedProduct = action.payload.editedProduct
-
-      state.items = state.items.map((product) =>
-        product._id === editedProduct._id ? editedProduct : product
-      )
-      toast.success(`${action.payload.editedProduct.name} is updated`, {
-        position: 'bottom-left'
-      })
-    },
 
     getSearch: (state, action) => {
       state.search = action.payload
@@ -141,17 +130,27 @@ export const productSlice = createSlice({
       state.items = deleteProduct
       return state
     })
-    builder.addCase(addProductsThunk.fulfilled, (state, action) => {
-      state.items = action.payload
+    builder.addCase(createProductThunk.fulfilled, (state, action) => {
+      const newProduct = action.payload
+      state.items.push(newProduct)
+    })
+    builder.addCase(editProductThunk.fulfilled, (state, action) => {
+      const productId = action.payload
+      if (productId) {
+        const uptadetproducts: any = state.items.map((product) =>
+          product._id === productId._id ? productId : product
+        )
+        state.items = uptadetproducts
+        console.log(state.items)
+        return state
+      }
     })
   }
 })
 export const {
-  removeProduct,
-  addProduct,
   productsRequest,
   productsSuccess,
-  editProduct,
+
   getSearch,
   singleProductsSuccess
 } = productSlice.actions

@@ -1,8 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import api from '../../../api'
-import { User, UserUser } from '../users/usersSlice'
-import { Category } from '../categories/categoriesSlice'
 import { Product } from '../products/productSlice'
+import { User } from '../users/usersSlice'
 
 export type OrderItems = {
   _id: string
@@ -72,15 +71,7 @@ export const deleteOrderThunk = createAsyncThunk('orders/delete', async (orderId
 export const ordersSlice = createSlice({
   name: 'orders',
   initialState,
-  reducers: {
-    ordersRequest: (state) => {
-      state.isLoading = true
-    },
-    ordersSuccess: (state, action) => {
-      state.isLoading = false
-      state.orders = action.payload
-    }
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getOrdersThunk.fulfilled, (state, action) => {
       state.orders = action.payload
@@ -100,6 +91,6 @@ export const ordersSlice = createSlice({
     })
   }
 })
-export const { ordersRequest, ordersSuccess } = ordersSlice.actions
+export const {} = ordersSlice.actions
 
 export default ordersSlice.reducer
