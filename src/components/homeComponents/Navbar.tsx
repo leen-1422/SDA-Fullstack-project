@@ -1,9 +1,18 @@
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { RootState } from '../../redux/store'
+
+import { toast } from 'react-toastify'
+import { logout } from '../../redux/slices/users/usersSlice'
+import { AppDispatch, RootState } from '../../redux/store'
 
 export default function Navbar() {
+  const dispatch = useDispatch<AppDispatch>()
   const { isLoggedIn, isAdmin, userData } = useSelector((state: RootState) => state.users)
+  function handleLogout() {
+    dispatch(logout())
+    localStorage.removeItem('token')
+    toast.success('you are logged out')
+  }
 
   return (
     <div className="header">
@@ -39,7 +48,7 @@ export default function Navbar() {
           </section>
           <section>
             <ul className="md:space-x-8 space-x-6 text-gray-900 font-semibold hidden md:flex">
-              {/* {isLoggedIn && ( */}
+              {isLoggedIn && (
                 <>
                   <div className="flex">
                     <svg
@@ -58,12 +67,18 @@ export default function Navbar() {
                     <Link
                       to={`/${userData?.role}`}
                       className="group focus:ring focus:ring-purple-500 focus:ring-opacity-25 outline-none rounded-lg">
-                      {userData?.firstName}
+                      {userData?.email}
+                    </Link>
+                    <Link
+                      className="bg-yellow-300 px-4 py-1 rounded-xl text-white hover:bg-yellow-500 active:bg-yellow-500focus:ring focus:bg-yellow-500 focus:ring-opacity-25 outline-none"
+                      onClick={handleLogout}
+                      to={'/'}>
+                      Logout
                     </Link>
                   </div>
                 </>
-              {/* )} */}
-              {/* {!isAdmin && ( */}
+              )}
+              {!isAdmin && (
                 <>
                   <li className="relative group">
                     <Link
@@ -104,9 +119,9 @@ export default function Navbar() {
                     <div className="w-full h-0.5 bg-transparent group-hover:bg-purple-500 transition-al absolute bottom-0" />
                   </li>
                 </>
-              {/* )} */}
+              )}
 
-              {/* {!isLoggedIn && ( */}
+              {!isLoggedIn && (
                 <>
                   <li>
                     <Link
@@ -116,9 +131,9 @@ export default function Navbar() {
                     </Link>
                   </li>
                 </>
-              {/* )} */}
+              )}
 
-              {/* {isLoggedIn && isAdmin && ( */}
+              {isLoggedIn && isAdmin && (
                 <>
                   <li className="relative group">
                     <Link
@@ -155,7 +170,7 @@ export default function Navbar() {
                     <div className="w-full h-0.5 bg-transparent group-hover:bg-purple-500 transition-al absolute bottom-0" />
                   </li>
                 </>
-              {/* )} */}
+              )}
             </ul>
             <button className="flex md:hidden hover:bg-gray-100 p-2 rounded-full transition-all focus:ring focus:ring-purple-500 focus:ring-opacity-25 active:bg-gray-200 outline-none">
               <svg

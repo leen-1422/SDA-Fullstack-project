@@ -1,14 +1,18 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { useParams } from 'react-router'
-import { editProductThunk } from '../../redux/slices/products/productSlice'
-import { AppDispatch } from '../../redux/store'
+import { useNavigate, useParams } from 'react-router'
 
-import api from '../../api'
+import {
+  Product,
+  editProductThunk,
+  getSingleProductThunk
+} from '../../redux/slices/products/productSlice'
+import { AppDispatch } from '../../redux/store'
 
 export default function EditProduct() {
   const { id } = useParams()
   const dispatch = useDispatch<AppDispatch>()
+  const navigate = useNavigate()
 
   const [product, setProduct] = useState({
     _id: '',
@@ -19,26 +23,39 @@ export default function EditProduct() {
     sizes: [],
     price: 0
   })
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
 
   useEffect(() => {
-    api
-      .get(`/api/products/${id}`)
-      .then((response) => {
-        const productData = response.data
-        console.log(productData)
-        setProduct(productData)
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-  }, [])
+    if (id) {
+      dispatch(getSingleProductThunk(id))
+        .then((response) => {
+          const productData = response.payload
+          console.log(productData)
+          setProduct(productData)
+        })
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
+        .catch((error) => {
+          console.log(error)
+        })
+    }
+  }, [id, dispatch])
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
-    setProduct((prevProduct) => ({
-      ...prevProduct,
-      [name]: value
-    }))
+    const newValue = name === 'price' ? parseFloat(value) : value
+    const isList = name === 'sizes' || name === 'category'
+
+    if (selectedProduct) {
+      setSelectedProduct((prevProduct) => ({
+        ...prevProduct!,
+        [name]: isList ? value.split(',') : newValue
+      }))
+    } else {
+      setProduct((prevProduct) => ({
+        ...prevProduct,
+        [name]: isList ? value.split(',') : newValue
+      }))
+    }
   }
 
   const handleSubmit = (e: FormEvent): void => {
@@ -46,6 +63,7 @@ export default function EditProduct() {
     try {
       if (product._id) {
         dispatch(editProductThunk({ productId: product._id, updatedProduct: product }))
+        navigate('/admin')
       }
     } catch (error) {
       console.log(error)
@@ -95,10 +113,10 @@ export default function EditProduct() {
           <div className="mr-2">
             <input
               type="text"
-              name="categories"
-              id="categories"
+              name="category"
+              id="category"
               onChange={handleChange}
-              value={product.category}
+              value={product.category.join(',')}
               className="w-full rounded-md border border-gray-300 bg-white py-2 pl-3 pr-3 leading-5 placeholder-gray-500 focus:border-gray-500 focus:placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-500 sm:text-sm"
               placeholder="Categories"
             />
@@ -112,7 +130,7 @@ export default function EditProduct() {
               name="sizes"
               id="sizes"
               onChange={handleChange}
-              value={product.sizes}
+              value={product.sizes.join(',')}
               className="w-full rounded-md border border-gray-300 bg-white py-2 pl-3 pr-3 leading-5 placeholder-gray-500 focus:border-gray-500 focus:placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-500 sm:text-sm"
               placeholder="Sizes"
             />

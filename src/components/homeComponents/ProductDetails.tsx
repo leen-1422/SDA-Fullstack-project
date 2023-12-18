@@ -1,9 +1,9 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router'
-import api from '../../api'
+
 import { addToCart } from '../../redux/slices/cart/cartSlice'
-import { productsRequest, singleProductsSuccess } from '../../redux/slices/products/productSlice'
+import { getSingleProductThunk } from '../../redux/slices/products/productSlice'
 import { AppDispatch, RootState } from '../../redux/store'
 
 export default function ProductDetails() {
@@ -12,19 +12,10 @@ export default function ProductDetails() {
   const selectedProduct = useSelector((state: RootState) => state.products.selectedProduct)
 
   useEffect(() => {
-    handleGetProduct()
-  }, [])
-
-  const handleGetProduct = async () => {
-    dispatch(productsRequest())
-    try {
-      const res = await api.get(`/api/products/${id}`)
-      dispatch(singleProductsSuccess(res.data))
-      console.log('single product data:', res.data)
-    } catch (error) {
-      // Handle error
+    if (id) {
+      dispatch(getSingleProductThunk(id))
     }
-  }
+  }, [id])
 
   if (!selectedProduct) {
     return <div>No product found.</div>

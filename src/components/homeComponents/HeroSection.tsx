@@ -30,9 +30,6 @@ export default function HeroSection() {
               </svg>
             </a>
           </div>
-          <div className="hidden lg:mt-0 lg:col-span-5 lg:flex">
-            <img src="src\images\download.jpg" alt="mockup" />
-          </div>
         </div>
       </section>
     </div>

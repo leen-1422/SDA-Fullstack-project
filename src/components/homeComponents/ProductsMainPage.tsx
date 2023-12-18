@@ -1,20 +1,13 @@
 import { ChangeEvent, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
-import api from '../../api'
+
 import { addToCart } from '../../redux/slices/cart/cartSlice'
 import {
-  categoriesRequest,
-  categoriesSuccess,
+  getCategoriesThunk,
   setSelectedCategory
 } from '../../redux/slices/categories/categoriesSlice'
-import {
-  Product,
-  getProductsThunk,
-  getSearch,
-  productsRequest,
-  productsSuccess
-} from '../../redux/slices/products/productSlice'
+import { Product, getProductsThunk, getSearch } from '../../redux/slices/products/productSlice'
 import { AppDispatch, RootState } from '../../redux/store'
 
 export default function ProductsMainPage() {
@@ -26,23 +19,12 @@ export default function ProductsMainPage() {
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 4
+
   useEffect(() => {
     dispatch(getProductsThunk())
-    handleGetCategories()
+    dispatch(getCategoriesThunk())
   }, [])
-  const handleGetCategories = () => {
-    dispatch(categoriesRequest())
-    api
-      .get('/api/categories')
-      .then((res) => dispatch(categoriesSuccess(res.data)))
-      .catch((error) => console.error('Error fetching categories:', error))
-  }
-  // const handleGetProducts = async () => {
-  //   dispatch(productsRequest())
-  //   const res = await api.get('/api/products')
-  //   console.log('res', res.data.result)
-  //   dispatch(productsSuccess(res.data.result))
-  // }
+
   const productsList: Product[] = state.products.items
   const selectedCategoryId: string = state.categories.selectedCategoryId
   const filterProductsbyCategory = (selectedCategoryId: string) => {
@@ -89,7 +71,7 @@ export default function ProductsMainPage() {
               <select
                 className="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-l-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600"
                 id="category"
-                onChange={(e) => handleCategoryChange((e.target.value))}
+                onChange={(e) => handleCategoryChange(e.target.value)}
                 value={state.categories.selectedCategoryId || ''}>
                 <option value={''}>All Categories</option>
                 {categories.map((category) => (

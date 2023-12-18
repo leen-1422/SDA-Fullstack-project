@@ -1,73 +1,51 @@
-import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
+import { ChangeEvent, FormEvent, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { RootState } from '../../redux/store'
 import { useNavigate } from 'react-router'
 import { Link } from 'react-router-dom'
-import api from '../../api'
-import { Adminlogin, ROLES, login, loginSucccess, usersRequest, usersSuccess } from '../../redux/slices/users/usersSlice'
-import { AxiosError } from 'axios'
-import { useCookies } from 'react-cookie'
 
+import { ROLES, loginThunk } from '../../redux/slices/users/usersSlice'
+import { AppDispatch, RootState } from '../../redux/store'
 
 export default function Login() {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
   const state = useSelector((state: RootState) => state)
-  const users = state.users.user
+  const users = state.users.userData
   console.log(state.users)
   const [errorMessage, setErrorMessage] = useState<null | string>(null)
   const [successMessage, setSuccsessMessage] = useState<null | string>(null)
   const [loading, setLoading] = useState(false)
 
-  const { isLoggedIn, isAdmin, userData } = useSelector((state: RootState) => state.users)
-
-  const [user, setUser] = useState({
+  const [credentials, setCredentials] = useState({
     email: '',
     password: ''
   })
 
-  const [_, setCookie] = useCookies(["access_token"])
-
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
-    setUser({
-      ...user,
+    setCredentials({
+      ...credentials,
       [name]: value
     })
   }
 
-  const handleSubmit = async (event: FormEvent) => {
-    event.preventDefault()
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault()
     try {
-      setLoading(true)
-      const res = await api.post('/api/users/login', user)
-      console.log(res)
-      // const token = res.data.token
-      
-      if (users?.role === ROLES.ADMIN && isLoggedIn ){
-    
-      navigate('/admin')
-
-      }
-      
-      setCookie ("access_token", res.data.token)
-      localStorage.setItem("userId", res.data.userId)
-      dispatch(loginSucccess(res.data.user))
-      setSuccsessMessage(res.data.msg)
-      setErrorMessage(null)
+      dispatch(loginThunk(credentials)).then((res) => {
+        if (res.meta.requestStatus === 'fulfilled') {
+          localStorage.setItem('token', res.payload.token)
+        }
+      })
     } catch (error) {
-      if (error instanceof AxiosError) {
-        setErrorMessage(error.response?.data.msg)
-        setSuccsessMessage(null)
-      }
+      console.log(error)
     } finally {
       setLoading(false)
     }
   }
-
   return (
     <section className="bg-gray-50 dark:bg-gray-900  ">
-      <p>hello, {state.users.user?.email}</p>
+      <p>hello, {state.users.userData?.email}</p>
       <p>{users?.role === ROLES.ADMIN ? 'Welcome, Admin' : 'Welcome, User'}</p>
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <a

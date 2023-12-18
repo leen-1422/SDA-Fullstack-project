@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { AppDispatch, RootState } from '../../redux/store'
 
 import { blockUserThunk, deleteUserThunk, getUsersThunk } from '../../redux/slices/users/usersSlice'
+import { AppDispatch, RootState } from '../../redux/store'
 
 export default function UsersList() {
   const dispatch = useDispatch<AppDispatch>()

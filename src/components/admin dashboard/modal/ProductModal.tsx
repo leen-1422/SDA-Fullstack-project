@@ -1,20 +1,23 @@
 import { ChangeEvent, FormEvent, useState } from 'react'
 import { useSelector } from 'react-redux'
+
+import { useNavigate } from 'react-router'
+import { toast } from 'react-toastify'
 import api from '../../../api'
 import { Product } from '../../../redux/slices/products/productSlice'
 import { RootState } from '../../../redux/store'
 
 export default function ProductModal() {
   const products = useSelector((state: RootState) => state.products.items)
+  const navigate = useNavigate()
   console.log(products)
 
   const [product, setProduct] = useState({
-    _id: 0,
+    _id: '',
     name: '',
     image: '',
     description: '',
-    categories: [],
-    variants: [],
+    category: [],
     sizes: [],
     price: 0
   })
@@ -23,7 +26,7 @@ export default function ProductModal() {
   const handleProductChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     const newValue = name === 'price' ? parseFloat(value) : value
-    const isList = name === 'sizes'
+    const isList = name === 'sizes' || name === 'category'
 
     if (selectedProduct) {
       setSelectedProduct((prevProduct) => ({
@@ -42,6 +45,7 @@ export default function ProductModal() {
     e.preventDefault()
     try {
       await api.post('/api/products', product)
+      toast.success('Product is added')
     } catch (error) {
       console.log(error)
     }
@@ -84,6 +88,9 @@ export default function ProductModal() {
               </label>
               <input
                 onChange={handleProductChange}
+                value={
+                  selectedProduct ? selectedProduct.category.join(',') : product.category.join(',')
+                }
                 name="category"
                 type="text"
                 placeholder="Category"
@@ -131,11 +138,9 @@ export default function ProductModal() {
                 required
               />
             </div>
-
             <div className="form-control mt-6">
               <button className="btn btn-primary">Add Product</button>
             </div>
-
             <button
               className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
               onClick={() => {

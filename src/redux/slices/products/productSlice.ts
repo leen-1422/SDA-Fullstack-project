@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { toast } from 'react-toastify'
 
 import api from '../../../api'
 import { Category } from '../categories/categoriesSlice'
@@ -38,6 +37,16 @@ export const getProductsThunk = createAsyncThunk('products/get', async () => {
     const res = await api.get('/api/products')
     console.log(res)
     return res.data.result
+  } catch (error) {
+    console.log(error)
+  }
+})
+
+export const getSingleProductThunk = createAsyncThunk('product/get', async (productId: string) => {
+  try {
+    const res = await api.get(`/api/products/${productId}`)
+    console.log(res)
+    return res.data
   } catch (error) {
     console.log(error)
   }
@@ -104,17 +113,6 @@ export const productSlice = createSlice({
   name: 'products',
   initialState,
   reducers: {
-    productsRequest: (state) => {
-      state.isLoading = true
-    },
-    productsSuccess: (state, action) => {
-      state.items = action.payload
-    },
-    singleProductsSuccess: (state, action) => {
-      state.isLoading = false
-      state.selectedProduct = action.payload
-    },
-
     getSearch: (state, action) => {
       state.search = action.payload
     }
@@ -122,6 +120,10 @@ export const productSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getProductsThunk.fulfilled, (state, action) => {
       state.items = action.payload
+      return state
+    })
+    builder.addCase(getSingleProductThunk.fulfilled, (state, action) => {
+      state.selectedProduct = action.payload
       return state
     })
     builder.addCase(deleteProductsThunk.fulfilled, (state, action) => {
@@ -147,12 +149,6 @@ export const productSlice = createSlice({
     })
   }
 })
-export const {
-  productsRequest,
-  productsSuccess,
-
-  getSearch,
-  singleProductsSuccess
-} = productSlice.actions
+export const { getSearch } = productSlice.actions
 
 export default productSlice.reducer
