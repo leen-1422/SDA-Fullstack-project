@@ -3,12 +3,10 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { AxiosError } from 'axios'
 import api from '../../../api'
 import { getDecodedTokenFromStorage, getTokenFromStorage } from '../../../utils/token'
+import { ROLES } from '../../../Constant'
 
-export const ROLES = {
-  USER: 'USER',
-  ADMIN: 'ADMIN'
-} as const
-type Role = keyof typeof ROLES
+
+export type Role = keyof typeof ROLES
 
 export type UserUser = {
   _id: string
@@ -70,6 +68,21 @@ export const loginThunk = createAsyncThunk(
         console.log(error)
         return rejectWithValue(error.response?.data.msg)
       }
+    }
+  }
+)
+
+export const grantRoleUserThunk = createAsyncThunk(
+  'users/role',
+  async ({ role, userId }: { role: Role; userId: User['_id'] }) => {
+    try {
+      const res = await api.put('api/users/role', {
+        role,
+        userId
+      })
+      return res.data.user
+    } catch (error) {
+      console.log(':eyes: ', error)
     }
   }
 )
@@ -192,6 +205,17 @@ export const usersSlice = createSlice({
       state.users = state.users.map((user) =>
         user._id === userId ? { ...user, blocked: !user.blocked } : user
       )
+    })
+    builder.addCase(grantRoleUserThunk.fulfilled, (state, action) => {
+      const userId = action.payload._id
+      const updatedUsers = state.users.map((user) => {
+        if (user._id === userId) {
+          return action.payload
+        }
+        return user
+      })
+      state.users = updatedUsers
+      return state
     })
   }
 })

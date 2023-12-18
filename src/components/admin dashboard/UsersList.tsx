@@ -1,8 +1,9 @@
-import { useEffect } from 'react'
+import { ChangeEvent, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { blockUserThunk, deleteUserThunk, getUsersThunk } from '../../redux/slices/users/usersSlice'
+import {  Role, User, blockUserThunk, deleteUserThunk, getUsersThunk, grantRoleUserThunk } from '../../redux/slices/users/usersSlice'
 import { AppDispatch, RootState } from '../../redux/store'
+import { ROLES } from '../../Constant'
 
 export default function UsersList() {
   const dispatch = useDispatch<AppDispatch>()
@@ -20,6 +21,13 @@ export default function UsersList() {
   const handelBlockUser = (id: string) => {
     dispatch(blockUserThunk(id))
   }
+
+  const handleGrantRole = (e: ChangeEvent<HTMLSelectElement>, userId: User['_id']) => {
+    const role = e.target.value as Role
+    dispatch(grantRoleUserThunk({ role, userId }))
+  }
+
+  
 
   return (
     <section className="container mx-auto p-6 font-mono">
@@ -79,6 +87,17 @@ export default function UsersList() {
                       className="text-white bg-purple-600 rounded-md hover:bg-purple-500 focus:outline-none focus:shadow-outline-gray active:bg-purple-600 py-2 px-4 font-small">
                       {user.blocked ? 'Unblock' : 'Block'}
                     </button>
+
+                    <select name="roles" title="roles" onChange={(e) => handleGrantRole(e, user._id)}>
+                  <option>Select Role</option>
+                  {Object.keys(ROLES).map((role) => (
+                    <option key={role} value={role}>
+                      {role}
+                    </option>
+                  ))}
+                </select>
+
+
                   </td>
                 </tr>
               ))}

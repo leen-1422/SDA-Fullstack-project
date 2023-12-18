@@ -3,8 +3,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router'
 import { Link } from 'react-router-dom'
 
-import { ROLES, loginThunk } from '../../redux/slices/users/usersSlice'
+import { loginThunk } from '../../redux/slices/users/usersSlice'
 import { AppDispatch, RootState } from '../../redux/store'
+import { ROLES } from '../../Constant'
 
 export default function Login() {
   const dispatch = useDispatch<AppDispatch>()

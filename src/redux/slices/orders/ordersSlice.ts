@@ -85,11 +85,17 @@ export const ordersSlice = createSlice({
       return state
     })
     builder.addCase(updateOrderThunk.fulfilled, (state, action) => {
-      const orderId = action.payload
-      const updatedOrder = state.orders.filter((order) => order._id !== orderId)
-      state.orders = updatedOrder
+      const categoryId = action.payload._id
+      const updatedCatgory = state.orders.map((category) => {
+        if (category._id === categoryId) {
+          return action.payload
+        }
+        return category
+      })
+      state.orders = updatedCatgory
       return state
     })
+
   }
 })
 export const {} = ordersSlice.actions
