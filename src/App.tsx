@@ -16,6 +16,7 @@ import UserProfile from './components/usersComponents/UserProfile'
 import About from './pages/About'
 import Cart from './pages/Cart'
 import Home from './pages/Home'
+import AdminRoute from './components/adminComponents/AdminRoute'
 
 function App() {
   return (
@@ -34,12 +35,12 @@ function App() {
         <Route path="/admin/products/:id" element={<EditProduct />} />
        
 
-        {/* <Route element={<AdminRoute />}>  */}
+        <Route element={<AdminRoute />}> 
         <Route path="/admin" element={<ProductsManager />} />
         <Route path="/users" element={<UsersList />} />
         <Route path="/orders" element={<OrdersList />} />
         <Route path="/categories" element={<CategoriesForm />} />
-        {/* </Route>  */}
+        </Route> 
       </Routes>
     </div>
   )

@@ -33,7 +33,6 @@ export default function EditProduct() {
           console.log(productData)
           setProduct(productData)
         })
-
         .catch((error) => {
           console.log(error)
         })

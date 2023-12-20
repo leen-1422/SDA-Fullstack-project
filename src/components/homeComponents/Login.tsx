@@ -12,7 +12,7 @@ export default function Login() {
   const navigate = useNavigate()
   const state = useSelector((state: RootState) => state)
   const users = state.users.userData
-  console.log(state.users)
+  console.log(state.users.userData)
   const [errorMessage, setErrorMessage] = useState<null | string>(null)
   const [successMessage, setSuccsessMessage] = useState<null | string>(null)
   const [loading, setLoading] = useState(false)
@@ -30,14 +30,16 @@ export default function Login() {
     })
   }
 
+
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
     try {
-      dispatch(loginThunk(credentials)).then((res) => {
+      const res = await dispatch(loginThunk(credentials))
         if (res.meta.requestStatus === 'fulfilled') {
           localStorage.setItem('token', res.payload.token)
         }
-      })
+
     } catch (error) {
       console.log(error)
     } finally {

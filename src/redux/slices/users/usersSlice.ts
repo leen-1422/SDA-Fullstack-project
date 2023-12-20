@@ -5,15 +5,12 @@ import api from '../../../api'
 import { getDecodedTokenFromStorage, getTokenFromStorage } from '../../../utils/token'
 import { ROLES } from '../../../Constant'
 
-
 export type Role = keyof typeof ROLES
 
-export type UserUser = {
-  _id: string
+export type DecodedUser = {
   email: string
   userId: string
-  isActive: boolean
-  role: 'USER'
+  role: Role
 }
 
 export type User = {
@@ -27,33 +24,29 @@ export type User = {
   isAdmin: boolean
   blocked: boolean
 }
-export type DecodedUser = {
-  email: string
-  userId: string
-  role: Role
-}
 
 export type UserState = {
   users: User[]
-  // user: null | User
   error: null | string
   isLoading: boolean
   isLoggedIn: boolean
   isAdmin: boolean
   userData: DecodedUser | null
 }
+
 const isLoggedIn = !!getTokenFromStorage()
 const decodedUser = getDecodedTokenFromStorage()
 const isAdmin = decodedUser?.role === ROLES.ADMIN
 const initialState: UserState = {
   users: [],
-  // user: null,
   error: null,
   isLoading: false,
   isLoggedIn,
   isAdmin,
   userData: decodedUser
 }
+
+
 
 //users thunk
 
@@ -76,7 +69,7 @@ export const grantRoleUserThunk = createAsyncThunk(
   'users/role',
   async ({ role, userId }: { role: Role; userId: User['_id'] }) => {
     try {
-      const res = await api.put('api/users/role', {
+      const res = await api.put('/api/users/role', {
         role,
         userId
       })
@@ -123,18 +116,18 @@ export const usersSlice = createSlice({
       state.isLoggedIn = false
       state.userData = null
       state.isAdmin = false
-    },
-    login: (state, action) => {
-      state.isLoggedIn = true
-      state.userData = action.payload
-      localStorage.setItem(
-        'loginData',
-        JSON.stringify({
-          isLoggedIn: state.isLoggedIn,
-          userData: state.userData
-        })
-      )
     }
+    // login: (state, action) => {
+    //   state.isLoggedIn = true
+    //   state.userData = action.payload
+    //   localStorage.setItem(
+    //     'loginData',
+    //     JSON.stringify({
+    //       isLoggedIn: state.isLoggedIn,
+    //       userData: state.userData
+    //     })
+    //   )
+    // }
 
     // loginSucccess: (state, action) => {
     //   state.user = action.payload
@@ -219,6 +212,6 @@ export const usersSlice = createSlice({
     })
   }
 })
-export const { login, logout } = usersSlice.actions
+export const { logout } = usersSlice.actions
 
 export default usersSlice.reducer

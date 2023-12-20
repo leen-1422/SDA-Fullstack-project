@@ -1,61 +1,77 @@
 import { ChangeEvent, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 
 import { addToCart } from '../../redux/slices/cart/cartSlice'
-import {
-  getCategoriesThunk,
-  setSelectedCategory
-} from '../../redux/slices/categories/categoriesSlice'
-import { Product, getProductsThunk, getSearch } from '../../redux/slices/products/productSlice'
+import { getCategoriesThunk } from '../../redux/slices/categories/categoriesSlice'
+import { getProductsThunk, productSucssess } from '../../redux/slices/products/productSlice'
 import { AppDispatch, RootState } from '../../redux/store'
+import api from '../../api'
 
 export default function ProductsMainPage() {
   const dispatch = useDispatch<AppDispatch>()
+  const [searchParams, setSearchParams] = useSearchParams()
+  const page = searchParams.get('page') || 0
+  const name = searchParams.get('name') ||''
   const state = useSelector((state: RootState) => state)
+  const [pagination, setPagination] = useState({
+    page,
+    totalPages: 0
+  })
+  // const [search, SetSearch] = useState('')
+  console.log('pagination', pagination)
   const products = state.products
-  const categories = state.categories.items
-  const searchTerm = useSelector((state: RootState) => state.products.search)
+  const currentItems = products.items
+  console.log('currentItems', currentItems)
+
   // Pagination state
-  const [currentPage, setCurrentPage] = useState(1)
-  const itemsPerPage = 4
+
+  const totalPages = pagination.totalPages
 
   useEffect(() => {
-    dispatch(getProductsThunk())
-    dispatch(getCategoriesThunk())
+    if (page && name) {
+      handleGetProductsByName(name, Number(page))
+      
+    } else if (page){
+     
+      handleGetProductsByPage(Number(page))
+
+    } else {
+      handleGetProducts()
+    }
   }, [])
 
-  const productsList: Product[] = state.products.items
-  const selectedCategoryId: string = state.categories.selectedCategoryId
-  const filterProductsbyCategory = (selectedCategoryId: string) => {
-    return selectedCategoryId !== ''
-      ? productsList.filter((product) =>
-          product.category.find((cat) => cat._id === selectedCategoryId)
-        )
-      : productsList
+  const handleGetProducts = async () => {
+    const res = await api.get('/api/products')
+    console.log('res', res.data.result)
+
+    const { page, totalPages } = res.data.infoOfPage
+    setPagination({ page, totalPages })
+    dispatch(productSucssess(res.data.result))
   }
-  const filtereddProducts = filterProductsbyCategory(selectedCategoryId)
-  const handleCategoryChange = (categoryId: string) => {
-    dispatch(setSelectedCategory(categoryId))
+
+  const handleGetProductsByPage = async (nextPage: number) => {
+    const res = await api.get(`/api/products?page=${nextPage}`)
+    console.log('res', res.data.result)
+    const { page, totalPages } = res.data.infoOfPage
+    setPagination({ page, totalPages })
+    setSearchParams({ page })
+    dispatch(productSucssess(res.data.result))
   }
-  const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
-    dispatch(getSearch(event.target.value))
+  const handleGetProductsByName = async (name: string, nextPage: number) => {
+    const res = await api.get(`/api/products?page=${nextPage}&search=name&name=${name}`)
+    console.log('res', res.data.result)
+    const { page, totalPages } = res.data.infoOfPage
+    setPagination({ page, totalPages })
+    setSearchParams({ page , name })
+    dispatch(productSucssess(res.data.result))
   }
-  const filterProductbySearch = (products: Product[], searchKeyWord: string) => {
-    return searchKeyWord
-      ? products.filter((product) =>
-          product.name.toLowerCase().includes(searchKeyWord.toLowerCase())
-        )
-      : products
+  const handleSearch = async (e: ChangeEvent<HTMLInputElement>) => {
+    const name = e.target.value
+    setSearchParams({name})
+    await handleGetProductsByName(e.target.value, Number(page))
   }
-  const filteredAndSearchedProducts = filterProductbySearch(filtereddProducts, searchTerm)
-  const indexOfLastProduct = currentPage * itemsPerPage
-  const indexOfFirstProduct = indexOfLastProduct - itemsPerPage
-  const currentProducts = filteredAndSearchedProducts.slice(indexOfFirstProduct, indexOfLastProduct)
-  const totalPages = Math.ceil(filteredAndSearchedProducts.length / itemsPerPage)
-  const handlePageChange = (pageNumber: number) => {
-    setCurrentPage(pageNumber)
-  }
+
   return (
     <div className="bg-white">
       <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
@@ -68,7 +84,7 @@ export default function ProductsMainPage() {
                 className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">
                 Your Email
               </label>
-              <select
+              {/* <select
                 className="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-l-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600"
                 id="category"
                 onChange={(e) => handleCategoryChange(e.target.value)}
@@ -79,12 +95,12 @@ export default function ProductsMainPage() {
                     {category.name}
                   </option>
                 ))}
-              </select>
+              </select> */}
 
               <div className="relative w-full">
                 <input
                   type="search"
-                  value={searchTerm}
+                  // value={searchTerm}
                   onChange={handleSearch}
                   id="search-dropdown"
                   className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-r-lg border-l-gray-50 border-l-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-l-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
@@ -106,7 +122,7 @@ export default function ProductsMainPage() {
               </svg>
             </div>
           ) : (
-            currentProducts.map((product) => (
+            products.items.map((product) => (
               <div key={product._id}>
                 <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7">
                   <img
@@ -154,10 +170,16 @@ export default function ProductsMainPage() {
           {Array.from({ length: totalPages }, (_, index) => index + 1).map((pageNumber) => (
             <button
               className={`mx-1 flex h-9 w-9 items-center justify-center rounded-full border ${
-                currentPage === pageNumber ? 'bg-gray-500' : 'bg-purple-600'
+                pagination.page === pageNumber ? 'bg-gray-500' : 'bg-purple-600'
               }    transition duration-150 ease-in-out hover:bg-light-300`}
               key={pageNumber}
-              onClick={() => handlePageChange(pageNumber)}
+              onClick={() => {
+                if (name) {
+                  handleGetProductsByName(name, pageNumber)
+                } else {
+                  handleGetProductsByPage(pageNumber)
+                }
+              }}
               style={{
                 justifyContent: 'center',
 

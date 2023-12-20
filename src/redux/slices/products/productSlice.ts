@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 import api from '../../../api'
 import { Category } from '../categories/categoriesSlice'
+import { AxiosError } from 'axios'
 
 export type Product = {
   _id: string
@@ -20,6 +21,7 @@ export type ProductState = {
   isLoading: boolean
   selectedProduct: Product | null
   search: string
+  pageInfo: { page: number; perPage: number; totalItems: number; totalPages: number }
 }
 
 const initialState: ProductState = {
@@ -27,7 +29,14 @@ const initialState: ProductState = {
   error: null,
   isLoading: false,
   selectedProduct: null,
-  search: ''
+  search: '',
+
+  pageInfo: {
+    page: 0,
+    perPage: 0,
+    totalItems: 0,
+    totalPages: 0
+  }
 }
 
 //products thunk
@@ -36,7 +45,8 @@ export const getProductsThunk = createAsyncThunk('products/get', async () => {
   try {
     const res = await api.get('/api/products')
     console.log(res)
-    return res.data.result
+    return res.data
+
   } catch (error) {
     console.log(error)
   }
@@ -77,37 +87,33 @@ export const editProductThunk = createAsyncThunk(
   }
 )
 
-// export const addProductsThunk = createAsyncThunk(
-//   'products/add',
-//   async (product: {
-//     name: string
-//     image: string
-//     description: string
-//     category: Category[]
-//     sizes: string[]
-//     price: number
-//   }) => {
+export const addProductThunk = createAsyncThunk(
+  'products/post',
+  async (products: Product[], { rejectWithValue }) => {
+    try {
+      const res = await api.post('/api/products', products);
+      return res.data.result;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        console.log(error);
+        throw rejectWithValue(error.response?.data.msg);
+      }
+      throw error;
+    }
+  }
+);
+
+// export const createProductThunk = createAsyncThunk(
+//   'products/create',
+//   async (newProduct: Product) => {
 //     try {
-//       const res = await api.post('/api/products', product)
-//       console.log('res', res.data)
-//       return res.data
+//       const response = await api.post('/api/products', newProduct)
+//       return response.data
 //     } catch (error) {
 //       console.log(error)
 //     }
 //   }
 // )
-
-export const createProductThunk = createAsyncThunk(
-  'products/create',
-  async (newProduct: Product) => {
-    try {
-      const response = await api.post('/api/products', newProduct)
-      return response.data
-    } catch (error) {
-      console.log(error)
-    }
-  }
-)
 
 export const productSlice = createSlice({
   name: 'products',
@@ -115,11 +121,21 @@ export const productSlice = createSlice({
   reducers: {
     getSearch: (state, action) => {
       state.search = action.payload
+    },
+    productSucssess:(state,action) =>{
+      state.items = action.payload
+
+
     }
   },
   extraReducers: (builder) => {
     builder.addCase(getProductsThunk.fulfilled, (state, action) => {
-      state.items = action.payload
+      state.items = action.payload?.result
+      state.pageInfo.page = action.payload.infoOfPage.page
+      state.pageInfo.perPage = action.payload.infoOfPage.perPage
+      state.pageInfo.totalItems = action.payload.infoOfPage.totalItems
+      state.pageInfo.totalPages = action.payload.infoOfPage.totalPages
+
       return state
     })
     builder.addCase(getSingleProductThunk.fulfilled, (state, action) => {
@@ -132,14 +148,18 @@ export const productSlice = createSlice({
       state.items = deleteProduct
       return state
     })
-    builder.addCase(createProductThunk.fulfilled, (state, action) => {
-      const newProduct = action.payload
-      state.items.push(newProduct)
-    })
+    builder.addCase(addProductThunk.fulfilled, (state, action) => {
+      state.items = action.payload
+      return state
+    }),
+    // builder.addCase(createProductThunk.fulfilled, (state, action) => {
+    //   const newProduct = action.payload
+    //   state.items.push(newProduct)
+    // })
     builder.addCase(editProductThunk.fulfilled, (state, action) => {
       const productId = action.payload
       if (productId) {
-        const uptadetproducts: any = state.items.map((product) =>
+        const uptadetproducts = state.items.map((product) =>
           product._id === productId._id ? productId : product
         )
         state.items = uptadetproducts
@@ -149,6 +169,6 @@ export const productSlice = createSlice({
     })
   }
 })
-export const { getSearch } = productSlice.actions
+export const { getSearch, productSucssess } = productSlice.actions
 
 export default productSlice.reducer
