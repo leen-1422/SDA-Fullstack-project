@@ -84,6 +84,7 @@ export const categoriesSlice = createSlice({
   reducers: {
     setSelectedCategory: (state, action) => {
       state.selectedCategoryId = action.payload
+      console.log("zdxftyguhoigfdghyhuijhgcjijhgfgthu",state.selectedCategoryId)
     },
     addCategory: (state, action) => {
       state.items = [action.payload.category, ...state.items]

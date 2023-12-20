@@ -3,7 +3,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link, useSearchParams } from 'react-router-dom'
 
 import { addToCart } from '../../redux/slices/cart/cartSlice'
-import { getCategoriesThunk } from '../../redux/slices/categories/categoriesSlice'
+import {
+  getCategoriesThunk,
+  setSelectedCategory
+} from '../../redux/slices/categories/categoriesSlice'
 import { getProductsThunk, productSucssess } from '../../redux/slices/products/productSlice'
 import { AppDispatch, RootState } from '../../redux/store'
 import api from '../../api'
@@ -12,16 +15,21 @@ export default function ProductsMainPage() {
   const dispatch = useDispatch<AppDispatch>()
   const [searchParams, setSearchParams] = useSearchParams()
   const page = searchParams.get('page') || 0
-  const name = searchParams.get('name') ||''
+  const name = searchParams.get('name') || ''
   const state = useSelector((state: RootState) => state)
+  const selectedCategoryId: string = state.categories.selectedCategoryId
+  const [selectedValue, setSelectedValue] = useState('');
+  console.log("value of select",selectedValue)
+  
+
   const [pagination, setPagination] = useState({
     page,
     totalPages: 0
   })
-  // const [search, SetSearch] = useState('')
   console.log('pagination', pagination)
   const products = state.products
   const currentItems = products.items
+  const categories = state.categories.items
   console.log('currentItems', currentItems)
 
   // Pagination state
@@ -31,14 +39,13 @@ export default function ProductsMainPage() {
   useEffect(() => {
     if (page && name) {
       handleGetProductsByName(name, Number(page))
-      
-    } else if (page){
-     
+    } else if (page) {
       handleGetProductsByPage(Number(page))
-
     } else {
       handleGetProducts()
     }
+
+    dispatch(getCategoriesThunk())
   }, [])
 
   const handleGetProducts = async () => {
@@ -63,14 +70,40 @@ export default function ProductsMainPage() {
     console.log('res', res.data.result)
     const { page, totalPages } = res.data.infoOfPage
     setPagination({ page, totalPages })
-    setSearchParams({ page , name })
+    setSearchParams({ page, name })
     dispatch(productSucssess(res.data.result))
   }
+
+  
+//const res = await api.get(`/api/products?page=${nextPage}&search=name&name=${name}&category=${category}`)
+
+  const handleCategoryChange = async (categoryId: string) => {
+    dispatch(setSelectedCategory(categoryId))
+    // Call API to fetch products by category
+    const res = await api.get(`/api/products?category=${categoryId}`)
+    const { page, totalPages } = res.data.infoOfPage
+    setPagination({ page, totalPages })
+    setSearchParams({ page, name: '' })
+    dispatch(productSucssess(res.data.result))
+  }
+
+
+
+  // const handleSearch = async (e: ChangeEvent<HTMLInputElement>) => {
+  //   const name = e.target.value
+  //   setSearchParams({ name, page: '' })
+  //   await handleGetProductsByName(name, 0)
+  // }
+
+  // the choosen one 
   const handleSearch = async (e: ChangeEvent<HTMLInputElement>) => {
     const name = e.target.value
-    setSearchParams({name})
-    await handleGetProductsByName(e.target.value, Number(page))
+    setPagination({ page, totalPages })
+    setSearchParams({ name, page: '' }) // Reset page to 0 when performing a search
+    // Pass 0 as the page number for the first page
   }
+
+
 
   return (
     <div className="bg-white">
@@ -84,18 +117,20 @@ export default function ProductsMainPage() {
                 className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">
                 Your Email
               </label>
-              {/* <select
+              <select
                 className="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-l-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600"
                 id="category"
                 onChange={(e) => handleCategoryChange(e.target.value)}
-                value={state.categories.selectedCategoryId || ''}>
+                value={selectedValue}
+                
+                >
                 <option value={''}>All Categories</option>
                 {categories.map((category) => (
                   <option key={category._id} value={category._id}>
                     {category.name}
                   </option>
                 ))}
-              </select> */}
+              </select>
 
               <div className="relative w-full">
                 <input
@@ -136,6 +171,13 @@ export default function ProductsMainPage() {
                 <h1>
                   <span>{product.price} SAR</span>
                 </h1>
+
+                <div>{product.category.map((category)=>(
+                  <span>{category.name}</span>
+                )
+
+
+                )}</div>
 
                 <div className="flex justify-between mt-4">
                   <Link to={`products/${product._id}`}>
