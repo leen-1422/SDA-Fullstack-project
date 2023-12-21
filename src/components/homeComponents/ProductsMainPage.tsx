@@ -13,45 +13,39 @@ import api from '../../api'
 
 export default function ProductsMainPage() {
   const dispatch = useDispatch<AppDispatch>()
-  const [searchParams, setSearchParams] = useSearchParams()
+  const [searchParams, setSearchParams] = useSearchParams({
+    name: '',
+    page: ''
+  })
   const page = searchParams.get('page') || 0
   const name = searchParams.get('name') || ''
+
   const state = useSelector((state: RootState) => state)
   const selectedCategoryId: string = state.categories.selectedCategoryId
-  const [selectedValue, setSelectedValue] = useState('');
-  console.log("value of select",selectedValue)
-  
 
   const [pagination, setPagination] = useState({
     page,
     totalPages: 0
   })
-  console.log('pagination', pagination)
+
   const products = state.products
   const currentItems = products.items
   const categories = state.categories.items
-  console.log('currentItems', currentItems)
 
   // Pagination state
 
   const totalPages = pagination.totalPages
 
   useEffect(() => {
-    if (page && name) {
-      handleGetProductsByName(name, Number(page))
-    } else if (page) {
-      handleGetProductsByPage(Number(page))
-    } else {
-      handleGetProducts()
-    }
+    handleGetProducts()
 
     dispatch(getCategoriesThunk())
-  }, [])
+  }, [name, selectedCategoryId, pagination.page])
 
   const handleGetProducts = async () => {
-    const res = await api.get('/api/products')
-    console.log('res', res.data.result)
-
+    const res = await api.get(
+      `/api/products?page=${pagination.page}&search=name&name=${name}&category=${selectedCategoryId}`
+    )
     const { page, totalPages } = res.data.infoOfPage
     setPagination({ page, totalPages })
     dispatch(productSucssess(res.data.result))
@@ -59,51 +53,35 @@ export default function ProductsMainPage() {
 
   const handleGetProductsByPage = async (nextPage: number) => {
     const res = await api.get(`/api/products?page=${nextPage}`)
-    console.log('res', res.data.result)
+
     const { page, totalPages } = res.data.infoOfPage
     setPagination({ page, totalPages })
     setSearchParams({ page })
     dispatch(productSucssess(res.data.result))
   }
   const handleGetProductsByName = async (name: string, nextPage: number) => {
-    const res = await api.get(`/api/products?page=${nextPage}&search=name&name=${name}`)
-    console.log('res', res.data.result)
+    const res = await api.get(`/api/products?page=${pagination.page}&search=name&name=${name}`)
     const { page, totalPages } = res.data.infoOfPage
     setPagination({ page, totalPages })
     setSearchParams({ page, name })
     dispatch(productSucssess(res.data.result))
   }
 
-  
-//const res = await api.get(`/api/products?page=${nextPage}&search=name&name=${name}&category=${category}`)
-
   const handleCategoryChange = async (categoryId: string) => {
     dispatch(setSelectedCategory(categoryId))
-    // Call API to fetch products by category
-    const res = await api.get(`/api/products?category=${categoryId}`)
-    const { page, totalPages } = res.data.infoOfPage
-    setPagination({ page, totalPages })
-    setSearchParams({ page, name: '' })
-    dispatch(productSucssess(res.data.result))
+    setSearchParams({ page: '1', name: '' }) // Reset the search parameters
+
+    // const res = await api.get(`/api/products?page=1&category=${categoryId}`)
+    // dispatch(productSucssess(res.data.result))
+
+    // Update the pagination
+    setPagination({ page: 1, totalPages })
   }
 
-
-
-  // const handleSearch = async (e: ChangeEvent<HTMLInputElement>) => {
-  //   const name = e.target.value
-  //   setSearchParams({ name, page: '' })
-  //   await handleGetProductsByName(name, 0)
-  // }
-
-  // the choosen one 
   const handleSearch = async (e: ChangeEvent<HTMLInputElement>) => {
-    const name = e.target.value
-    setPagination({ page, totalPages })
-    setSearchParams({ name, page: '' }) // Reset page to 0 when performing a search
-    // Pass 0 as the page number for the first page
+    const { name, value } = e.target
+    setSearchParams({ ...searchParams, [name]: value })
   }
-
-
 
   return (
     <div className="bg-white">
@@ -121,9 +99,8 @@ export default function ProductsMainPage() {
                 className="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-l-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600"
                 id="category"
                 onChange={(e) => handleCategoryChange(e.target.value)}
-                value={selectedValue}
-                
-                >
+                // value={selectedValue}
+              >
                 <option value={''}>All Categories</option>
                 {categories.map((category) => (
                   <option key={category._id} value={category._id}>
@@ -135,7 +112,8 @@ export default function ProductsMainPage() {
               <div className="relative w-full">
                 <input
                   type="search"
-                  // value={searchTerm}
+                  // value={searchParams.}
+                  name="name"
                   onChange={handleSearch}
                   id="search-dropdown"
                   className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-r-lg border-l-gray-50 border-l-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-l-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
@@ -157,7 +135,7 @@ export default function ProductsMainPage() {
               </svg>
             </div>
           ) : (
-            products.items.map((product) => (
+            state.products.items.map((product) => (
               <div key={product._id}>
                 <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7">
                   <img
@@ -172,12 +150,11 @@ export default function ProductsMainPage() {
                   <span>{product.price} SAR</span>
                 </h1>
 
-                <div>{product.category.map((category)=>(
-                  <span>{category.name}</span>
-                )
-
-
-                )}</div>
+                <div>
+                  {product.category.map((category) => (
+                    <span>{category.name}</span>
+                  ))}
+                </div>
 
                 <div className="flex justify-between mt-4">
                   <Link to={`products/${product._id}`}>
