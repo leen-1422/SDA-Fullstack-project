@@ -76,7 +76,7 @@ export const deleteProductsThunk = createAsyncThunk(
 
 export const editProductThunk = createAsyncThunk(
   'products/edit',
-  async ({ productId, updatedProduct }: { productId: string; updatedProduct: any }) => {
+  async ({ productId, updatedProduct }: { productId: string; updatedProduct: Product }) => {
     try {
       await api.put(`/api/products/${productId}`, updatedProduct)
       console.log('from inside thunk', productId)

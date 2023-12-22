@@ -9,6 +9,7 @@ export default function Navbar() {
   const dispatch = useDispatch<AppDispatch>()
   const { isLoggedIn, isAdmin, userData } = useSelector((state: RootState) => state.users)
   console.log( { isLoggedIn, isAdmin, userData })
+  const state = useSelector((state: RootState) => state.users)
   function handleLogout() {
     dispatch(logout())
     localStorage.removeItem('token')
@@ -66,9 +67,10 @@ export default function Navbar() {
                       />
                     </svg>
                     <Link
-                      to={`/${userData?.role}`}
+                      to={`/${userData?.role}/${state.userData?.userId}`}
+
                       className="group focus:ring focus:ring-purple-500 focus:ring-opacity-25 outline-none rounded-lg">
-                      {userData?.email}
+                      {userData?.firstName}
                     </Link>
                     <Link
                       className="bg-yellow-300 px-4 py-1 rounded-xl text-white hover:bg-yellow-500 active:bg-yellow-500focus:ring focus:bg-yellow-500 focus:ring-opacity-25 outline-none"

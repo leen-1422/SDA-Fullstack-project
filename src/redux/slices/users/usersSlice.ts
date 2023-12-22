@@ -8,9 +8,12 @@ import { ROLES } from '../../../Constant'
 export type Role = keyof typeof ROLES
 
 export type DecodedUser = {
+  _id: string,
   email: string
   userId: string
   role: Role
+  firstName: string
+  lastName:string
 }
 
 export type User = {
@@ -98,7 +101,7 @@ export const deleteUserThunk = createAsyncThunk('user/delete', async (userId: st
     console.log(error)
   }
 })
-
+// check here for the extra / 
 export const blockUserThunk = createAsyncThunk('user/block', async (userId: string) => {
   try {
     await api.put(`/api/users//block/${userId}`)
@@ -108,6 +111,35 @@ export const blockUserThunk = createAsyncThunk('user/block', async (userId: stri
   }
 })
 
+///////
+export const updateSingleUserThunk = createAsyncThunk('singleUser/edit', async ({ userId, updatedUser }: { userId: User['_id']; updatedUser:Partial<User> }) => {
+  try {
+    console.log("first")
+    const res= await api.put(`/api/users/profile/${userId}`, updatedUser)
+    console.log("sec")
+    return updatedUser
+  } catch (error) {
+    console.log('👀 ', error)
+  }
+})
+
+export const getSingleUserThunk = createAsyncThunk('user/get', async (userId: string) => {
+  try {
+    const res = await api.get(`/api/users/${userId}`)
+    console.log(res)
+    return res.data
+  } catch (error) {
+    console.log(error)
+  }
+})
+
+
+
+
+
+
+
+
 export const usersSlice = createSlice({
   name: 'users',
   initialState,
@@ -116,7 +148,18 @@ export const usersSlice = createSlice({
       state.isLoggedIn = false
       state.userData = null
       state.isAdmin = false
-    }
+    },
+    updateUserFromPayload: (state, action) => {
+      const updatedUser = action.payload;
+      if (updatedUser) {
+        const updatedUsers = state.users.map((user) =>
+          user._id === updatedUser._id ? updatedUser : user
+        );
+        state.users = updatedUsers;
+        state.userData = updatedUser;
+        // localStorage.setItem('userData', JSON.stringify(updatedUser));
+      }
+    },
     // login: (state, action) => {
     //   state.isLoggedIn = true
     //   state.userData = action.payload
@@ -130,7 +173,7 @@ export const usersSlice = createSlice({
     // }
 
     // loginSucccess: (state, action) => {
-    //   state.user = action.payload
+    //   state.users = action.payload
     // },
 
     // Adminlogin: (state, action: PayloadAction<User>) => {
@@ -140,13 +183,13 @@ export const usersSlice = createSlice({
     //   }
     // },
 
-    // usersRequest: (state) => {
-    //   state.isLoading = true
-    // },
-    // usersSuccess: (state, action) => {
-    //   state.isLoading = false
-    //   state.users = action.payload
-    // },
+    usersRequest: (state) => {
+      state.isLoading = true
+    },
+    usersSuccess: (state, action) => {
+   
+      state.users = action.payload
+    },
 
     // getError: (state, action: PayloadAction<string>) => {
     //   state.error = action.payload
@@ -210,8 +253,21 @@ export const usersSlice = createSlice({
       state.users = updatedUsers
       return state
     })
+    builder.addCase(updateSingleUserThunk.fulfilled, (state, action) => {
+      const updatedUser = action.payload
+      if (updatedUser) {
+        const updatedUsers = state.users.map((user) =>
+          user._id === updatedUser._id ? updatedUser : user
+        )
+        //@ts-ignore
+        state.users = updatedUsers
+        //@ts-ignore
+        state.userData = updatedUser
+      }
+    })
+
   }
 })
-export const { logout } = usersSlice.actions
+export const { logout ,usersSuccess , usersRequest, updateUserFromPayload} = usersSlice.actions
 
 export default usersSlice.reducer
