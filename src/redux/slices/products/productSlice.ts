@@ -21,7 +21,7 @@ export type ProductState = {
   isLoading: boolean
   selectedProduct: Product | null
   search: string
-  pageInfo: { page: number; perPage: number; totalItems: number; totalPages: number }
+  // pageInfo: { page: number; perPage: number; totalItems: number; totalPages: number }
 }
 
 const initialState: ProductState = {
@@ -31,12 +31,12 @@ const initialState: ProductState = {
   selectedProduct: null,
   search: '',
 
-  pageInfo: {
-    page: 0,
-    perPage: 0,
-    totalItems: 0,
-    totalPages: 0
-  }
+  // pageInfo: {
+  //   page: 0,
+  //   perPage: 0,
+  //   totalItems: 0,
+  //   totalPages: 0
+  // }
 }
 
 //products thunk
@@ -131,10 +131,10 @@ export const productSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getProductsThunk.fulfilled, (state, action) => {
       state.items = action.payload?.result
-      state.pageInfo.page = action.payload.infoOfPage.page
-      state.pageInfo.perPage = action.payload.infoOfPage.perPage
-      state.pageInfo.totalItems = action.payload.infoOfPage.totalItems
-      state.pageInfo.totalPages = action.payload.infoOfPage.totalPages
+      // state.pageInfo.page = action.payload.infoOfPage.page
+      // state.pageInfo.perPage = action.payload.infoOfPage.perPage
+      // state.pageInfo.totalItems = action.payload.infoOfPage.totalItems
+      // state.pageInfo.totalPages = action.payload.infoOfPage.totalPages
 
       return state
     })

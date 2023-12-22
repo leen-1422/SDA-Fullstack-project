@@ -35,6 +35,7 @@ export type UserState = {
   isLoggedIn: boolean
   isAdmin: boolean
   userData: DecodedUser | null
+  selectedUser: User | null
 }
 
 const isLoggedIn = !!getTokenFromStorage()
@@ -46,7 +47,8 @@ const initialState: UserState = {
   isLoading: false,
   isLoggedIn,
   isAdmin,
-  userData: decodedUser
+  userData: decodedUser,
+  selectedUser: null
 }
 
 
@@ -157,7 +159,6 @@ export const usersSlice = createSlice({
         );
         state.users = updatedUsers;
         state.userData = updatedUser;
-        // localStorage.setItem('userData', JSON.stringify(updatedUser));
       }
     },
     // login: (state, action) => {
@@ -183,13 +184,7 @@ export const usersSlice = createSlice({
     //   }
     // },
 
-    usersRequest: (state) => {
-      state.isLoading = true
-    },
-    usersSuccess: (state, action) => {
-   
-      state.users = action.payload
-    },
+
 
     // getError: (state, action: PayloadAction<string>) => {
     //   state.error = action.payload
@@ -253,21 +248,25 @@ export const usersSlice = createSlice({
       state.users = updatedUsers
       return state
     })
+    builder.addCase(getSingleUserThunk.fulfilled, (state, action) => {
+      state.selectedUser = action.payload
+      return state
+    })
     builder.addCase(updateSingleUserThunk.fulfilled, (state, action) => {
-      const updatedUser = action.payload
+      const updatedUser = action.payload;
       if (updatedUser) {
         const updatedUsers = state.users.map((user) =>
           user._id === updatedUser._id ? updatedUser : user
-        )
+        );
         //@ts-ignore
-        state.users = updatedUsers
+        state.users = updatedUsers;
         //@ts-ignore
-        state.userData = updatedUser
+        state.userData = updatedUser;
       }
     })
 
   }
 })
-export const { logout ,usersSuccess , usersRequest, updateUserFromPayload} = usersSlice.actions
+export const { logout , updateUserFromPayload} = usersSlice.actions
 
 export default usersSlice.reducer

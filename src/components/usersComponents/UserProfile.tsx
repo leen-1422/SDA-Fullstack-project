@@ -1,16 +1,13 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import api from '../../api'
-
 import { AppDispatch, RootState } from '../../redux/store'
+
+import { useParams } from 'react-router'
 import {
   getSingleUserThunk,
   updateSingleUserThunk,
-  updateUserFromPayload,
-  usersRequest,
-
+  updateUserFromPayload
 } from '../../redux/slices/users/usersSlice'
-import { useParams } from 'react-router'
 
 export default function UserProfile() {
   const { userData } = useSelector((state: RootState) => state.users)
@@ -18,10 +15,6 @@ export default function UserProfile() {
   const [user, setUser] = useState({ firstName: '', lastName: '', _id: '' })
   const dispatch = useDispatch<AppDispatch>()
   const { id } = useParams()
-  // console.log(id)
-  console.log('user', user)
-
-  console.log('userData', userData)
 
   useEffect(() => {
     handleGetUsers()
@@ -31,23 +24,20 @@ export default function UserProfile() {
   }, [])
 
   const handleGetUsers = async () => {
-    dispatch(usersRequest())
+    if (id) {
+      dispatch(getSingleUserThunk(id))
+        .then((response) => {
+          const productData = response.payload
+          console.log('productData', productData)
 
-    await api
-      .get(`/api/users/${id}`)
-      .then((response) => {
-        const productData = response.data
-        console.log('productData', productData)
-
-        setUser(productData)
-        dispatch(updateUserFromPayload(productData))
-      })
-      .catch((error) => {
-        console.log(error)
-      })
+          setUser(productData)
+          dispatch(updateUserFromPayload(productData))
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    }
   }
-
-
 
   const handleFormOpen = () => {
     setIsFormOpen(!isFormOpen)
@@ -65,7 +55,6 @@ export default function UserProfile() {
     try {
       if (user._id) {
         dispatch(updateSingleUserThunk({ userId: user._id, updatedUser: user }))
-        console.log('sucssfully updated')
       }
     } catch (error) {
       console.log(error)
