@@ -1,12 +1,15 @@
-import { useEffect } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import {
   deleteOrderThunk,
   getOrdersThunk,
-  updateOrderThunk
+  editOrderStatusThunk,
+  Orders,
+  Status
 } from '../../redux/slices/orders/ordersSlice'
 import { AppDispatch, RootState } from '../../redux/store'
+import { STATUS } from '../../Constant'
 
 export default function OrdersList() {
   const dispatch = useDispatch<AppDispatch>()
@@ -14,14 +17,15 @@ export default function OrdersList() {
 
   useEffect(() => {
     dispatch(getOrdersThunk())
-  }, [])
+  }, [dispatch])
 
   const handelDeleteProduct = (id: string) => {
     dispatch(deleteOrderThunk(id))
   }
 
-  const handelUpdate = (id: string) => {
-    dispatch(updateOrderThunk({ status, id }))
+  const handleUpdateStatus = (e: ChangeEvent<HTMLSelectElement>, orderId: Orders['_id']) => {
+    const status = e.target.value as Status
+    dispatch(editOrderStatusThunk({ status, orderId }))
   }
 
   return (
@@ -41,7 +45,7 @@ export default function OrdersList() {
             </thead>
             <tbody className="bg-white">
               {orders.orders.map((order) => (
-                <tr className="text-gray-700">
+                <tr key={order._id} className="text-gray-700">
                   <td className="px-4 py-3 border">
                     <div className="flex items-center text-sm">
                       <div>
@@ -54,10 +58,10 @@ export default function OrdersList() {
                   <td className="px-4 py-3 text-ms font-semibold border">
                     {' '}
                     {order.orderItems.map((item) => (
-                      <>
+                      <div key={item._id}>
                         <span>Product:{item.product.name} </span>
-                        <span>Qty:{item.quantity} | </span>
-                      </>
+                        <span>Qty:{item.quantity} </span>
+                      </div>
                     ))}
                   </td>
                   <td className="px-4 py-3 text-xs border">
@@ -67,16 +71,24 @@ export default function OrdersList() {
                     </span>
                   </td>
                   <td className="px-4 py-3 text-sm border">{order.purchasedAt}</td>
-                  <button
-                    onClick={() => handelDeleteProduct(order._id)}
-                    className="text-white bg-purple-600 rounded-md hover:bg-purple-500 focus:outline-none focus:shadow-outline-gray active:bg-purple-600 py-2 px-4 font-small">
-                    Delete
-                  </button>
-                  <button
-                    onClick={() => handelUpdate(order._id)}
-                    className="text-white bg-purple-600 rounded-md hover:bg-purple-500 focus:outline-none focus:shadow-outline-gray active:bg-purple-600 py-2 px-4 font-small">
-                    Edit
-                  </button>
+                  <td className="px-4 py-3 text-sm border">
+                    <button
+                      onClick={() => handelDeleteProduct(order._id)}
+                      className="text-white bg-purple-600 rounded-md hover:bg-purple-500 focus:outline-none focus:shadow-outline-gray active:bg-purple-600 py-2 px-4 font-small">
+                      Delete
+                    </button>
+                    <select
+                      name="status"
+                      title="status"
+                      onChange={(e) => handleUpdateStatus(e, order._id)}>
+                      <option>Select Status</option>
+                      {Object.keys(STATUS).map((status) => (
+                        <option key={status} value={status}>
+                          {status}
+                        </option>
+                      ))}
+                    </select>
+                  </td>
                 </tr>
               ))}
             </tbody>

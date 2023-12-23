@@ -37,12 +37,15 @@ export const getCategoriesThunk = createAsyncThunk('categories/get', async () =>
 
 export const deleteCategoryThunk = createAsyncThunk(
   'category/delete',
-  async (categoryId: string) => {
+  async (categoryId: string, { rejectWithValue }) => {
     try {
       await api.delete(`/api/categories/${categoryId}`)
       return categoryId
     } catch (error) {
-      console.log(error)
+      if (error instanceof AxiosError) {
+        console.log(error)
+        return rejectWithValue(error.response?.data.msg)
+      }
     }
   }
 )
@@ -50,9 +53,9 @@ export const deleteCategoryThunk = createAsyncThunk(
 // add category function
 export const addCategoryThunk = createAsyncThunk(
   'categories/post',
-  async (category: Category[], { rejectWithValue }) => {
+  async (newCategory: Category, { rejectWithValue }) => {
     try {
-      const res = await api.post('/api/categories', category)
+      const res = await api.post('/api/categories', newCategory)
       return res.data
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -65,7 +68,10 @@ export const addCategoryThunk = createAsyncThunk(
 
 export const editCategoryThunk = createAsyncThunk(
   'categories/edit',
-  async ({ name, categoryId }: { name: string; categoryId: Category['_id'] }) => {
+  async (
+    { name, categoryId }: { name: string; categoryId: Category['_id'] },
+    { rejectWithValue }
+  ) => {
     try {
       const res = await api.put(`api/categories/${categoryId}`, {
         name,
@@ -73,7 +79,10 @@ export const editCategoryThunk = createAsyncThunk(
       })
       return res.data.category
     } catch (error) {
-      console.log(':eyes: ', error)
+      if (error instanceof AxiosError) {
+        console.log(error)
+        return rejectWithValue(error.response?.data.msg)
+      }
     }
   }
 )
@@ -84,13 +93,6 @@ export const categoriesSlice = createSlice({
   reducers: {
     setSelectedCategory: (state, action) => {
       state.selectedCategoryId = action.payload
-      console.log("zdxftyguhoigfdghyhuijhgcjijhgfgthu",state.selectedCategoryId)
-    },
-    addCategory: (state, action) => {
-      state.items = [action.payload.category, ...state.items]
-      toast.success('new category is added', {
-        position: 'bottom-left'
-      })
     }
   },
   extraReducers: (builder) => {
@@ -121,6 +123,6 @@ export const categoriesSlice = createSlice({
   }
 })
 
-export const { setSelectedCategory, addCategory } = categoriesSlice.actions
+export const { setSelectedCategory } = categoriesSlice.actions
 
 export default categoriesSlice.reducer

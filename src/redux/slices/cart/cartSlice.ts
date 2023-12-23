@@ -19,11 +19,11 @@ export type ProductState = {
   cartAmount: number
 }
 
-const cartItemsFromStorage = localStorage.getItem('cartItems')
-const initialCartItems = cartItemsFromStorage ? JSON.parse(cartItemsFromStorage) : []
+// const cartItemsFromStorage = localStorage.getItem('cartItems')
+// const initialCartItems = cartItemsFromStorage ? JSON.parse(cartItemsFromStorage) : []
 
 const initialState: ProductState = {
-  cartItems: initialCartItems,
+  cartItems: [],
   cartTotal: 0,
   cartAmount: 0
 }
@@ -50,7 +50,7 @@ export const cartSlice = createSlice({
         })
       }
 
-      localStorage.setItem('cartItems', JSON.stringify(state.cartItems))
+      // localStorage.setItem('cartItems', JSON.stringify(state.cartItems))
     },
     removeProduct: (state, action: { payload: { productId: number } }) => {
       const filteredItems = state.cartItems.filter(

@@ -3,6 +3,10 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import api from '../../../api'
 import { Product } from '../products/productSlice'
 import { User } from '../users/usersSlice'
+import { AxiosError } from 'axios'
+import { STATUS } from '../../../Constant'
+
+export type Status = keyof typeof STATUS
 
 export type OrderItems = {
   _id: string
@@ -16,7 +20,7 @@ export type Orders = {
   userId: User
   purchasedAt: string
   orderItems: OrderItems[]
-  status: string
+  status: Status
   total: number
 }
 
@@ -44,30 +48,39 @@ export const getOrdersThunk = createAsyncThunk('orders/get', async () => {
   }
 })
 
-export const updateOrderThunk = createAsyncThunk(
-  'orders/put',
-  async ({ status, id }: { status: string; id: string }) => {
+export const editOrderStatusThunk = createAsyncThunk(
+  'orderStatuts/edit',
+  async ({ status, orderId }: { status: Status; orderId: Orders['_id'] }, { rejectWithValue }) => {
     try {
-      const updatedStatues = prompt('enter updated status')
-      console.log(id)
-      console.log(updatedStatues)
-
-      const res = await api.put(`/api/orders/${id}`, { status: updatedStatues })
+      const res = await api.put(`api/orders/${orderId}`, {
+        status,
+        orderId
+      })
+      console.log("res for status",res)
       return res.data
     } catch (error) {
-      console.log('err', error)
+      if (error instanceof AxiosError) {
+        console.log(error)
+        return rejectWithValue(error.response?.data.msg)
+      }
     }
   }
 )
 
-export const deleteOrderThunk = createAsyncThunk('orders/delete', async (orderId: string) => {
-  try {
-    await api.delete(`/api/orders/${orderId}`)
-    return orderId
-  } catch (error) {
-    console.log(error)
+export const deleteOrderThunk = createAsyncThunk(
+  'orders/delete',
+  async (orderId: string, { rejectWithValue }) => {
+    try {
+      await api.delete(`/api/orders/${orderId}`)
+      return orderId
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        console.log(error)
+        return rejectWithValue(error.response?.data.msg)
+      }
+    }
   }
-})
+)
 
 export const ordersSlice = createSlice({
   name: 'orders',
@@ -84,18 +97,17 @@ export const ordersSlice = createSlice({
       state.orders = deleteOrder
       return state
     })
-    builder.addCase(updateOrderThunk.fulfilled, (state, action) => {
-      const categoryId = action.payload._id
-      const updatedCatgory = state.orders.map((category) => {
-        if (category._id === categoryId) {
+    builder.addCase(editOrderStatusThunk.fulfilled, (state, action) => {
+      const orderId = action.payload._id
+      const updatedOrder = state.orders.map((order) => {
+        if (order._id === orderId) {
           return action.payload
         }
-        return category
+        return order
       })
-      state.orders = updatedCatgory
+      state.orders = updatedOrder
       return state
     })
-
   }
 })
 export const {} = ordersSlice.actions

@@ -1,16 +1,17 @@
 import { ChangeEvent, FormEvent, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { useNavigate } from 'react-router'
 import { toast } from 'react-toastify'
 import api from '../../../api'
-import { Product } from '../../../redux/slices/products/productSlice'
-import { RootState } from '../../../redux/store'
+import { Product, addProductThunk } from '../../../redux/slices/products/productSlice'
+import { AppDispatch, RootState } from '../../../redux/store'
 
 export default function ProductModal() {
   const products = useSelector((state: RootState) => state.products.items)
   const navigate = useNavigate()
   console.log(products)
+  const dispatch = useDispatch<AppDispatch>()
 
   const [product, setProduct] = useState({
     _id: '',
@@ -19,7 +20,8 @@ export default function ProductModal() {
     description: '',
     category: [],
     sizes: [],
-    price: 0
+    price: 0,
+    categoryId: ''
   })
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
 
@@ -44,8 +46,8 @@ export default function ProductModal() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
     try {
-      await api.post('/api/products', product)
-      toast.success('Product is added')
+      dispatch(addProductThunk(product))
+      toast.success('New Product is added')
     } catch (error) {
       console.log(error)
     }

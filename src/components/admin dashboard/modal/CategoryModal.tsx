@@ -1,10 +1,13 @@
 import { ChangeEvent, FormEvent, useState } from 'react'
-
+import { useDispatch } from 'react-redux'
 import { toast } from 'react-toastify'
-import api from '../../../api'
+
+import { addCategoryThunk } from '../../../redux/slices/categories/categoriesSlice'
+import { AppDispatch } from '../../../redux/store'
 
 export default function CategoryModal() {
   const [category, setCategory] = useState({ _id: '', name: '' })
+  const dispatch = useDispatch<AppDispatch>()
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setCategory((prevCategory) => {
@@ -15,8 +18,8 @@ export default function CategoryModal() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
     try {
-      await api.post('/api/categories', category)
-      toast.success('Product is added')
+      dispatch(addCategoryThunk(category))
+      toast.success('New Category is added')
     } catch (error) {
       console.log(error)
     }

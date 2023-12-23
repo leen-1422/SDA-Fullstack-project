@@ -2,14 +2,14 @@ import { ChangeEvent, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useSearchParams } from 'react-router-dom'
 
+import api from '../../api'
 import { addToCart } from '../../redux/slices/cart/cartSlice'
 import {
   getCategoriesThunk,
   setSelectedCategory
 } from '../../redux/slices/categories/categoriesSlice'
-import { getProductsThunk, productSucssess } from '../../redux/slices/products/productSlice'
+import { productSucssess } from '../../redux/slices/products/productSlice'
 import { AppDispatch, RootState } from '../../redux/store'
-import api from '../../api'
 
 export default function ProductsMainPage() {
   const dispatch = useDispatch<AppDispatch>()
@@ -69,7 +69,7 @@ export default function ProductsMainPage() {
 
   const handleCategoryChange = async (categoryId: string) => {
     dispatch(setSelectedCategory(categoryId))
-    setSearchParams({ page: '1', name: '' }) // Reset the search parameters
+    setSearchParams({ page: '1', name: '' })
 
     // const res = await api.get(`/api/products?page=1&category=${categoryId}`)
     // dispatch(productSucssess(res.data.result))

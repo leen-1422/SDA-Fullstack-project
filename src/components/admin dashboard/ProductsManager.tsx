@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 
-import { deleteProductsThunk, getProductsThunk } from '../../redux/slices/products/productSlice'
+import { deleteProductsThunk, getProductsForAdminThunk } from '../../redux/slices/products/productSlice'
 import { AppDispatch, RootState } from '../../redux/store'
 import ProductModal from './modal/ProductModal'
 
@@ -11,7 +11,7 @@ export function ProductsManager() {
   const products = useSelector((state: RootState) => state.products)
 
   useEffect(() => {
-    dispatch(getProductsThunk())
+    dispatch(getProductsForAdminThunk())
   }, [])
 
   const handelDeleteProduct = (id: string) => {

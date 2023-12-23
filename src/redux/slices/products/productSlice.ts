@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import {  createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 import api from '../../../api'
 import { Category } from '../categories/categoriesSlice'
@@ -29,7 +29,7 @@ const initialState: ProductState = {
   error: null,
   isLoading: false,
   selectedProduct: null,
-  search: '',
+  search: ''
 
   // pageInfo: {
   //   page: 0,
@@ -44,76 +44,74 @@ const initialState: ProductState = {
 export const getProductsThunk = createAsyncThunk('products/get', async () => {
   try {
     const res = await api.get('/api/products')
-    console.log(res)
     return res.data
-
   } catch (error) {
-    console.log(error)
+    console.log('👀 ', error)
   }
 })
 
-export const getSingleProductThunk = createAsyncThunk('product/get', async (productId: string) => {
+export const getProductsForAdminThunk = createAsyncThunk('adminProducts/get', async () => {
   try {
-    const res = await api.get(`/api/products/${productId}`)
-    console.log(res)
+    const res = await api.get('/api/products/admin')
     return res.data
   } catch (error) {
-    console.log(error)
+    console.log('👀 ', error)
+  }
+})
+
+export const getSingleProductThunk = createAsyncThunk('product/get', async (productId: string, { rejectWithValue }) => {
+  try {
+    const res = await api.get(`/api/products/${productId}`)
+    return res.data
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      console.log(error)
+      return rejectWithValue(error.response?.data.msg)
+    }
   }
 })
 
 export const deleteProductsThunk = createAsyncThunk(
   'products/delete',
-  async (productId: string) => {
+  async (productId: string, { rejectWithValue }) => {
     try {
       await api.delete(`/api/products/${productId}`)
       return productId
     } catch (error) {
-      console.log(error)
+      if (error instanceof AxiosError) {
+        console.log(error)
+        return rejectWithValue(error.response?.data.msg)
+      }
     }
   }
 )
 
 export const editProductThunk = createAsyncThunk(
   'products/edit',
-  async ({ productId, updatedProduct }: { productId: string; updatedProduct: Product }) => {
+  async ({ productId, updatedProduct }: { productId: string; updatedProduct: Product }, { rejectWithValue }) => {
     try {
       await api.put(`/api/products/${productId}`, updatedProduct)
-      console.log('from inside thunk', productId)
       return updatedProduct
     } catch (error) {
-      console.log('👀 ', error)
+      if (error instanceof AxiosError) {
+        console.log(error)
+        return rejectWithValue(error.response?.data.msg)
+      }
     }
   }
 )
 
-export const addProductThunk = createAsyncThunk(
-  'products/post',
-  async (products: Product[], { rejectWithValue }) => {
-    try {
-      const res = await api.post('/api/products', products);
-      return res.data.result;
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        console.log(error);
-        throw rejectWithValue(error.response?.data.msg);
-      }
-      throw error;
+export const addProductThunk = createAsyncThunk('products/add', async (newProduct: Product, { rejectWithValue }) => {
+  try {
+    await api.post('/api/products/', newProduct)
+    return newProduct
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      console.log(error)
+      return rejectWithValue(error.response?.data.msg)
     }
   }
-);
-
-// export const createProductThunk = createAsyncThunk(
-//   'products/create',
-//   async (newProduct: Product) => {
-//     try {
-//       const response = await api.post('/api/products', newProduct)
-//       return response.data
-//     } catch (error) {
-//       console.log(error)
-//     }
-//   }
-// )
+})
 
 export const productSlice = createSlice({
   name: 'products',
@@ -122,10 +120,8 @@ export const productSlice = createSlice({
     getSearch: (state, action) => {
       state.search = action.payload
     },
-    productSucssess:(state,action) =>{
+    productSucssess: (state, action) => {
       state.items = action.payload
-
-
     }
   },
   extraReducers: (builder) => {
@@ -136,6 +132,10 @@ export const productSlice = createSlice({
       // state.pageInfo.totalItems = action.payload.infoOfPage.totalItems
       // state.pageInfo.totalPages = action.payload.infoOfPage.totalPages
 
+      return state
+    })
+    builder.addCase(getProductsForAdminThunk.fulfilled, (state, action) => {
+      state.items = action.payload.products
       return state
     })
     builder.addCase(getSingleProductThunk.fulfilled, (state, action) => {
@@ -149,24 +149,23 @@ export const productSlice = createSlice({
       return state
     })
     builder.addCase(addProductThunk.fulfilled, (state, action) => {
-      state.items = action.payload
+      const newProduct = action.payload
+      if (newProduct) {
+        state.items = [newProduct, ...state.items]
+      }
       return state
     }),
-    // builder.addCase(createProductThunk.fulfilled, (state, action) => {
-    //   const newProduct = action.payload
-    //   state.items.push(newProduct)
-    // })
-    builder.addCase(editProductThunk.fulfilled, (state, action) => {
-      const productId = action.payload
-      if (productId) {
-        const uptadetproducts = state.items.map((product) =>
-          product._id === productId._id ? productId : product
-        )
-        state.items = uptadetproducts
-        console.log(state.items)
-        return state
-      }
-    })
+      builder.addCase(editProductThunk.fulfilled, (state, action) => {
+        const productId = action.payload
+        if (productId) {
+          const uptadetproducts = state.items.map((product) =>
+            product._id === productId._id ? productId : product
+          )
+          state.items = uptadetproducts
+          console.log(state.items)
+          return state
+        }
+      })
   }
 })
 export const { getSearch, productSucssess } = productSlice.actions

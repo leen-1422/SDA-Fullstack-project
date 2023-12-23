@@ -2,11 +2,14 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { CartProduct, addToCart, decreaseCart, removeProduct } from '../redux/slices/cart/cartSlice'
 import { AppDispatch, RootState } from '../redux/store'
+import { Product } from '../redux/slices/products/productSlice'
 
 export default function Cart() {
   const dispatch = useDispatch<AppDispatch>()
   const state = useSelector((state: RootState) => state)
   const cartItems = state.cart.cartItems
+
+  console.log("cartItems", cartItems)
 
   const newTotalAmount = cartItems.reduce(
     (total, item) => total + item.price * item.cartQuantity,
