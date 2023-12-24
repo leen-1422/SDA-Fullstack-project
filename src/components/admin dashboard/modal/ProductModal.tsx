@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { useNavigate } from 'react-router'
 import { toast } from 'react-toastify'
-import api from '../../../api'
+
 import { Product, addProductThunk } from '../../../redux/slices/products/productSlice'
 import { AppDispatch, RootState } from '../../../redux/store'
 
@@ -21,7 +21,8 @@ export default function ProductModal() {
     category: [],
     sizes: [],
     price: 0,
-    categoryId: ''
+    categoryId: '',
+    quantity: 0
   })
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
 

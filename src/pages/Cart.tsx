@@ -1,7 +1,10 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { CartProduct, addToCart, decreaseCart, removeProduct } from '../redux/slices/cart/cartSlice'
+import { addToCart, decreaseCart, removeProduct } from '../redux/slices/cart/cartSlice'
 import { AppDispatch, RootState } from '../redux/store'
+import { useEffect } from 'react'
+import { AxiosError } from 'axios'
+import api from '../api'
 import { Product } from '../redux/slices/products/productSlice'
 
 export default function Cart() {
@@ -9,20 +12,61 @@ export default function Cart() {
   const state = useSelector((state: RootState) => state)
   const cartItems = state.cart.cartItems
 
-  console.log("cartItems", cartItems)
+  console.log('cartItems', cartItems)
+  const { userData } = useSelector((state: RootState) => state.users)
 
-  const newTotalAmount = cartItems.reduce(
-    (total, item) => total + item.price * item.cartQuantity,
-    0
-  )
+  console.log(userData)
 
-  const handleDecreaseAmountBtnClick = (id: number) => {
+  const newTotalAmount = cartItems.reduce((total, item) => total + item.price * item.quantity, 0)
+
+  const handleDecreaseAmountBtnClick = (id: string) => {
     dispatch(decreaseCart({ productId: id }))
   }
 
-  const handleIncreaseAmountBtnClick = (item: CartProduct) => {
+  const handleIncreaseAmountBtnClick = (item: Product) => {
     dispatch(addToCart(item))
   }
+  const handelPlaceOrder = async () => {
+    // const userId = userData && userData.userId;
+    // const orderItems = cartItems.map((item) => item._id)
+    // const address = {
+    //   shippingAddress: 'alsoodfa',
+    //   city: 'abha',
+    //   zipCode: '35647',
+    //   country: 'SAfgyjhgfukj',
+    //   phone: '0544356789'
+    // }
+    // console.log("orderItems", orderItems)
+    // console.log("user data", userId)
+
+    const placeOrderData = {
+      userId: userData && userData.userId,
+      orderItems: cartItems.map((item) => ({ product: String(item._id), quantity: item.quantity })),
+      shippingAddress: 'alsoodfa',
+      city: 'abha',
+      zipCode: '35647',
+      country: 'SAfdchgm',
+      phone: '0544356789'
+
+      // userId,
+      // orderItems,
+      // address
+    }
+
+    try {
+      const res = await api.post('/api/orders', placeOrderData)
+      console.log(res)
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        console.log(error)
+      }
+    }
+  }
+
+  useEffect(() => {
+    handelPlaceOrder()
+  }, [])
+
   return (
     <div className="h-screen bg-gray-100 pt-20">
       {cartItems.length === 0 ? (
@@ -49,7 +93,7 @@ export default function Cart() {
             <div className="rounded-lg md:w-2/3">
               {cartItems.map((item) => (
                 <div
-                  key={item.id}
+                  key={item._id}
                   className="justify-between mb-6 rounded-lg bg-white p-6 shadow-md sm:flex sm:justify-start">
                   <img src={item.image} alt="product-image" className="w-full rounded-lg sm:w-40" />
                   <div className="sm:ml-4 sm:flex sm:w-full sm:justify-between">
@@ -61,14 +105,14 @@ export default function Cart() {
                       <div className="flex items-center border-gray-100">
                         <button
                           className="cursor-pointer rounded-l bg-gray-100 py-1 px-3.5 duration-100 hover:bg-purple-500 hover:text-blue-50"
-                          onClick={() => handleDecreaseAmountBtnClick(item.id)}>
+                          onClick={() => handleDecreaseAmountBtnClick(item._id)}>
                           {' '}
                           -{' '}
                         </button>
                         <input
                           className="h-8 w-8 border bg-white text-center text-xs outline-none"
                           type="number"
-                          value={item.cartQuantity}
+                          value={item.quantity}
                         />
                         <button
                           className="cursor-pointer rounded-r bg-gray-100 py-1 px-3 duration-100 hover:bg-purple-500 hover:text-blue-50"
@@ -81,7 +125,7 @@ export default function Cart() {
                         <p className="text-sm">{item.price}</p>
                         <button
                           className="h-5 w-5 cursor-pointer duration-150 hover:text-red-500"
-                          onClick={() => dispatch(removeProduct({ productId: item.id }))}>
+                          onClick={() => dispatch(removeProduct({ productId: item._id }))}>
                           X
                         </button>
                       </div>
@@ -110,7 +154,9 @@ export default function Cart() {
                       <p className="text-sm text-gray-700">including VAT</p>
                     </div>
                   </div>
-                  <button className="mt-6 w-full rounded-md bg-purple-500 py-1.5 font-medium text-blue-50 hover:bg-purple-400">
+                  <button
+                    onClick={handelPlaceOrder}
+                    className="mt-6 w-full rounded-md bg-purple-500 py-1.5 font-medium text-blue-50 hover:bg-purple-400">
                     Check out
                   </button>
                 </div>

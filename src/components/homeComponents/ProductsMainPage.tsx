@@ -2,20 +2,21 @@ import { ChangeEvent, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useSearchParams } from 'react-router-dom'
 
-import api from '../../api'
 import { addToCart } from '../../redux/slices/cart/cartSlice'
 import {
   getCategoriesThunk,
   setSelectedCategory
 } from '../../redux/slices/categories/categoriesSlice'
-import { productSucssess } from '../../redux/slices/products/productSlice'
+import { getProductsThunk, productSucssess } from '../../redux/slices/products/productSlice'
 import { AppDispatch, RootState } from '../../redux/store'
+import api from '../../api'
 
 export default function ProductsMainPage() {
   const dispatch = useDispatch<AppDispatch>()
   const [searchParams, setSearchParams] = useSearchParams({
     name: '',
-    page: ''
+    page: '',
+    
   })
   const page = searchParams.get('page') || 0
   const name = searchParams.get('name') || ''
@@ -69,12 +70,8 @@ export default function ProductsMainPage() {
 
   const handleCategoryChange = async (categoryId: string) => {
     dispatch(setSelectedCategory(categoryId))
-    setSearchParams({ page: '1', name: '' })
+    setSearchParams({ page: '1', name: '' }) 
 
-    // const res = await api.get(`/api/products?page=1&category=${categoryId}`)
-    // dispatch(productSucssess(res.data.result))
-
-    // Update the pagination
     setPagination({ page: 1, totalPages })
   }
 

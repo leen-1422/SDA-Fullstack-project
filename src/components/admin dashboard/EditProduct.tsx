@@ -22,7 +22,8 @@ export default function EditProduct() {
     category: [],
     sizes: [],
     price: 0,
-    categoryId: ''
+    categoryId: '',
+    quantity: 0
   })
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
 

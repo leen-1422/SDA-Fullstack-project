@@ -12,7 +12,8 @@ export type Product = {
   category: Category[]
   sizes: string[]
   categoryId: null | string
-  price: number
+  price: number,
+  quantity: number
 }
 
 export type ProductState = {
@@ -21,7 +22,7 @@ export type ProductState = {
   isLoading: boolean
   selectedProduct: Product | null
   search: string
-  // pageInfo: { page: number; perPage: number; totalItems: number; totalPages: number }
+  pageInfo: { page: number; perPage: number; totalItems: number; totalPages: number }
 }
 
 const initialState: ProductState = {
@@ -29,14 +30,14 @@ const initialState: ProductState = {
   error: null,
   isLoading: false,
   selectedProduct: null,
-  search: ''
+  search: '',
 
-  // pageInfo: {
-  //   page: 0,
-  //   perPage: 0,
-  //   totalItems: 0,
-  //   totalPages: 0
-  // }
+  pageInfo: {
+    page: 0,
+    perPage: 0,
+    totalItems: 0,
+    totalPages: 0
+  }
 }
 
 //products thunk

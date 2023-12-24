@@ -1,29 +1,30 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { toast } from 'react-toastify'
+import { Product } from '../products/productSlice'
 
-export type CartProduct = {
-  id: number
-  name: string
-  image: string
-  description: string
-  categories: number[]
-  variants: string[]
-  sizes: string[]
-  cartQuantity: number
-  price: number
-}
+// export type CartProduct = {
+//   id: number
+//   name: string
+//   image: string
+//   description: string
+//   categories: number[]
+//   variants: string[]
+//   sizes: string[]
+//   cartQuantity: number
+//   price: number
+// }
 
 export type ProductState = {
-  cartItems: CartProduct[]
+  cartItems: Product[]
   cartTotal: number
   cartAmount: number
 }
 
-// const cartItemsFromStorage = localStorage.getItem('cartItems')
-// const initialCartItems = cartItemsFromStorage ? JSON.parse(cartItemsFromStorage) : []
+const cartItemsFromStorage = localStorage.getItem('cartItems')
+const initialCartItems = cartItemsFromStorage ? JSON.parse(cartItemsFromStorage) : []
 
 const initialState: ProductState = {
-  cartItems: [],
+  cartItems: initialCartItems,
   cartTotal: 0,
   cartAmount: 0
 }
@@ -33,46 +34,46 @@ export const cartSlice = createSlice({
   initialState,
   reducers: {
     addToCart: (state, action) => {
-      //check if the id already exist in cart items []
-      const itemIndex = state.cartItems.findIndex((item) => item.id === action.payload.id)
-
+      const itemIndex = state.cartItems.findIndex((item) => item._id === action.payload._id)
+    
       if (itemIndex >= 0) {
-        state.cartItems[itemIndex].cartQuantity += 1
+        state.cartItems[itemIndex].quantity += 1
         toast.success(`${action.payload.name} is added to your cart`, {
           position: 'bottom-left'
         })
       } else {
-        const tempProduct = { ...action.payload, cartQuantity: 1 } // increase the product by one if it already exist
-        state.cartItems.push(tempProduct)
-
+        const newProduct = { ...action.payload, quantity: 1 }
+        state.cartItems.push(newProduct)
+    
         toast.success(`${action.payload.name} is added to your cart`, {
           position: 'bottom-left'
         })
       }
-
-      // localStorage.setItem('cartItems', JSON.stringify(state.cartItems))
+    
+      localStorage.setItem('cartItems', JSON.stringify(state.cartItems))
     },
-    removeProduct: (state, action: { payload: { productId: number } }) => {
+    removeProduct: (state, action: { payload: { productId: string } }) => {
       const filteredItems = state.cartItems.filter(
-        (product) => product.id !== action.payload.productId
+        (product) => product._id !== action.payload.productId
       )
       state.cartItems = filteredItems
       toast.error('item is removed from cart', {
         position: 'bottom-left'
       })
+      // localStorage.removeItem( 'cartItems')
     },
-    decreaseCart: (state, action: { payload: { productId: number } }) => {
+    decreaseCart: (state, action: { payload: { productId: string } }) => {
       const itemIndex = state.cartItems.findIndex(
-        (cartItem) => cartItem.id === action.payload.productId
+        (cartItem) => cartItem._id === action.payload.productId
       )
-      if (state.cartItems[itemIndex].cartQuantity > 1) {
-        state.cartItems[itemIndex].cartQuantity -= 1
+      if (state.cartItems[itemIndex].quantity > 1) {
+        state.cartItems[itemIndex].quantity -= 1
         toast.info('you removed one item from cart', {
           position: 'bottom-left'
         })
-      } else if (state.cartItems[itemIndex].cartQuantity === 1) {
+      } else if (state.cartItems[itemIndex].quantity === 1) {
         const filteredItems = state.cartItems.filter(
-          (product) => product.id !== action.payload.productId
+          (product) => product._id !== action.payload.productId
         )
         state.cartItems = filteredItems
         toast.error('item is removed from cart', {

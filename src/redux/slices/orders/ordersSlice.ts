@@ -16,7 +16,7 @@ export type OrderItems = {
 
 export type Orders = {
   _id: string
-  productId: number
+  productId: string
   userId: User
   purchasedAt: string
   orderItems: OrderItems[]
@@ -56,7 +56,7 @@ export const editOrderStatusThunk = createAsyncThunk(
         status,
         orderId
       })
-      console.log("res for status",res)
+      console.log('res for status', res)
       return res.data
     } catch (error) {
       if (error instanceof AxiosError) {
