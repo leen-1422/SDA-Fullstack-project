@@ -30,16 +30,13 @@ export default function Login() {
     })
   }
 
-
-
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
     try {
       const res = await dispatch(loginThunk(credentials))
-        if (res.meta.requestStatus === 'fulfilled') {
-          localStorage.setItem('token', res.payload.token)
-        }
-
+      if (res.meta.requestStatus === 'fulfilled') {
+        localStorage.setItem('token', res.payload.token)
+      }
     } catch (error) {
       console.log(error)
     } finally {
@@ -112,11 +109,11 @@ export default function Login() {
                     </label>
                   </div>
                 </div>
-                <a
-                  href="#"
+                <Link
+                  to="/forgot-password"
                   className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500">
                   Forgot password?
-                </a>
+                </Link>
               </div>
 
               <button className="w-full text-white bg-purple-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">

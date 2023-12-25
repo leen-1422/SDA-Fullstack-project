@@ -22,7 +22,12 @@ export type ProductState = {
   isLoading: boolean
   selectedProduct: Product | null
   search: string
-  pageInfo: { page: number; perPage: number; totalItems: number; totalPages: number }
+  pageInfo: { 
+    page: number
+  
+    totalItems: number
+    
+  }
 }
 
 const initialState: ProductState = {
@@ -34,9 +39,8 @@ const initialState: ProductState = {
 
   pageInfo: {
     page: 0,
-    perPage: 0,
     totalItems: 0,
-    totalPages: 0
+  
   }
 }
 
@@ -48,6 +52,16 @@ export const getProductsThunk = createAsyncThunk('products/get', async () => {
     return res.data
   } catch (error) {
     console.log('👀 ', error)
+  }
+})
+export const getProductsRequestThunk = createAsyncThunk('request/get', async (params: string) => {
+  try {
+    console.log('==', params)
+    const res = await api.get(`/api/products?${params}`)
+    console.log('res from requst products thunk', res.data)
+    return res.data.result
+  } catch (error) {
+    console.log('err', error)
   }
 })
 
@@ -128,11 +142,18 @@ export const productSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getProductsThunk.fulfilled, (state, action) => {
       state.items = action.payload?.result
-      // state.pageInfo.page = action.payload.infoOfPage.page
-      // state.pageInfo.perPage = action.payload.infoOfPage.perPage
-      // state.pageInfo.totalItems = action.payload.infoOfPage.totalItems
-      // state.pageInfo.totalPages = action.payload.infoOfPage.totalPages
+      state.pageInfo.page = action.payload.infoOfPage.page
+      state.pageInfo.totalItems = action.payload.infoOfPage.totalItems
+   
 
+      return state
+    })
+    builder.addCase(getProductsRequestThunk.fulfilled, (state, action) => {
+      state.items = action.payload?.infoOfPage
+      state.pageInfo.page = action.payload?.page
+      state.pageInfo.totalItems = action.payload?.totalItems
+    
+      state.isLoading = false
       return state
     })
     builder.addCase(getProductsForAdminThunk.fulfilled, (state, action) => {

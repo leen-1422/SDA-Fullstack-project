@@ -17,6 +17,10 @@ import About from './pages/About'
 import Cart from './pages/Cart'
 import Home from './pages/Home'
 
+import { ResetPassword } from './components/ResetPassword'
+import { ForgotPassword } from './components/ForgotPassword'
+
+
 
 function App() {
   return (
@@ -35,6 +39,8 @@ function App() {
         <Route path="/regesteration" element={<Regeregister />} />
         <Route path="/USER/:id" element={<UserProfile />} />
         <Route path="/admin/products/:id" element={<EditProduct />} />
+        <Route path="/reset-password/:forgotPasswordCode" element={<ResetPassword />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
 
 
        

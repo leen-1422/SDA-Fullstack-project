@@ -12,73 +12,77 @@ import { AppDispatch, RootState } from '../../redux/store'
 import api from '../../api'
 
 export default function ProductsMainPage() {
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useDispatch<AppDispatch>();
   const [searchParams, setSearchParams] = useSearchParams({
     name: '',
     page: '',
-    
-  })
-  const page = searchParams.get('page') || 0
-  const name = searchParams.get('name') || ''
-
-  const state = useSelector((state: RootState) => state)
-  const selectedCategoryId: string = state.categories.selectedCategoryId
-
+    sortBy: ''
+  });
+  const page = searchParams.get('page') || '0';
+  const name = searchParams.get('name') || '';
+  const sortBy = searchParams.get('sortBy') || '';
+  
+  const state = useSelector((state: RootState) => state);
+  const selectedCategoryId: string = state.categories.selectedCategoryId;
+  
   const [pagination, setPagination] = useState({
-    page,
+    page: Number(page),
     totalPages: 0
-  })
-
-  const products = state.products
-  const currentItems = products.items
-  const categories = state.categories.items
-
+  });
+  
+  const products = state.products;
+  const currentItems = products.items;
+  const categories = state.categories.items;
+  
   // Pagination state
-
-  const totalPages = pagination.totalPages
-
+  const totalPages = pagination.totalPages;
+  
   useEffect(() => {
-    handleGetProducts()
-
-    dispatch(getCategoriesThunk())
-  }, [name, selectedCategoryId, pagination.page])
-
+    handleGetProducts();
+    dispatch(getCategoriesThunk());
+  }, [name, selectedCategoryId, pagination.page, sortBy]);
+  
   const handleGetProducts = async () => {
     const res = await api.get(
-      `/api/products?page=${pagination.page}&search=name&name=${name}&category=${selectedCategoryId}`
-    )
-    const { page, totalPages } = res.data.infoOfPage
-    setPagination({ page, totalPages })
-    dispatch(productSucssess(res.data.result))
-  }
-
+      `/api/products?page=${pagination.page}&search=${name}&category=${selectedCategoryId}&sortBy=${sortBy}=1`
+    );
+    const { page, totalPages } = res.data.infoOfPage;
+    setPagination({ page, totalPages });
+    dispatch(productSucssess(res.data.result));
+  };
+  
   const handleGetProductsByPage = async (nextPage: number) => {
-    const res = await api.get(`/api/products?page=${nextPage}`)
-
-    const { page, totalPages } = res.data.infoOfPage
-    setPagination({ page, totalPages })
-    setSearchParams({ page })
-    dispatch(productSucssess(res.data.result))
-  }
+    const res = await api.get(`/api/products?page=${nextPage}&sortBy=${sortBy}`);
+    const { page, totalPages } = res.data.infoOfPage;
+    setPagination({ page, totalPages });
+    setSearchParams({ page: String(nextPage) });
+    dispatch(productSucssess(res.data.result));
+  };
+  
   const handleGetProductsByName = async (name: string, nextPage: number) => {
-    const res = await api.get(`/api/products?page=${pagination.page}&search=name&name=${name}`)
-    const { page, totalPages } = res.data.infoOfPage
-    setPagination({ page, totalPages })
-    setSearchParams({ page, name })
-    dispatch(productSucssess(res.data.result))
-  }
-
+    const res = await api.get(`/api/products?page=${nextPage}&search=${name}&sortBy=${sortBy}`);
+    const { page, totalPages } = res.data.infoOfPage;
+    setPagination({ page, totalPages });
+    setSearchParams({ page: String(nextPage), name });
+    dispatch(productSucssess(res.data.result));
+  };
+  
   const handleCategoryChange = async (categoryId: string) => {
-    dispatch(setSelectedCategory(categoryId))
-    setSearchParams({ page: '1', name: '' }) 
-
-    setPagination({ page: 1, totalPages })
-  }
-
+    dispatch(setSelectedCategory(categoryId));
+    setSearchParams({ page: '1', name: '', sortBy: '' });
+    setPagination({ page: 1, totalPages });
+  };
+  
   const handleSearch = async (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setSearchParams({ ...searchParams, [name]: value })
-  }
+    const { name, value } = e.target;
+    setSearchParams({ ...searchParams, [name]: value });
+  };
+  
+  const handleSortChange = async (e: ChangeEvent<HTMLSelectElement>) => {
+    const { value } = e.target;
+    setSearchParams({ ...searchParams, sortBy: value });
+  };
+
 
   return (
     <div className="bg-white">
@@ -105,6 +109,20 @@ export default function ProductsMainPage() {
                   </option>
                 ))}
               </select>
+              <label
+              htmlFor="sort-select"
+              className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">
+              Sort By
+            </label>
+            <select
+              className="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-l-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600"
+              id="sort-select"
+              onChange={(e) => handleSortChange(e)}
+              // value={selectedSortOption}
+            >
+              <option value="name">Sort by Name</option>
+              <option value="price">Sort by Price</option>
+            </select>
 
               <div className="relative w-full">
                 <input

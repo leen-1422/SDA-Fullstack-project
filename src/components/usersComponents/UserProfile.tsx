@@ -16,6 +16,9 @@ export default function UserProfile() {
   const dispatch = useDispatch<AppDispatch>()
   const { id } = useParams()
 
+
+  console.log("test", userData)
+
   useEffect(() => {
     handleGetUsers()
     if (userData) {
@@ -27,6 +30,7 @@ export default function UserProfile() {
     if (id) {
       dispatch(getSingleUserThunk(id))
         .then((response) => {
+          console.log("response", response)
           const productData = response.payload
           console.log('productData', productData)
 
