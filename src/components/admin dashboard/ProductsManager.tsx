@@ -2,7 +2,10 @@ import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 
-import { deleteProductsThunk, getProductsForAdminThunk } from '../../redux/slices/products/productSlice'
+import {
+  deleteProductsThunk,
+  getProductsForAdminThunk,
+} from '../../redux/slices/products/productSlice'
 import { AppDispatch, RootState } from '../../redux/store'
 import ProductModal from './modal/ProductModal'
 
@@ -57,10 +60,8 @@ export function ProductsManager() {
                   <td className="py-4 px-6 border-b border-gray-200">{item.name}</td>
 
                   <td className="py-4 px-6 border-b border-gray-200">
-                    {item.category.map((item) => (
-                      <>
-                        <span>{item.name} </span>
-                      </>
+                    {item.category.map((category, index) => (
+                      <span key={index}>{category.name}</span>
                     ))}
                   </td>
                   <td className="py-4 px-6 border-b border-gray-200">

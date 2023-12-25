@@ -1,4 +1,4 @@
-import {  createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 import api from '../../../api'
 import { Category } from '../categories/categoriesSlice'
@@ -12,7 +12,7 @@ export type Product = {
   category: Category[]
   sizes: string[]
   categoryId: null | string
-  price: number,
+  price: number
   quantity: number
 }
 
@@ -22,11 +22,9 @@ export type ProductState = {
   isLoading: boolean
   selectedProduct: Product | null
   search: string
-  pageInfo: { 
+  pageInfo: {
     page: number
-  
     totalItems: number
-    
   }
 }
 
@@ -39,8 +37,7 @@ const initialState: ProductState = {
 
   pageInfo: {
     page: 0,
-    totalItems: 0,
-  
+    totalItems: 0
   }
 }
 
@@ -74,17 +71,20 @@ export const getProductsForAdminThunk = createAsyncThunk('adminProducts/get', as
   }
 })
 
-export const getSingleProductThunk = createAsyncThunk('product/get', async (productId: string, { rejectWithValue }) => {
-  try {
-    const res = await api.get(`/api/products/${productId}`)
-    return res.data
-  } catch (error) {
-    if (error instanceof AxiosError) {
-      console.log(error)
-      return rejectWithValue(error.response?.data.msg)
+export const getSingleProductThunk = createAsyncThunk(
+  'product/get',
+  async (productId: string, { rejectWithValue }) => {
+    try {
+      const res = await api.get(`/api/products/${productId}`)
+      return res.data
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        console.log(error)
+        return rejectWithValue(error.response?.data.msg)
+      }
     }
   }
-})
+)
 
 export const deleteProductsThunk = createAsyncThunk(
   'products/delete',
@@ -103,7 +103,10 @@ export const deleteProductsThunk = createAsyncThunk(
 
 export const editProductThunk = createAsyncThunk(
   'products/edit',
-  async ({ productId, updatedProduct }: { productId: string; updatedProduct: Product }, { rejectWithValue }) => {
+  async (
+    { productId, updatedProduct }: { productId: string; updatedProduct: Product },
+    { rejectWithValue }
+  ) => {
     try {
       await api.put(`/api/products/${productId}`, updatedProduct)
       return updatedProduct
@@ -116,17 +119,20 @@ export const editProductThunk = createAsyncThunk(
   }
 )
 
-export const addProductThunk = createAsyncThunk('products/add', async (newProduct: Product, { rejectWithValue }) => {
-  try {
-    await api.post('/api/products/', newProduct)
-    return newProduct
-  } catch (error) {
-    if (error instanceof AxiosError) {
-      console.log(error)
-      return rejectWithValue(error.response?.data.msg)
+export const addProductThunk = createAsyncThunk(
+  'products/add',
+  async (newProduct: Product, { rejectWithValue }) => {
+    try {
+      await api.post('/api/products/', newProduct)
+      return newProduct
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        console.log(error)
+        return rejectWithValue(error.response?.data.msg)
+      }
     }
   }
-})
+)
 
 export const productSlice = createSlice({
   name: 'products',
@@ -144,7 +150,6 @@ export const productSlice = createSlice({
       state.items = action.payload?.result
       state.pageInfo.page = action.payload.infoOfPage.page
       state.pageInfo.totalItems = action.payload.infoOfPage.totalItems
-   
 
       return state
     })
@@ -152,7 +157,7 @@ export const productSlice = createSlice({
       state.items = action.payload?.infoOfPage
       state.pageInfo.page = action.payload?.page
       state.pageInfo.totalItems = action.payload?.totalItems
-    
+
       state.isLoading = false
       return state
     })

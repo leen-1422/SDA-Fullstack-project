@@ -116,7 +116,7 @@ export const blockUserThunk = createAsyncThunk(
   'user/block',
   async (userId: string, { rejectWithValue }) => {
     try {
-      await api.put(`/api/users//block/${userId}`)
+      await api.put(`/api/users/block/${userId}`)
       return userId
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -211,6 +211,7 @@ export const usersSlice = createSlice({
     })
     builder.addCase(grantRoleUserThunk.fulfilled, (state, action) => {
       const userId = action.payload._id
+      console.log(userId)
       const updatedUsers = state.users.map((user) => {
         if (user._id === userId) {
           return action.payload

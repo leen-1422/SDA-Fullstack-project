@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from 'react-router'
+import { Navigate, Route, Routes, useNavigate } from 'react-router'
 
 import './App.css'
 import CategoriesForm from './components/admin dashboard/CategoriesForm'
@@ -16,12 +16,29 @@ import UserProfile from './components/usersComponents/UserProfile'
 import About from './pages/About'
 import Cart from './pages/Cart'
 import Home from './pages/Home'
-
 import { ResetPassword } from './components/ResetPassword'
 import { ForgotPassword } from './components/ForgotPassword'
-import { isExpired } from './utils/token'
+import { getDecodedTokenFromStorage, getTokenFromStorage } from './utils/token'
+import { useEffect, useState } from 'react'
 
 function App() {
+  const navigate = useNavigate()
+  const decodedToken = getDecodedTokenFromStorage()
+  const [isTokenExpired, setIsTokenExpired] = useState(false)
+
+  useEffect(() => {
+    if (decodedToken) {
+      if (decodedToken.exp * 1000 < new Date().getTime()) {
+        localStorage.removeItem('token')
+        console.log('Time Expired')
+        setIsTokenExpired(true)
+      }
+    }
+  }, [decodedToken])
+
+  if (isTokenExpired) {
+    // Toast your session is expired please login again
+  }
   return (
     <div>
       <Navbar />

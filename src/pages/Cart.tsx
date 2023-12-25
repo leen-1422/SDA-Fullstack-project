@@ -55,7 +55,8 @@ export default function Cart() {
 
     try {
       const res = await api.post('/api/orders', placeOrderData)
-      console.log(res)
+      localStorage.removeItem('cartItems')
+      console.log('sucssful added')
     } catch (error) {
       if (error instanceof AxiosError) {
         console.log(error)

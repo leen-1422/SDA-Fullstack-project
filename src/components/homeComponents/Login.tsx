@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 import { loginThunk } from '../../redux/slices/users/usersSlice'
 import { AppDispatch, RootState } from '../../redux/store'
 import { ROLES } from '../../Constant'
-import { isExpired } from '../../utils/token'
+
 
 export default function Login() {
   const dispatch = useDispatch<AppDispatch>()
@@ -39,6 +39,7 @@ export default function Login() {
       const res = await dispatch(loginThunk(credentials))
       if (res.meta.requestStatus === 'fulfilled') {
         localStorage.setItem('token', res.payload.token)
+      
       }
     } catch (error) {
       console.log(error)
@@ -48,8 +49,8 @@ export default function Login() {
   }
   return (
     <section className="bg-gray-50 dark:bg-gray-900  ">
-      <p>hello, {state.users.userData?.email}</p>
-      <p>{users?.role === ROLES.ADMIN ? 'Welcome, Admin' : 'Welcome, User'}</p>
+      {/* <p>hello, {state.users.userData?.email}</p>
+      <p>{users?.role === ROLES.ADMIN ? 'Welcome, Admin' : 'Welcome, User'}</p> */}
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <a
           href="#"

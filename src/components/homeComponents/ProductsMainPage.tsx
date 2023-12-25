@@ -10,15 +10,9 @@ import {
 import { getProductsThunk, productSucssess } from '../../redux/slices/products/productSlice'
 import { AppDispatch, RootState } from '../../redux/store'
 import api from '../../api'
-import { isExpired } from '../../utils/token'
 
 export default function ProductsMainPage() {
   const dispatch = useDispatch<AppDispatch>()
-  //
-  const isTokenExpired = isExpired()
-  if (isTokenExpired) {
-    return <Navigate to="/" />
-  }
   const [searchParams, setSearchParams] = useSearchParams({
     name: '',
     page: ''
@@ -44,9 +38,8 @@ export default function ProductsMainPage() {
 
   useEffect(() => {
     handleGetProducts()
-
     dispatch(getCategoriesThunk())
-  }, [name, selectedCategoryId, pagination.page])
+  }, [name, selectedCategoryId])
 
   const handleGetProducts = async () => {
     const res = await api.get(
@@ -84,13 +77,15 @@ export default function ProductsMainPage() {
     const { name, value } = e.target
     setSearchParams({ ...searchParams, [name]: value })
   }
-  const handleSortChange = async (sortOrder: 'asc' | 'desc') => {
+
+  const handleSortChange = async (sortOrder: 1 | -1) => {
     try {
       const res = await api.get(
         `/api/products?page=${pagination.page}&sortBy=name&name=${sortOrder}`
       )
       const { page, totalPages } = res.data.infoOfPage
       setPagination({ page, totalPages })
+      dispatch(productSucssess(res.data.result))
     } catch (error) {
       console.error('Error fetching products:', error)
     }
@@ -105,13 +100,13 @@ export default function ProductsMainPage() {
             <div className="flex mb-12">
               <div className="relative flex justify-center">
                 <button
-                  className="inline-flex  mr-4 gap-4 text-white bg-blue-700 hover:bg-blue-800 focus-ring-4 focus-outline-none focus-ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark-bg-blue-600 dark-hover-bg-blue-700 dark-focus-ring-blue-100"
-                  onClick={() => handleSortChange('asc')}>
+                  className="inline-flex mr-4 gap-4 text-white bg-red-700 hover:bg-red-800 focus-ring-4 text-sm px-5 py-2.5 text-center"
+                  onClick={() => handleSortChange(1)}>
                   Sort Ascending
                 </button>
                 <button
-                  className="inline-flex  mr-4 gap-4 text-white bg-blue-700 hover:bg-blue-800 focus-ring-4 focus-outline-none focus-ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark-bg-blue-600 dark-hover-bg-blue-700 dark-focus-ring-blue-100"
-                  onClick={() => handleSortChange('desc')}>
+                  className="inline-flex mr-4 gap-4 text-white bg-red-700 hover:bg-red-800 focus-ring-4 text-sm px-5 py-2.5 text-center"
+                  onClick={() => handleSortChange(-1)}>
                   Sort Descending
                 </button>
               </div>
@@ -135,7 +130,6 @@ export default function ProductsMainPage() {
               <div className="relative w-full">
                 <input
                   type="search"
-                  // value={searchParams.}
                   name="name"
                   onChange={handleSearch}
                   id="search-dropdown"
@@ -238,7 +232,4 @@ export default function ProductsMainPage() {
       </div>
     </div>
   )
-}
-function getProductsPaginatedThunk(arg0: { pageNumber: number; sort: 'asc' | 'desc' }): any {
-  throw new Error('Function not implemented.')
 }
