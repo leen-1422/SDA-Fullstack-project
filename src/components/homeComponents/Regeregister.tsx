@@ -1,13 +1,16 @@
+import { AxiosError } from 'axios'
 import { ChangeEvent, FormEvent, useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 
-import { AxiosError } from 'axios'
-import api from '../../api'
+import { registrationThunk } from '../../redux/slices/users/usersSlice'
+import { AppDispatch } from '../../redux/store'
 
 export default function Regeregister() {
   const [errorMessage, setErrorMessage] = useState<null | string>(null)
   const [successMessage, setSuccsessMessage] = useState<null | string>(null)
   const [loading, setLoading] = useState(false)
+  const dispatch = useDispatch<AppDispatch>()
 
   const [user, setUser] = useState({
     email: '',
@@ -28,13 +31,14 @@ export default function Regeregister() {
     event.preventDefault()
     try {
       setLoading(true)
-      const res = await api.post('/api/users/register', user)
-      console.log(res)
-      setSuccsessMessage(res.data.msg)
-      setErrorMessage(null)
+      dispatch(registrationThunk(user)).then((action) => {
+        const res = action.payload
+        setSuccsessMessage(res.msg)
+        setErrorMessage(null)
+      })
     } catch (error) {
       if (error instanceof AxiosError) {
-        setErrorMessage(error.response?.data.msg)
+        setErrorMessage(error.response?.data)
         setSuccsessMessage(null)
       }
     } finally {

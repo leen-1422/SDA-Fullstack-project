@@ -72,7 +72,7 @@ export default function CategoryTable() {
                 </div>
               </div>
               <button
-                className=" inline-flex items-center justify-center rounded-md border border-transparent bg-blue-500 px-4 py-2 font-medium text-white shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                className=" inline-flex items-center justify-center rounded-md border border-transparent bg-gray-600 rounded-md hover:bg-gray-500  px-4 py-2 font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
                 style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                 Edit Category
               </button>
@@ -105,13 +105,13 @@ export default function CategoryTable() {
 
                     <td className="py-4 px-6 border-b border-gray-200 whitespace">
                       <button
-                        className="mr-1 text-white bg-green-600 rounded-md hover:bg-green-500 focus:outline-none focus:shadow-outline-blue active:bg-blue-600 py-2 px-4 font-small"
+                        className="mr-1 text-white bg-gray-600 rounded-md hover:bg-gray-500 focus:outline-none focus:shadow-outline-gray active:bg-gray-600 py-2 px-4 font-small"
                         onClick={() => handleEditBtnClick(item._id)}>
                         Edit
                       </button>
                       <button
-                        className="text-white bg-red-600 rounded-md hover:bg-red-500 focus:outline-none focus:shadow-outline-blue active:bg-red-600 py-2 px-4 font-small"
-                        onClick={() => handelDeleteCategory(item._id)}>
+                      className="text-white bg-purple-600 rounded-md hover:bg-purple-500 focus:outline-none focus:shadow-outline-gray active:bg-purple-600 py-2 px-4 font-small"
+                      onClick={() => handelDeleteCategory(item._id)}>
                         Delete
                       </button>
                     </td>

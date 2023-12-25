@@ -5,9 +5,7 @@ import { toast } from 'react-toastify'
 import { logout } from '../../redux/slices/users/usersSlice'
 import { AppDispatch, RootState } from '../../redux/store'
 
-
 export default function Navbar() {
-
   const dispatch = useDispatch<AppDispatch>()
   const { isLoggedIn, isAdmin, userData } = useSelector((state: RootState) => state.users)
   console.log({ isLoggedIn, isAdmin, userData })
@@ -55,6 +53,12 @@ export default function Navbar() {
               {isLoggedIn && (
                 <>
                   <div className="flex">
+                    <Link
+                      className="bg-purple-500 px-4 py-1 rounded-xl text-white hover:bg-purple-400 active:bg-purple-600 focus:ring focus:ring-purple-500 focus:ring-opacity-25 outline-none"
+                      onClick={handleLogout}
+                      to={'/'}>
+                      Logout
+                    </Link>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
@@ -72,12 +76,6 @@ export default function Navbar() {
                       to={`/${userData?.role}/${state.userData?.userId}`}
                       className="group focus:ring focus:ring-purple-500 focus:ring-opacity-25 outline-none rounded-lg">
                       {userData?.firstName}
-                    </Link>
-                    <Link
-                      className="bg-yellow-300 px-4 py-1 rounded-xl text-white hover:bg-yellow-500 active:bg-yellow-500focus:ring focus:bg-yellow-500 focus:ring-opacity-25 outline-none"
-                      onClick={handleLogout}
-                      to={'/'}>
-                      Logout
                     </Link>
                   </div>
                 </>

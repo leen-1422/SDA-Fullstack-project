@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 
 import {
   deleteProductsThunk,
-  getProductsForAdminThunk,
+  getProductsForAdminThunk
 } from '../../redux/slices/products/productSlice'
 import { AppDispatch, RootState } from '../../redux/store'
 import ProductModal from './modal/ProductModal'
@@ -25,7 +25,7 @@ export function ProductsManager() {
     <div className="flex">
       <div className="w-3/4 bg-white p-4">
         <div className=" rounded-lg overflow-hidden mx-4 md:mx-10">
-          <div className="flex flex-1 items-center justify-center p-6">
+          <div className="flex flex-1  p-6">
             <button
               className="btn"
               onClick={() => {

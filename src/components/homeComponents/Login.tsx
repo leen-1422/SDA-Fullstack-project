@@ -16,6 +16,7 @@ export default function Login() {
   console.log(state.users.userData)
   const [errorMessage, setErrorMessage] = useState<null | string>(null)
   const [successMessage, setSuccsessMessage] = useState<null | string>(null)
+  
   const [loading, setLoading] = useState(false)
 
   const [credentials, setCredentials] = useState({
@@ -39,6 +40,13 @@ export default function Login() {
       const res = await dispatch(loginThunk(credentials))
       if (res.meta.requestStatus === 'fulfilled') {
         localStorage.setItem('token', res.payload.token)
+        if(users?.role === ROLES.ADMIN){
+          navigate('/admin')
+        }
+        if(users?.role === ROLES.USER){
+          navigate('/')
+        }
+        
       
       }
     } catch (error) {

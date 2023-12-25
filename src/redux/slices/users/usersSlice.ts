@@ -68,6 +68,24 @@ export const loginThunk = createAsyncThunk(
     }
   }
 )
+export const registrationThunk = createAsyncThunk(
+  'user/registration',
+  async (
+    credentials: { email: string; password: string; firstName: string; lastName: string },
+    { rejectWithValue }
+  ) => {
+    try {
+      const res = await api.post('/api/users/register', credentials)
+      
+      return res.data
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        console.log(error)
+        return rejectWithValue(error.response?.data.msg)
+      }
+    }
+  }
+)
 
 export const grantRoleUserThunk = createAsyncThunk(
   'users/role',
@@ -196,6 +214,16 @@ export const usersSlice = createSlice({
       state.isLoading = false
       return state
     })
+    builder.addCase(registrationThunk.fulfilled, (state, action) => {
+      const newUser = action.payload
+      console.log('this is the created product ', newUser)
+      if (newUser) {
+        state.users = [newUser, ...state.users]
+        console.log(state.users)
+        return state
+      }
+    })
+
     builder.addCase(deleteUserThunk.fulfilled, (state, action) => {
       const userId = action.payload
       const deleteUser = state.users.filter((user) => user._id !== userId)

@@ -45,11 +45,11 @@ export default function CategoryModal() {
           </div>
 
           <div className="form-control mt-6">
-            <button className="btn btn-primary">Add Category</button>
+            <button className="btn bg-purple-600 rounded-md hover:bg-purple-500 text-white ">Add Category</button>
           </div>
 
           <button
-            className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+            className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 "
             onClick={() => {
               const modal = document.getElementById('my_modal_3') as HTMLDialogElement | null
               if (modal) {

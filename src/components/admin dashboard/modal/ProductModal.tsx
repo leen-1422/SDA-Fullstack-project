@@ -142,7 +142,7 @@ export default function ProductModal() {
               />
             </div>
             <div className="form-control mt-6">
-              <button className="btn btn-primary">Add Product</button>
+              <button className="btn bg-purple-600 rounded-md hover:bg-purple-500 text-white ">Add Product</button>
             </div>
             <button
               className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
