@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router'
+import { Navigate, Route, Routes } from 'react-router'
 
 import './App.css'
 import CategoriesForm from './components/admin dashboard/CategoriesForm'
@@ -19,17 +19,14 @@ import Home from './pages/Home'
 
 import { ResetPassword } from './components/ResetPassword'
 import { ForgotPassword } from './components/ForgotPassword'
-
-
+import { isExpired } from './utils/token'
 
 function App() {
   return (
     <div>
-      
       <Navbar />
 
       <Routes>
-        
         <Route path="/" element={<Home />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/about" element={<About />} />
@@ -41,9 +38,6 @@ function App() {
         <Route path="/admin/products/:id" element={<EditProduct />} />
         <Route path="/reset-password/:forgotPasswordCode" element={<ResetPassword />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
-
-
-       
 
         <Route element={<AdminRoute />}>
           <Route path="/admin" element={<ProductsManager />} />

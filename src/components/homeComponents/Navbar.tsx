@@ -1,11 +1,13 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
-
 import { toast } from 'react-toastify'
+
 import { logout } from '../../redux/slices/users/usersSlice'
 import { AppDispatch, RootState } from '../../redux/store'
 
+
 export default function Navbar() {
+
   const dispatch = useDispatch<AppDispatch>()
   const { isLoggedIn, isAdmin, userData } = useSelector((state: RootState) => state.users)
   console.log({ isLoggedIn, isAdmin, userData })

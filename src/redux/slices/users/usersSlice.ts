@@ -14,6 +14,7 @@ export type DecodedUser = {
   role: Role
   firstName: string
   lastName: string
+  exp: number
 }
 
 export type User = {
@@ -133,9 +134,7 @@ export const updateSingleUserThunk = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      console.log('first')
       const res = await api.put(`/api/users/profile/${userId}`, updatedUser)
-      console.log('sec')
       return updatedUser
     } catch (error) {
       if (error instanceof AxiosError) {
