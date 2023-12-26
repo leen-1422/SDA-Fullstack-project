@@ -7,24 +7,21 @@ import { loginThunk } from '../../redux/slices/users/usersSlice'
 import { AppDispatch, RootState } from '../../redux/store'
 import { ROLES } from '../../Constant'
 
-
 export default function Login() {
   const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
   const state = useSelector((state: RootState) => state)
   const users = state.users.userData
-  console.log(state.users.userData)
+  // console.log(state.users.userData)
   const [errorMessage, setErrorMessage] = useState<null | string>(null)
   const [successMessage, setSuccsessMessage] = useState<null | string>(null)
-  
+
   const [loading, setLoading] = useState(false)
 
   const [credentials, setCredentials] = useState({
     email: '',
     password: ''
   })
-
-
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -38,16 +35,16 @@ export default function Login() {
     e.preventDefault()
     try {
       const res = await dispatch(loginThunk(credentials))
+      
       if (res.meta.requestStatus === 'fulfilled') {
-        localStorage.setItem('token', res.payload.token)
-        if(users?.role === ROLES.ADMIN){
+        const user = res.payload.user
+        // localStorage.setItem('token', res.payload.token)
+        console.log("usershry6jyikgmihjnugnyuk6i7,9",users?.role)
+        if (user.role === ROLES.ADMIN ) {
           navigate('/admin')
-        }
-        if(users?.role === ROLES.USER){
+        } else if (user.role === ROLES.USER) {
           navigate('/')
         }
-        
-      
       }
     } catch (error) {
       console.log(error)

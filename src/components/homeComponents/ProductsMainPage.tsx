@@ -13,19 +13,19 @@ import api from '../../api'
 
 export default function ProductsMainPage() {
   const dispatch = useDispatch<AppDispatch>()
-  const [searchParams, setSearchParams] = useSearchParams({
-    name: '',
-    page: ''
-  })
-  const page = searchParams.get('page') || 0
+  const [searchParams, setSearchParams] = useSearchParams()
+  const page = searchParams.get('page') || 1
   const name = searchParams.get('name') || ''
+  const sortBy = searchParams.get('sortBy') || ''
 
   const state = useSelector((state: RootState) => state)
   const selectedCategoryId: string = state.categories.selectedCategoryId
 
   const [pagination, setPagination] = useState({
     page,
-    totalPages: 0
+    totalPages: 0,
+    sortOption: '',
+    sortOrder: 1
   })
 
   const products = state.products
@@ -46,22 +46,27 @@ export default function ProductsMainPage() {
       `/api/products?page=${pagination.page}&search=name&name=${name}&category=${selectedCategoryId}`
     )
     const { page, totalPages } = res.data.infoOfPage
-    setPagination({ page, totalPages })
+    setPagination({ ...pagination, page, totalPages })
     dispatch(productSucssess(res.data.result))
   }
 
   const handleGetProductsByPage = async (nextPage: number) => {
-    const res = await api.get(`/api/products?page=${nextPage}`)
+    searchParams.set('page', nextPage.toString())
+
+    const res = await api.get(
+      `/api/products?${searchParams.toString()}&${pagination.sortOption}=${pagination.sortOrder}`
+    )
 
     const { page, totalPages } = res.data.infoOfPage
-    setPagination({ page, totalPages })
-    setSearchParams({ page })
+    setPagination({ ...pagination, page, totalPages })
+    setSearchParams(searchParams)
     dispatch(productSucssess(res.data.result))
   }
+
   const handleGetProductsByName = async (name: string, nextPage: number) => {
     const res = await api.get(`/api/products?page=${pagination.page}&search=name&name=${name}`)
     const { page, totalPages } = res.data.infoOfPage
-    setPagination({ page, totalPages })
+    setPagination({ ...pagination, page, totalPages })
     setSearchParams({ page, name })
     dispatch(productSucssess(res.data.result))
   }
@@ -70,7 +75,7 @@ export default function ProductsMainPage() {
     dispatch(setSelectedCategory(categoryId))
     setSearchParams({ page: '1', name: '' })
 
-    setPagination({ page: 1, totalPages })
+    setPagination({ ...pagination, page: 1, totalPages })
   }
 
   const handleSearch = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -93,12 +98,15 @@ export default function ProductsMainPage() {
 
   const handleSortChange = async (sortOption: string, sortOrder: 1 | -1) => {
     try {
+      searchParams.set('sortBy', sortOption)
+
       const res = await api.get(
-        `/api/products?page=${pagination.page}&sortBy=${sortOption}&${sortOption}=${sortOrder}`
+        `/api/products?${searchParams.toString()}&${sortOption}=${sortOrder}`
       )
       const { page, totalPages } = res.data.infoOfPage
-      setPagination({ page, totalPages })
+      setPagination({ page, totalPages, sortOption, sortOrder })
       dispatch(productSucssess(res.data.result))
+      setSearchParams(searchParams)
     } catch (error) {
       console.error('Error fetching products:', error)
     }

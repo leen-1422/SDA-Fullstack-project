@@ -5,8 +5,9 @@ import { RootState } from '../../redux/store'
 import Login from '../homeComponents/Login'
 
 const useAuth = () => {
-  const { isLoggedIn, isAdmin } = useSelector((state: RootState) => state.users)
-  return isLoggedIn && isAdmin
+  const { isLoggedIn, isAdmin, userData } = useSelector((state: RootState) => state.users)
+  return isLoggedIn && isAdmin && userData
+  
 }
 const AdminRoute = () => {
   const isAuth = useAuth()
