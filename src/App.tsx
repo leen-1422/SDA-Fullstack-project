@@ -1,10 +1,14 @@
-import { Navigate, Route, Routes, useNavigate } from 'react-router'
+import { Route, Routes, useNavigate } from 'react-router'
+import { useEffect, useState } from 'react'
 
 import './App.css'
+import { ForgotPassword } from './components/ForgotPassword'
+import { ResetPassword } from './components/ResetPassword'
 import CategoriesForm from './components/admin dashboard/CategoriesForm'
 import EditProduct from './components/admin dashboard/EditProduct'
 import OrdersList from './components/admin dashboard/OrdersList'
 import { ProductsManager } from './components/admin dashboard/ProductsManager'
+import UserOrderDetails from './components/admin dashboard/UserOrderDetails'
 import UsersList from './components/admin dashboard/UsersList'
 import AdminRoute from './components/adminComponents/AdminRoute'
 import Login from './components/homeComponents/Login'
@@ -16,10 +20,7 @@ import UserProfile from './components/usersComponents/UserProfile'
 import About from './pages/About'
 import Cart from './pages/Cart'
 import Home from './pages/Home'
-import { ResetPassword } from './components/ResetPassword'
-import { ForgotPassword } from './components/ForgotPassword'
-import { getDecodedTokenFromStorage, getTokenFromStorage } from './utils/token'
-import { useEffect, useState } from 'react'
+import { getDecodedTokenFromStorage } from './utils/token'
 
 function App() {
   const navigate = useNavigate()
@@ -30,7 +31,6 @@ function App() {
     if (decodedToken) {
       if (decodedToken.exp * 1000 < new Date().getTime()) {
         localStorage.removeItem('token')
-        console.log('Time Expired')
         setIsTokenExpired(true)
       }
     }
@@ -60,6 +60,7 @@ function App() {
           <Route path="/admin" element={<ProductsManager />} />
           <Route path="/users" element={<UsersList />} />
           <Route path="/orders" element={<OrdersList />} />
+          <Route path="/orders/:id" element={<UserOrderDetails />} />
           <Route path="/categories" element={<CategoriesForm />} />
         </Route>
       </Routes>

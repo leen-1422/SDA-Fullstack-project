@@ -3,8 +3,6 @@ import { getTokenFromStorage } from '../utils/token'
 
 let baseURL = process.env.VITE_BACKEND_ORIGIN || 'http://localhost:5050'
 
-console.log('baseURL:', baseURL)
-
 const api = axios.create({
   baseURL
 })

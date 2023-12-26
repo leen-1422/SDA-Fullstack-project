@@ -1,21 +1,20 @@
+import { AxiosError } from 'axios'
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { addToCart, decreaseCart, removeProduct } from '../redux/slices/cart/cartSlice'
-import { AppDispatch, RootState } from '../redux/store'
-import { useEffect } from 'react'
-import { AxiosError } from 'axios'
+import { toast } from 'react-toastify'
+
 import api from '../api'
+import { addToCart, decreaseCart, removeProduct } from '../redux/slices/cart/cartSlice'
 import { Product } from '../redux/slices/products/productSlice'
+import { AppDispatch, RootState } from '../redux/store'
 
 export default function Cart() {
   const dispatch = useDispatch<AppDispatch>()
   const state = useSelector((state: RootState) => state)
   const cartItems = state.cart.cartItems
 
-  console.log('cartItems', cartItems)
   const { userData } = useSelector((state: RootState) => state.users)
-
-  console.log(userData)
 
   const newTotalAmount = cartItems.reduce((total, item) => total + item.price * item.quantity, 0)
 
@@ -27,36 +26,20 @@ export default function Cart() {
     dispatch(addToCart(item))
   }
   const handelPlaceOrder = async () => {
-    // const userId = userData && userData.userId;
-    // const orderItems = cartItems.map((item) => item._id)
-    // const address = {
-    //   shippingAddress: 'alsoodfa',
-    //   city: 'abha',
-    //   zipCode: '35647',
-    //   country: 'SAfgyjhgfukj',
-    //   phone: '0544356789'
-    // }
-    // console.log("orderItems", orderItems)
-    // console.log("user data", userId)
-
     const placeOrderData = {
       userId: userData && userData.userId,
       orderItems: cartItems.map((item) => ({ product: String(item._id), quantity: item.quantity })),
-      shippingAddress: 'alsoodfa',
-      city: 'abha',
+      shippingAddress: 'some address',
+      city: 'Abha',
       zipCode: '35647',
-      country: 'SAfdchgm',
+      country: 'Saudi Arabia',
       phone: '0544356789'
-
-      // userId,
-      // orderItems,
-      // address
     }
 
     try {
       const res = await api.post('/api/orders', placeOrderData)
       localStorage.removeItem('cartItems')
-      console.log('sucssful added')
+      toast.success('ordr placed successfully')
     } catch (error) {
       if (error instanceof AxiosError) {
         console.log(error)

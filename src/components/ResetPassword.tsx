@@ -1,5 +1,6 @@
 import { ChangeEvent, FormEvent, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+
 import api from '../api'
 
 export const ResetPassword = () => {
@@ -13,7 +14,6 @@ export const ResetPassword = () => {
   const [isPassMatch, setIsPassMatch] = useState(true)
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
-    console.log({ name, value })
     setCredentials({
       ...credentials,
       [name]: value
@@ -33,7 +33,6 @@ export const ResetPassword = () => {
     if (res.status === 200) {
       navigate('/login')
     }
-    console.log(res.data)
   }
   return (
     <div>

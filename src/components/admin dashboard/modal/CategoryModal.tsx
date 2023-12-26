@@ -45,7 +45,9 @@ export default function CategoryModal() {
           </div>
 
           <div className="form-control mt-6">
-            <button className="btn bg-purple-600 rounded-md hover:bg-purple-500 text-white ">Add Category</button>
+            <button className="btn bg-purple-600 rounded-md hover:bg-purple-500 text-white ">
+              Add Category
+            </button>
           </div>
 
           <button

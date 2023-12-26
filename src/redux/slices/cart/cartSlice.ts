@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { toast } from 'react-toastify'
+
 import { Product } from '../products/productSlice'
 
 export type ProductState = {
@@ -48,7 +49,6 @@ export const cartSlice = createSlice({
       toast.error('item is removed from cart', {
         position: 'bottom-left'
       })
-      
     },
     decreaseCart: (state, action: { payload: { productId: string } }) => {
       const itemIndex = state.cartItems.findIndex(

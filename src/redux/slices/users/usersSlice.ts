@@ -1,9 +1,9 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 import { AxiosError } from 'axios'
+import { ROLES } from '../../../Constant'
 import api from '../../../api'
 import { getDecodedTokenFromStorage, getTokenFromStorage } from '../../../utils/token'
-import { ROLES } from '../../../Constant'
 
 export type Role = keyof typeof ROLES
 
@@ -59,7 +59,7 @@ export const loginThunk = createAsyncThunk(
   async (credentials: { email: string; password: string }, { rejectWithValue }) => {
     try {
       const res = await api.post('/api/users/login', credentials)
-      
+
       const token = res.data.token
       localStorage.setItem('token', token)
       return res.data
@@ -79,7 +79,7 @@ export const registrationThunk = createAsyncThunk(
   ) => {
     try {
       const res = await api.post('/api/users/register', credentials)
-      
+
       return res.data
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -111,7 +111,6 @@ export const grantRoleUserThunk = createAsyncThunk(
 export const getUsersThunk = createAsyncThunk('users/get', async () => {
   try {
     const res = await api.get('/api/users')
-    console.log('res', res)
     return res.data.users
   } catch (error) {
     console.log(error)
@@ -132,7 +131,7 @@ export const deleteUserThunk = createAsyncThunk(
     }
   }
 )
-// check here for the extra /
+
 export const blockUserThunk = createAsyncThunk(
   'user/block',
   async (userId: string, { rejectWithValue }) => {
@@ -171,7 +170,6 @@ export const getSingleUserThunk = createAsyncThunk(
   async (userId: string, { rejectWithValue }) => {
     try {
       const res = await api.get(`/api/users/${userId}`)
-      console.log(res)
       return res.data
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -219,10 +217,8 @@ export const usersSlice = createSlice({
     })
     builder.addCase(registrationThunk.fulfilled, (state, action) => {
       const newUser = action.payload
-      console.log('this is the created product ', newUser)
       if (newUser) {
         state.users = [newUser, ...state.users]
-        console.log(state.users)
         return state
       }
     })
@@ -242,7 +238,6 @@ export const usersSlice = createSlice({
     })
     builder.addCase(grantRoleUserThunk.fulfilled, (state, action) => {
       const userId = action.payload._id
-      console.log(userId)
       const updatedUsers = state.users.map((user) => {
         if (user._id === userId) {
           return action.payload

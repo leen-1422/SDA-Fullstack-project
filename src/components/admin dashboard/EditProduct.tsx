@@ -32,7 +32,6 @@ export default function EditProduct() {
       dispatch(getSingleProductThunk(id))
         .then((response) => {
           const productData = response.payload
-          console.log(productData)
           setProduct(productData)
         })
         .catch((error) => {

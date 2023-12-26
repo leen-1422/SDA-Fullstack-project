@@ -1,6 +1,7 @@
 import { ChangeEvent, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
+import { ROLES } from '../../Constant'
 import {
   Role,
   User,
@@ -10,7 +11,6 @@ import {
   grantRoleUserThunk
 } from '../../redux/slices/users/usersSlice'
 import { AppDispatch, RootState } from '../../redux/store'
-import { ROLES } from '../../Constant'
 
 export default function UsersList() {
   const dispatch = useDispatch<AppDispatch>()

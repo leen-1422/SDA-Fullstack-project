@@ -1,16 +1,11 @@
 import { ChangeEvent, FormEvent, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-
-import { useNavigate } from 'react-router'
 import { toast } from 'react-toastify'
 
 import { Product, addProductThunk } from '../../../redux/slices/products/productSlice'
 import { AppDispatch, RootState } from '../../../redux/store'
 
 export default function ProductModal() {
-  const products = useSelector((state: RootState) => state.products.items)
-  const navigate = useNavigate()
-  console.log(products)
   const dispatch = useDispatch<AppDispatch>()
 
   const [product, setProduct] = useState({
@@ -142,7 +137,9 @@ export default function ProductModal() {
               />
             </div>
             <div className="form-control mt-6">
-              <button className="btn bg-purple-600 rounded-md hover:bg-purple-500 text-white ">Add Product</button>
+              <button className="btn bg-purple-600 rounded-md hover:bg-purple-500 text-white ">
+                Add Product
+              </button>
             </div>
             <button
               className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"

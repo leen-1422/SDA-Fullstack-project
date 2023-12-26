@@ -110,8 +110,8 @@ export default function CategoryTable() {
                         Edit
                       </button>
                       <button
-                      className="text-white bg-purple-600 rounded-md hover:bg-purple-500 focus:outline-none focus:shadow-outline-gray active:bg-purple-600 py-2 px-4 font-small"
-                      onClick={() => handelDeleteCategory(item._id)}>
+                        className="text-white bg-purple-600 rounded-md hover:bg-purple-500 focus:outline-none focus:shadow-outline-gray active:bg-purple-600 py-2 px-4 font-small"
+                        onClick={() => handelDeleteCategory(item._id)}>
                         Delete
                       </button>
                     </td>

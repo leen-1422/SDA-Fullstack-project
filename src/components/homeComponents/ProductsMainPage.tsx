@@ -74,7 +74,6 @@ export default function ProductsMainPage() {
     handleSortProduct(pagination.pageNumber, e.target.value)
   }
   const handleSelectedCategory = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    console.log('this is categories', event.target.value)
     searchParams.set('categoryId', event.target.value)
     setSearchParams(searchParams)
     dispatch(getProductsRequestThunk(searchParams.toString()))

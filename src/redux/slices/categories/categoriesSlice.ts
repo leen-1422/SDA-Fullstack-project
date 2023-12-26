@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { toast } from 'react-toastify'
 
 import { AxiosError } from 'axios'
 import api from '../../../api'
@@ -28,7 +27,6 @@ const initialState: InitialState = {
 export const getCategoriesThunk = createAsyncThunk('categories/get', async () => {
   try {
     const res = await api.get('/api/categories')
-    console.log(res)
     return res.data
   } catch (error) {
     console.log(error)

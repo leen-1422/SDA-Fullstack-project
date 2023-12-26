@@ -1,16 +1,16 @@
-import { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
 
+import { STATUS } from '../../Constant'
 import {
-  deleteOrderThunk,
-  getOrdersThunk,
-  editOrderStatusThunk,
   Orders,
-  Status
+  Status,
+  deleteOrderThunk,
+  editOrderStatusThunk,
+  getOrdersThunk
 } from '../../redux/slices/orders/ordersSlice'
 import { AppDispatch, RootState } from '../../redux/store'
-import { STATUS } from '../../Constant'
-import { Link } from 'react-router-dom'
 
 export default function OrdersList() {
   const dispatch = useDispatch<AppDispatch>()
@@ -25,9 +25,6 @@ export default function OrdersList() {
   }
 
   const handleUpdateStatus = (e: ChangeEvent<HTMLSelectElement>, orderId: Orders['_id']) => {
-    console.log('userId:', orders)
-    console.log('selected value:', e.target.value)
-
     const status = e.target.value as Status
     dispatch(editOrderStatusThunk({ status, orderId }))
   }
@@ -64,13 +61,9 @@ export default function OrdersList() {
                   </td>
                   <td className="px-4 py-3 text-ms font-semibold border">
                     {' '}
-                    {order.orderItems.map((item) => (
-                      <div key={item._id}>
-                        <span>Product:{item.product.name} </span>
-                        <span>Qty:{item.quantity} </span>
-                      </div>
-                    ))}
-                    <Link to={`/orders/${order._id}`} className="text-white bg-purple-600 rounded-md hover:bg-purple-500 focus:outline-none focus:shadow-outline-gray active:bg-purple-600 py-2 px-4 font-small">
+                    <Link
+                      to={`/orders/${order._id}`}
+                      className="text-white bg-gray-600 rounded-md hover:bg-purple-500 focus:outline-none focus:shadow-outline-gray active:bg-purple-600 py-2 px-4 font-small">
                       Details
                     </Link>
                   </td>

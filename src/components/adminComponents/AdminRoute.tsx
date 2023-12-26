@@ -7,7 +7,6 @@ import Login from '../homeComponents/Login'
 const useAuth = () => {
   const { isLoggedIn, isAdmin, userData } = useSelector((state: RootState) => state.users)
   return isLoggedIn && isAdmin && userData
-  
 }
 const AdminRoute = () => {
   const isAuth = useAuth()

@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
+import { AxiosError } from 'axios'
 import api from '../../../api'
 import { Category } from '../categories/categoriesSlice'
-import { AxiosError } from 'axios'
 
 export type Product = {
   _id: string
@@ -46,7 +46,6 @@ const initialState: ProductState = {
 export const getProductsThunk = createAsyncThunk('products/get', async () => {
   try {
     const res = await api.get('/api/products/')
-    console.log('res from all products thunk', res.data)
 
     return res.data
   } catch (error) {
@@ -55,16 +54,13 @@ export const getProductsThunk = createAsyncThunk('products/get', async () => {
 })
 export const getProductsRequestThunk = createAsyncThunk('request/get', async (params: string) => {
   try {
-    // console.log('==', params)
     const res = await api.get(`/api/products?${params}`)
-    console.log('res from requst products thunk', res.data)
+
     return res.data
   } catch (error) {
     console.log('err', error)
   }
 })
-
-///
 
 export const getProductsForAdminThunk = createAsyncThunk('adminProducts/get', async () => {
   try {
@@ -196,7 +192,6 @@ export const productSlice = createSlice({
             product._id === productId._id ? productId : product
           )
           state.items = uptadetproducts
-          console.log(state.items)
           return state
         }
       })

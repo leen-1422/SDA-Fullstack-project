@@ -8,7 +8,6 @@ import { AppDispatch, RootState } from '../../redux/store'
 export default function Navbar() {
   const dispatch = useDispatch<AppDispatch>()
   const { isLoggedIn, isAdmin, userData } = useSelector((state: RootState) => state.users)
-  console.log({ isLoggedIn, isAdmin, userData })
   const state = useSelector((state: RootState) => state.users)
   function handleLogout() {
     dispatch(logout())
