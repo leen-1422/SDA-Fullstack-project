@@ -1,115 +1,83 @@
-import { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, Navigate, useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 
 import { addToCart } from '../../redux/slices/cart/cartSlice'
-import {
-  getCategoriesThunk,
-  setSelectedCategory
-} from '../../redux/slices/categories/categoriesSlice'
-import { getProductsThunk, productSucssess } from '../../redux/slices/products/productSlice'
+import { getCategoriesThunk } from '../../redux/slices/categories/categoriesSlice'
+import { getProductsRequestThunk, getProductsThunk } from '../../redux/slices/products/productSlice'
 import { AppDispatch, RootState } from '../../redux/store'
-import api from '../../api'
 
 export default function ProductsMainPage() {
-  const dispatch = useDispatch<AppDispatch>()
-  const [searchParams, setSearchParams] = useSearchParams()
-  const page = searchParams.get('page') || 1
-  const name = searchParams.get('name') || ''
-  const sortBy = searchParams.get('sortBy') || ''
-
   const state = useSelector((state: RootState) => state)
-  const selectedCategoryId: string = state.categories.selectedCategoryId
-
-  const [pagination, setPagination] = useState({
-    page,
-    totalPages: 0,
-    sortOption: '',
-    sortOrder: 1
-  })
-
   const products = state.products
-  const currentItems = products.items
   const categories = state.categories.items
-
-  // Pagination state
-
+  const [searchParams, setSearchParams] = useSearchParams()
+  const page = searchParams.get('pageNumber') || 1
+  const name = searchParams.get('search') || ''
+  const sortOrder = searchParams.get('sortOrder') || ''
+  const categoryId = searchParams.get('categoryId') || ''
+  const selectedCategoryId = searchParams.get('categoryId') || ''
+  const pagination = {
+    pageNumber: state.products.pageNumber,
+    totalPages: state.products.totalPages
+  }
+  const dispatch = useDispatch<AppDispatch>()
   const totalPages = pagination.totalPages
 
   useEffect(() => {
-    handleGetProducts()
     dispatch(getCategoriesThunk())
-  }, [name, selectedCategoryId])
+    if (page && categoryId) {
+      handleGetByCatd(pagination.pageNumber, categoryId)
+    } else if (page && sortOrder) {
+      handleSortProduct(pagination.pageNumber, sortOrder)
+    } else if (page && name) {
+      handleGetProductsByName(name, pagination.pageNumber)
+    } else if (page || name || sortOrder || categoryId) {
+      handleGetProductsByName(name, pagination.pageNumber)
+    } else {
+      dispatch(getProductsThunk())
+    }
+  }, [])
 
-  const handleGetProducts = async () => {
-    const res = await api.get(
-      `/api/products?page=${pagination.page}&search=name&name=${name}&category=${selectedCategoryId}`
-    )
-    const { page, totalPages } = res.data.infoOfPage
-    setPagination({ ...pagination, page, totalPages })
-    dispatch(productSucssess(res.data.result))
-  }
-
-  const handleGetProductsByPage = async (nextPage: number) => {
-    searchParams.set('page', nextPage.toString())
-
-    const res = await api.get(
-      `/api/products?${searchParams.toString()}&${pagination.sortOption}=${pagination.sortOrder}`
-    )
-
-    const { page, totalPages } = res.data.infoOfPage
-    setPagination({ ...pagination, page, totalPages })
+  const handleGetProductsByName = async (search: string, selectedPage: number) => {
+    searchParams.set('search', search)
+    searchParams.set('pageNumber', selectedPage.toString())
     setSearchParams(searchParams)
-    dispatch(productSucssess(res.data.result))
+    dispatch(getProductsRequestThunk(searchParams.toString()))
   }
 
-  const handleGetProductsByName = async (name: string, nextPage: number) => {
-    const res = await api.get(`/api/products?page=${pagination.page}&search=name&name=${name}`)
-    const { page, totalPages } = res.data.infoOfPage
-    setPagination({ ...pagination, page, totalPages })
-    setSearchParams({ page, name })
-    dispatch(productSucssess(res.data.result))
+  const handleGetProductsByNextPage = async (selectedPage: number) => {
+    searchParams.set('pageNumber', selectedPage.toString())
+    setSearchParams(searchParams)
+    dispatch(getProductsRequestThunk(searchParams.toString()))
   }
 
-  const handleCategoryChange = async (categoryId: string) => {
-    dispatch(setSelectedCategory(categoryId))
-    setSearchParams({ page: '1', name: '' })
+  const handleGetByCatd = async (selectedPage: number, categoryId: string) => {
+    searchParams.set('sortOrder', sortOrder)
+    searchParams.set('categoryId', categoryId)
+    searchParams.set('pageNumber', selectedPage.toString())
+    setSearchParams(searchParams)
+    dispatch(getProductsRequestThunk(searchParams.toString()))
+  }
 
-    setPagination({ ...pagination, page: 1, totalPages })
+  const handleSortProduct = async (selectedPage: number, sortOrder: string) => {
+    searchParams.set('sortOrder', sortOrder)
+    searchParams.set('pageNumber', selectedPage.toString())
+    setSearchParams(searchParams)
+    dispatch(getProductsRequestThunk(searchParams.toString()))
   }
 
   const handleSearch = async (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setSearchParams({ ...searchParams, [name]: value })
+    handleGetProductsByName(e.target.value, pagination.pageNumber)
   }
-
-  // const handleSortChange = async (sortOrder: 1 | -1) => {
-  //   try {
-  //     const res = await api.get(
-  //       `/api/products?page=${pagination.page}&sortBy=name&name=${sortOrder}`
-  //     )
-  //     const { page, totalPages } = res.data.infoOfPage
-  //     setPagination({ page, totalPages })
-  //     dispatch(productSucssess(res.data.result))
-  //   } catch (error) {
-  //     console.error('Error fetching products:', error)
-  //   }
-  // }
-
-  const handleSortChange = async (sortOption: string, sortOrder: 1 | -1) => {
-    try {
-      searchParams.set('sortBy', sortOption)
-
-      const res = await api.get(
-        `/api/products?${searchParams.toString()}&${sortOption}=${sortOrder}`
-      )
-      const { page, totalPages } = res.data.infoOfPage
-      setPagination({ page, totalPages, sortOption, sortOrder })
-      dispatch(productSucssess(res.data.result))
-      setSearchParams(searchParams)
-    } catch (error) {
-      console.error('Error fetching products:', error)
-    }
+  const handleSortOrder = async (e: ChangeEvent<HTMLSelectElement>) => {
+    handleSortProduct(pagination.pageNumber, e.target.value)
+  }
+  const handleSelectedCategory = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    console.log('this is categories', event.target.value)
+    searchParams.set('categoryId', event.target.value)
+    setSearchParams(searchParams)
+    dispatch(getProductsRequestThunk(searchParams.toString()))
   }
   return (
     <div className="bg-white">
@@ -118,41 +86,14 @@ export default function ProductsMainPage() {
         <div>
           <div>
             <div className="flex mb-12">
-              <div className="relative flex justify-center">
-                <select
-                  className="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-l-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600"
-                  name="sortOption"
-                  onChange={(e) =>
-                    handleSortChange(
-                      e.target.value,
-                      parseInt(e.target.options[e.target.selectedIndex].dataset.sortOrder!) as
-                        | 1
-                        | -1
-                    )
-                  }>
-                  <option value="name" data-sort-order="1">
-                    Sort by Name (Ascending)
-                  </option>
-                  <option value="name" data-sort-order="-1">
-                    Sort by Name (Descending)
-                  </option>
-                  <option value="price" data-sort-order="1">
-                    Sort by Price (Ascending)
-                  </option>
-                  <option value="price" data-sort-order="-1">
-                    Sort by Price (Descending)
-                  </option>
-                </select>
-              </div>
               <label
                 htmlFor="filter-dropdown"
                 className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"></label>
               <select
                 className="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-l-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600"
                 id="category"
-                onChange={(e) => handleCategoryChange(e.target.value)}
-                // value={selectedValue}
-              >
+                onChange={handleSelectedCategory}
+                value={selectedCategoryId}>
                 <option value={''}>All Categories</option>
                 {categories.map((category) => (
                   <option key={category._id} value={category._id}>
@@ -164,13 +105,26 @@ export default function ProductsMainPage() {
               <div className="relative w-full">
                 <input
                   type="search"
-                  name="name"
+                  title="search"
+                  value={name}
                   onChange={handleSearch}
                   id="search-dropdown"
-                  className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-r-lg border-l-gray-50 border-l-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-l-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
+                  className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50  border-l-gray-50 border-l-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-l-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
                   placeholder="Search Mobile, Laptop, Watches..."
                   required
                 />
+              </div>
+              <div className="relative flex justify-center">
+                <select
+                  className="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-r-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600"
+                  name="sortOrder"
+                  title="sort Order"
+                  onChange={(e) => handleSortOrder(e)}
+                  value={sortOrder}>
+                  <option>Sort</option>
+                  <option>high to low</option>
+                  <option>low to high</option>
+                </select>
               </div>
             </div>
           </div>
@@ -240,14 +194,18 @@ export default function ProductsMainPage() {
           {Array.from({ length: totalPages }, (_, index) => index + 1).map((pageNumber) => (
             <button
               className={`mx-1 flex h-9 w-9 items-center justify-center rounded-full border ${
-                pagination.page === pageNumber ? 'bg-gray-500' : 'bg-purple-600'
+                pagination.pageNumber === pageNumber ? 'bg-gray-500' : 'bg-purple-600'
               }    transition duration-150 ease-in-out hover:bg-light-300`}
               key={pageNumber}
               onClick={() => {
-                if (name) {
+                if (categoryId) {
+                  handleGetByCatd(pageNumber, categoryId)
+                } else if (sortOrder) {
+                  handleSortProduct(pageNumber, sortOrder)
+                } else if (name) {
                   handleGetProductsByName(name, pageNumber)
                 } else {
-                  handleGetProductsByPage(pageNumber)
+                  handleGetProductsByNextPage(pageNumber)
                 }
               }}
               style={{

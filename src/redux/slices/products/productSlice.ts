@@ -22,10 +22,10 @@ export type ProductState = {
   isLoading: boolean
   selectedProduct: Product | null
   search: string
-  pageInfo: {
-    page: number
-    totalItems: number
-  }
+  pageNumber: number
+  perPage: number
+  totalPages: number
+  totalProducts: number
 }
 
 const initialState: ProductState = {
@@ -35,32 +35,36 @@ const initialState: ProductState = {
   selectedProduct: null,
   search: '',
 
-  pageInfo: {
-    page: 0,
-    totalItems: 0
-  }
+  pageNumber: 0,
+  perPage: 0,
+  totalPages: 0,
+  totalProducts: 0
 }
 
 //products thunk
 
 export const getProductsThunk = createAsyncThunk('products/get', async () => {
   try {
-    const res = await api.get('/api/products')
+    const res = await api.get('/api/products/')
+    console.log('res from all products thunk', res.data)
+
     return res.data
-  } catch (error) {
-    console.log('👀 ', error)
-  }
-})
-export const getProductsRequestThunk = createAsyncThunk('request/get', async (params: string) => {
-  try {
-    console.log('==', params)
-    const res = await api.get(`/api/products?${params}`)
-    console.log('res from requst products thunk', res.data)
-    return res.data.result
   } catch (error) {
     console.log('err', error)
   }
 })
+export const getProductsRequestThunk = createAsyncThunk('request/get', async (params: string) => {
+  try {
+    // console.log('==', params)
+    const res = await api.get(`/api/products?${params}`)
+    console.log('res from requst products thunk', res.data)
+    return res.data
+  } catch (error) {
+    console.log('err', error)
+  }
+})
+
+///
 
 export const getProductsForAdminThunk = createAsyncThunk('adminProducts/get', async () => {
   try {
@@ -147,17 +151,20 @@ export const productSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(getProductsThunk.fulfilled, (state, action) => {
-      state.items = action.payload?.result
-      state.pageInfo.page = action.payload.infoOfPage.page
-      state.pageInfo.totalItems = action.payload.infoOfPage.totalItems
-
+      state.items = action.payload?.products
+      state.pageNumber = action.payload?.pageNumber
+      state.perPage = action.payload?.perPage
+      state.totalPages = action.payload?.totalPages
+      state.totalProducts = action.payload?.totalProducts
+      state.isLoading = false
       return state
     })
     builder.addCase(getProductsRequestThunk.fulfilled, (state, action) => {
-      state.items = action.payload?.infoOfPage
-      state.pageInfo.page = action.payload?.page
-      state.pageInfo.totalItems = action.payload?.totalItems
-
+      state.items = action.payload?.products
+      state.pageNumber = action.payload?.pageNumber
+      state.perPage = action.payload?.perPage
+      state.totalPages = action.payload?.totalPages
+      state.totalProducts = action.payload?.totalProducts
       state.isLoading = false
       return state
     })

@@ -89,7 +89,7 @@ export default function UsersList() {
                     </button>
                     <button
                       onClick={() => handelBlockUser(user._id)}
-                      className="text-white bg-purple-600 rounded-md hover:bg-purple-500 focus:outline-none focus:shadow-outline-gray active:bg-purple-600 py-2 px-4 font-small">
+                      className="mr-1 text-white bg-gray-600 rounded-md hover:bg-gray-500 focus:outline-none focus:shadow-outline-gray active:bg-gray-600 py-2 px-4 font-small ml-4">
                       {user.blocked ? 'Unblock' : 'Block'}
                     </button>
 

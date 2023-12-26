@@ -23,7 +23,7 @@ export function ProductsManager() {
 
   return (
     <div className="flex">
-      <div className="w-3/4 bg-white p-4">
+      <div className="w-full mb-8 overflow-hidden rounded-lg shadow-lg">
         <div className=" rounded-lg overflow-hidden mx-4 md:mx-10">
           <div className="flex flex-1  p-6">
             <button
@@ -41,13 +41,13 @@ export function ProductsManager() {
           <table className="w-full table-fixed border">
             <thead>
               <tr className="bg-gray-100">
-                <th className="w-1/7 py-4 px-6 text-left text-gray-600 font-bold">Count</th>
+                <th className="w-1/6 py-4 px-6 text-left text-gray-600 font-bold">Count</th>
                 <th className="w-1/5 py-4 px-6 text-left text-gray-600 font-bold">Image</th>
                 <th className="w-1/5 py-4 px-6 text-left text-gray-600 font-bold">Name</th>
                 <th className="w-1/4 py-4 px-6 text-left text-gray-600 font-bold">Categories</th>
                 <th className="w-1/4 py-4 px-6 text-left text-gray-600 font-bold">Sizes</th>
                 <th className="w-1/4 py-4 px-6 text-left text-gray-600 font-bold">Price</th>
-                <th className="w-1/4 py-4 px-6 text-left text-gray-600 font-bold">Action</th>
+                <th className="w-1/3 py-4 px-6 text-left text-gray-600 font-bold">Action</th>
               </tr>
             </thead>
             <tbody className="bg-white">
@@ -72,14 +72,12 @@ export function ProductsManager() {
                     ))}
                   </td>
                   <td className="py-4 px-6 border-b border-gray-200">{item.price}</td>
-
                   <td className="py-4 px-6  border-gray-200 whitespace flex mt-9 ">
                     <Link to={`/admin/products/${item._id}`}>
                       <button className="mr-1 text-white bg-gray-600 rounded-md hover:bg-gray-500 focus:outline-none focus:shadow-outline-gray active:bg-gray-600 py-2 px-4 font-small">
                         Edit
                       </button>
                     </Link>
-
                     <button
                       onClick={() => handelDeleteProduct(item._id)}
                       className="text-white bg-purple-600 rounded-md hover:bg-purple-500 focus:outline-none focus:shadow-outline-gray active:bg-purple-600 py-2 px-4 font-small">
